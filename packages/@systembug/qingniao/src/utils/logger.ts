@@ -1,9 +1,11 @@
 /**
- * 日志工具 - 基于 pino
+ * 日志工具 - 基于 ink
+ * 使用 ink 统一所有输出，包括日志消息
  */
 
-import pino from "pino";
-import type { Logger as PinoLogger } from "pino";
+import { Box, Text } from "ink";
+import React from "react";
+import { render } from "ink";
 
 export interface Logger {
     info(message: string, ...args: any[]): void;
@@ -24,103 +26,43 @@ export function createLogger(
         pretty?: boolean;
     } = {},
 ): Logger {
-    const { verbose = false, silent = false, pretty = true } = options;
+    const { verbose = false, silent = false } = options;
 
-    // 创建 pino logger
-    const pinoLogger = pino({
-        level: verbose ? "debug" : silent ? "silent" : "info",
-        transport:
-            pretty && !silent
-                ? {
-                      target: "pino-pretty",
-                      options: {
-                          colorize: true,
-                          translateTime: "HH:MM:ss",
-                          ignore: "pid,hostname",
-                          errorLikeObjectKeys: ["err", "error"],
-                          singleLine: false,
-                      },
-                  }
-                : undefined,
-    });
-
-    // 包装为统一的 Logger 接口
+    // 简单的控制台输出（非交互式场景）
     const logger: Logger = {
         info: (message: string, ...args: any[]) => {
-            pinoLogger.info({ msg: message, args }, message);
+            if (silent) return;
+            console.log(`ℹ ${message}`, ...args);
         },
         success: (message: string, ...args: any[]) => {
-            pinoLogger.info({ msg: message, args, type: "success" }, `✓ ${message}`);
+            if (silent) return;
+            console.log(`✓ ${message}`, ...args);
         },
         warn: (message: string, ...args: any[]) => {
-            pinoLogger.warn({ msg: message, args }, message);
+            if (silent) return;
+            console.warn(`⚠ ${message}`, ...args);
         },
         error: (message: string | Error, ...args: any[]) => {
+            if (silent) return;
             if (message instanceof Error) {
                 const error = message;
-                pinoLogger.error(
-                    {
-                        err: {
-                            message: error.message,
-                            stack: error.stack,
-                            name: error.name,
-                        },
-                        msg: error.message,
-                    },
-                    `✗ ${error.message}`,
-                );
+                console.error(`✗ ${error.message}`);
+                if (verbose && error.stack) {
+                    console.error(error.stack);
+                }
             } else {
-                pinoLogger.error({ msg: message, args }, `✗ ${message}`);
+                console.error(`✗ ${message}`, ...args);
             }
         },
         debug: (message: string, ...args: any[]) => {
-            pinoLogger.debug({ msg: message, args }, message);
+            if (silent || !verbose) return;
+            console.debug(`🐛 ${message}`, ...args);
         },
         child: (bindings: Record<string, any>) => {
-            return createLoggerFromPino(pinoLogger.child(bindings));
+            // 子 logger 继承父 logger 的配置
+            return createLogger(options);
         },
     };
 
     return logger;
-}
-
-/**
- * 从 pino logger 创建 Logger 接口
- */
-function createLoggerFromPino(pinoLogger: PinoLogger): Logger {
-    return {
-        info: (message: string, ...args: any[]) => {
-            pinoLogger.info({ msg: message, args }, message);
-        },
-        success: (message: string, ...args: any[]) => {
-            pinoLogger.info({ msg: message, args, type: "success" }, `✓ ${message}`);
-        },
-        warn: (message: string, ...args: any[]) => {
-            pinoLogger.warn({ msg: message, args }, message);
-        },
-        error: (message: string | Error, ...args: any[]) => {
-            if (message instanceof Error) {
-                const error = message;
-                pinoLogger.error(
-                    {
-                        err: {
-                            message: error.message,
-                            stack: error.stack,
-                            name: error.name,
-                        },
-                        msg: error.message,
-                    },
-                    `✗ ${error.message}`,
-                );
-            } else {
-                pinoLogger.error({ msg: message, args }, `✗ ${message}`);
-            }
-        },
-        debug: (message: string, ...args: any[]) => {
-            pinoLogger.debug({ msg: message, args }, message);
-        },
-        child: (bindings: Record<string, any>) => {
-            return createLoggerFromPino(pinoLogger.child(bindings));
-        },
-    };
 }

@@ -53,8 +53,6 @@
         "commander": "^9.5.0",
         "ink": "^6.6.0",
         "listr2": "^8.0.1",
-        "pino": "^9.0.0",
-        "pino-pretty": "^11.0.0",
         "react": "^19.0.0"
     },
     "devDependencies": {
