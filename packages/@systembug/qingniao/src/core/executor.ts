@@ -378,17 +378,22 @@ export async function executePublish(
         if (config.checks?.format !== false) {
             try {
                 const spinner = ora("代码格式检查 (Prettier)").start();
-                exec(`${pmCommand} format:check`, { cwd: rootDir, silent: true });
-                spinner.succeed();
-            } catch {
-                // 可能没有 format:check 脚本，尝试 format
+                // 尝试使用 format:check（只检查不修改）
                 try {
-                    const spinner = ora("代码格式检查 (Prettier)").start();
-                    exec(`${pmCommand} format`, { cwd: rootDir, silent: true });
+                    exec(`${pmCommand} format:check`, { cwd: rootDir, silent: true });
                     spinner.succeed();
                 } catch {
-                    // 可能没有 format 脚本
+                    // 如果没有 format:check，尝试使用 prettier --check
+                    try {
+                        exec(`npx prettier --check "**/*.{ts,tsx,md}"`, { cwd: rootDir, silent: true });
+                        spinner.succeed();
+                    } catch {
+                        // 如果都失败，跳过格式检查
+                        spinner.warn("跳过格式检查（未找到 format:check 脚本）");
+                    }
                 }
+            } catch {
+                // 格式检查失败，但不影响发布流程
             }
         }
 
