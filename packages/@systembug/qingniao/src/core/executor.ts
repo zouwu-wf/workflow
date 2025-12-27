@@ -216,11 +216,11 @@ export async function executePublish(
                     "如何更新版本号?",
                     [
                         {
-                            label: "使用 changeset (推荐) - 基于 .changeset 文件自动计算版本",
+                            label: "使用 changeset (推荐) - 自动根据变更文件计算版本",
                             value: "changeset" as const,
                         },
                         {
-                            label: "手动指定版本类型 - 直接选择 major/minor/patch",
+                            label: "手动选择 - 直接指定 major/minor/patch",
                             value: "manual" as const,
                         },
                     ],
