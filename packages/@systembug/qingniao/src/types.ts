@@ -101,6 +101,8 @@ export interface PublishConfig {
         skipMissingArtifacts?: boolean;
         // 在 lint 之前需要先构建的包（如 eslint-plugin）
         preLintBuild?: string[];
+        // 是否在构建前清理旧的构建产物（默认：true）
+        cleanBeforeBuild?: boolean;
     };
 
     // pnpm workspace 配置（可选，覆盖自动检测）
