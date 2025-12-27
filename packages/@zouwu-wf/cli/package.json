@@ -35,9 +35,9 @@
     },
     "scripts": {
         "build": "vite build",
-        "test": "vitest",
-        "test:watch": "npx jest --watch",
-        "test:coverage": "npx jest --coverage",
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "test:coverage": "vitest run --coverage",
         "compile": "tsc",
         "lint": "eslint src/ --ext .ts",
         "format": "prettier --write src/ templates/",

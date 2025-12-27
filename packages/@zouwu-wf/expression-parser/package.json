@@ -31,7 +31,7 @@
         "build": "pnpm run generate && vite build",
         "generate": "peggy --format es --output src/generated/parser.js src/grammar.pegjs",
         "test": "pnpm run generate && vitest run",
-        "test:watch": "vitest --run",
+        "test:watch": "vitest",
         "test:coverage": "vitest run --coverage",
         "compile": "tsc",
         "lint": "eslint src/ --ext .ts",
