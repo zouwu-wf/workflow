@@ -1,0 +1,21 @@
+{
+    "name": "@zouwu-wf/zouwu-workflow",
+    "version": "0.0.0",
+    "private": true,
+    "scripts": {
+        "build": "turbo run build",
+        "test": "turbo run test",
+        "lint": "turbo run lint",
+        "typecheck": "turbo run typecheck",
+        "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+        "prepare": "husky"
+    },
+    "devDependencies": {
+        "turbo": "^2.3.3",
+        "husky": "^9.1.7",
+        "prettier": "^3.2.5",
+        "eslint": "^8.57.0",
+        "typescript": "^5.3.3"
+    },
+    "packageManager": "pnpm@9.0.0"
+}
