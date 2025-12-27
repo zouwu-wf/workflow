@@ -354,16 +354,13 @@ export async function executePublish(
                   ? "yarn"
                   : "npm";
 
-        // 清理旧的构建产物（如果启用）
-        if (config.build?.cleanBeforeBuild !== false) {
-            const cleanSpinner = ora("清理构建产物").start();
-            try {
-                exec(`${pmCommand} clean`, { cwd: rootDir, silent: true });
-                cleanSpinner.succeed();
-            } catch {
-                // 某些包可能没有 clean 脚本，忽略错误
-                cleanSpinner.warn("跳过清理（未找到 clean 脚本）");
-            }
+        // 清理旧的构建产物（在构建之前）
+        try {
+            const cleanSpinner = ora("清理旧的构建产物").start();
+            exec(`${pmCommand} clean`, { cwd: rootDir, silent: true });
+            cleanSpinner.succeed();
+        } catch {
+            // 某些包可能没有 clean 脚本，忽略错误
         }
 
         // 安装依赖
