@@ -5,7 +5,11 @@
 import type { Context, PublishConfig } from "../types";
 import { checkNpmAuth } from "../stages/auth";
 import { getCurrentBranch, hasUncommittedChanges, hasUnpushedCommits } from "../stages/git";
-import { discoverPackagesWithPnpm, discoverPackagesWithPattern } from "../utils/package";
+import {
+    discoverPackagesWithPnpm,
+    discoverPackagesWithPattern,
+    discoverAllPackagesWithPnpm,
+} from "../utils/package";
 import { exec } from "../utils/exec";
 import { applyVersionUpdate } from "../stages/version";
 import { executeBuildSteps, verifyArtifacts } from "../stages/build";
@@ -364,6 +368,39 @@ export async function executePublish(
         exec(`${pmCommand} install --frozen-lockfile`, { cwd: rootDir, silent: true });
         spinner.succeed();
 
+        // 在 lint 之前构建特定包（如 eslint-plugin）
+        if (config.build?.preLintBuild && config.build.preLintBuild.length > 0) {
+            for (const pkgName of config.build.preLintBuild) {
+                try {
+                    const buildSpinner = ora(`构建 ${pkgName}（lint 依赖）`).start();
+                    if (pmCommand === "pnpm") {
+                        exec(`pnpm --filter ${pkgName} build`, { cwd: rootDir, silent: true });
+                    } else if (pmCommand === "yarn") {
+                        exec(`yarn workspace ${pkgName} build`, { cwd: rootDir, silent: true });
+                    } else {
+                        // npm 不支持 workspace filter，需要进入包目录构建
+                        // 尝试从已发现的包中查找，如果找不到则尝试从 packages 目录查找
+                        let pkg = packages.find((p) => p.name === pkgName);
+                        if (!pkg) {
+                            // 尝试从 packages 目录查找所有包（包括私有包）
+                            const allPackages = await discoverAllPackagesWithPnpm(rootDir);
+                            pkg = allPackages.find((p) => p.name === pkgName);
+                        }
+                        if (pkg) {
+                            exec("npm run build", { cwd: pkg.path, silent: true });
+                        } else {
+                            throw new Error(`未找到包 ${pkgName}`);
+                        }
+                    }
+                    buildSpinner.succeed();
+                } catch (error: unknown) {
+                    const errorMessage = error instanceof Error ? error.message : String(error);
+                    // 某些包可能没有 build 脚本，记录警告但继续
+                    logger.warn(`构建 ${pkgName} 失败: ${errorMessage}`);
+                }
+            }
+        }
+
         // 代码质量检查
         if (config.checks?.lint !== false) {
             try {
@@ -385,7 +422,10 @@ export async function executePublish(
                 } catch {
                     // 如果没有 format:check，尝试使用 prettier --check
                     try {
-                        exec(`npx prettier --check "**/*.{ts,tsx,md}"`, { cwd: rootDir, silent: true });
+                        exec(`npx prettier --check "**/*.{ts,tsx,md}"`, {
+                            cwd: rootDir,
+                            silent: true,
+                        });
                         spinner.succeed();
                     } catch {
                         // 如果都失败，跳过格式检查

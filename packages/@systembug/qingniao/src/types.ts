@@ -99,6 +99,8 @@ export interface PublishConfig {
         turboTasks?: string[];
         artifactPaths?: Record<string, string>;
         skipMissingArtifacts?: boolean;
+        // 在 lint 之前需要先构建的包（如 eslint-plugin）
+        preLintBuild?: string[];
     };
 
     // pnpm workspace 配置（可选，覆盖自动检测）
