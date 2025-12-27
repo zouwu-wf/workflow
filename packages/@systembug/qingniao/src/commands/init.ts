@@ -238,8 +238,8 @@ ${
         ? `  // Changeset 配置（自动检测：检测到 .changeset 目录）
   // changeset: {
   //   enabled: true, // 自动检测：true
-  //   versionCommand: '${pmCommand} changeset:version', // 自动生成
-  //   publishCommand: '${pmCommand} changeset:publish', // 自动生成
+  //   versionCommand: '${pmCommand} changeset version', // 自动生成
+  //   publishCommand: '${pmCommand} changeset publish', // 自动生成
   // },`
         : ""
 }
