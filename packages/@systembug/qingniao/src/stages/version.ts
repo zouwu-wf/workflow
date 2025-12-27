@@ -72,20 +72,15 @@ export function bumpVersion(
     rootPackageJson.version = newVersion;
     writeFileSync(rootPackageJsonPath, JSON.stringify(rootPackageJson, null, 2) + "\n", "utf-8");
 
-    // 更新所有包的 package.json
+    // 更新所有包的 package.json（包括所有 workspace 包，无论是否有 version 字段）
     for (const pkg of packages) {
         const packageJsonPath = join(pkg.path, "package.json");
         if (existsSync(packageJsonPath)) {
             try {
                 const pkgJson = JSON.parse(readFileSync(packageJsonPath, "utf-8"));
-                if (pkgJson.version) {
-                    pkgJson.version = newVersion;
-                    writeFileSync(
-                        packageJsonPath,
-                        JSON.stringify(pkgJson, null, 2) + "\n",
-                        "utf-8",
-                    );
-                }
+                // 更新版本号（即使原来没有 version 字段，也添加它）
+                pkgJson.version = newVersion;
+                writeFileSync(packageJsonPath, JSON.stringify(pkgJson, null, 2) + "\n", "utf-8");
             } catch {
                 // 忽略无效的 package.json
             }
@@ -120,24 +115,33 @@ export async function bumpVersionWithChangeset(
 /**
  * 发现所有 workspace 包（包括私有包，但排除根目录），用于版本更新
  */
-async function discoverAllWorkspacePackages(
+export async function discoverAllWorkspacePackages(
     rootDir: string,
     config: PublishConfig,
-): Promise<Array<{ path: string }>> {
+): Promise<Array<{ name: string; version: string; path: string; private: boolean }>> {
     const workspace = config.workspace;
-    let allPackages: Array<{ path: string }> = [];
+    let allPackages: Array<{ name: string; version: string; path: string; private: boolean }> = [];
 
+    let rawPackages;
     if (workspace?.enabled) {
-        allPackages = await discoverAllPackagesWithPnpm(rootDir);
+        rawPackages = await discoverAllPackagesWithPnpm(rootDir);
     } else if (config.packages?.pattern) {
         const patterns = Array.isArray(config.packages.pattern)
             ? config.packages.pattern
             : [config.packages.pattern];
-        allPackages = await discoverAllPackagesWithPattern(rootDir, patterns);
+        rawPackages = await discoverAllPackagesWithPattern(rootDir, patterns);
     } else {
         // 默认使用 pnpm workspace
-        allPackages = await discoverAllPackagesWithPnpm(rootDir);
+        rawPackages = await discoverAllPackagesWithPnpm(rootDir);
     }
+
+    // 转换为正确的类型，确保 private 字段是 boolean
+    allPackages = rawPackages.map((pkg) => ({
+        name: pkg.name,
+        version: pkg.version,
+        path: pkg.path,
+        private: pkg.private || false,
+    }));
 
     // 排除根目录的包（根目录的 package.json 会单独更新）
     return allPackages.filter((pkg) => {

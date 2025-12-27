@@ -65,8 +65,9 @@ export function commitVersionUpdate(version: string, message?: string): void {
         // 添加根目录 package.json
         exec("git add package.json", { silent: true });
 
-        // 添加所有 packages 目录下的 package.json（包括嵌套目录）
-        exec("git add packages/**/package.json", { silent: true });
+        // 使用 find 命令添加所有 packages 目录下的 package.json（包括嵌套目录）
+        // 这样可以确保找到所有嵌套的包，如 packages/@systembug/qingniao/package.json
+        exec("find packages -name package.json -type f -exec git add {} +", { silent: true });
 
         // 添加 CHANGELOG 和 changeset 文件
         exec("git add CHANGELOG.md .changeset/", { silent: true });

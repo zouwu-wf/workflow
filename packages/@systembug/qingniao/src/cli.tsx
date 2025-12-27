@@ -138,17 +138,11 @@ program
                 );
             } catch (error: any) {
                 const errorMessage = error instanceof Error ? error.message : String(error);
-                const errorObj = error instanceof Error ? error : new Error(errorMessage);
 
-                // 显示错误消息
+                // 显示错误消息（不显示堆栈跟踪）
                 render(
                     <Box flexDirection="column">
-                        <Text color="red">✗ 发布流程失败: {errorMessage}</Text>
-                        {errorObj.stack && (
-                            <Text color="gray" dimColor>
-                                {errorObj.stack.split("\n").slice(1, 4).join("\n")}
-                            </Text>
-                        )}
+                        <Text color="red">✗ {errorMessage}</Text>
                     </Box>,
                 );
                 process.exit(1);

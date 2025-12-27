@@ -22,7 +22,8 @@ import {
     pushToRemote,
 } from "../stages/git";
 import { hasChangesetFiles } from "../utils/auto-detect";
-import { getCurrentVersion } from "../stages/version";
+import { getCurrentVersion, discoverAllWorkspacePackages } from "../stages/version";
+import { PackageList } from "../components/PackageList";
 
 /**
  * 执行发布流程
@@ -140,6 +141,28 @@ export async function executePublish(
         }
 
         if (shouldBumpVersion) {
+            // 步骤 1: 显示所有将被更新的包
+            const allPackagesForVersion = await discoverAllWorkspacePackages(rootDir, config);
+            if (allPackagesForVersion.length > 0) {
+                // 显示包列表
+                const { unmount: unmountList } = render(
+                    <PackageList packages={allPackagesForVersion} title="📦 将被更新版本的包:" />,
+                );
+                await new Promise((resolve) => setTimeout(resolve, 1500)); // 显示 1.5 秒
+                unmountList();
+
+                // 确认是否继续
+                if (!options.yes) {
+                    const shouldContinue = await confirm(
+                        `确认更新以上 ${allPackagesForVersion.length} 个包的版本号?`,
+                        true,
+                    );
+                    if (!shouldContinue) {
+                        throw new Error("已取消版本更新");
+                    }
+                }
+            }
+
             // 选择版本更新方式
             let versionUpdateMethod: "changeset" | "manual" = "changeset";
             if (!options.yes) {
