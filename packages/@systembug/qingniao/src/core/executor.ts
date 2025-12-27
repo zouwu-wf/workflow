@@ -354,36 +354,13 @@ export async function executePublish(
                   ? "yarn"
                   : "npm";
 
-        // 清理旧的构建产物（必须在构建之前执行）
-        // 检查 build.steps 中是否包含 clean
+        // 清理旧的构建产物（如果 build.steps 中不包含 clean，则执行默认清理）
         const buildSteps = config.build?.steps || [];
         const hasCleanInSteps = buildSteps.some(
             (step) => step.name === "clean" || step.command?.includes("clean"),
         );
-        
-        // 如果 build.steps 中包含 clean，先执行它（在构建之前）
-        if (hasCleanInSteps) {
-            const cleanStep = buildSteps.find(
-                (step) => step.name === "clean" || step.command?.includes("clean"),
-            );
-            if (cleanStep) {
-                try {
-                    const cleanSpinner = ora("清理旧的构建产物").start();
-                    exec(cleanStep.command, {
-                        cwd: cleanStep.cwd || rootDir,
-                        silent: cleanStep.silent,
-                    });
-                    cleanSpinner.succeed();
-                } catch {
-                    // 如果 clean 步骤允许跳过错误，继续执行
-                    if (cleanStep.skipOnError) {
-                        // 忽略错误
-                    } else {
-                        throw new Error("清理步骤失败");
-                    }
-                }
-            }
-        } else {
+
+        if (!hasCleanInSteps) {
             // 如果 build.steps 中不包含 clean，执行默认的清理
             try {
                 const cleanSpinner = ora("清理旧的构建产物").start();
