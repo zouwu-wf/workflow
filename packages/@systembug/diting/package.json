@@ -1,16 +1,16 @@
 {
-  "name": "@systembug/diting",
-  "version": "1.0.0",
-  "description": "谛听 - 平台中立的日志库，使用 chalk 和 pino 进行日志记录",
-  "keywords": [
-    "logger",
-    "logging",
-    "platform-neutral",
-    "typescript",
-    "chalk",
-    "pino",
-    "diting"
-  ],
+    "name": "@systembug/diting",
+    "version": "1.0.1",
+    "description": "谛听 - 平台中立的日志库，使用 chalk 和 pino 进行日志记录",
+    "keywords": [
+        "logger",
+        "logging",
+        "platform-neutral",
+        "typescript",
+        "chalk",
+        "pino",
+        "diting"
+    ],
     "author": "Albert Li <albert_lee@hotmail.com>",
     "license": "MIT",
     "type": "module",
