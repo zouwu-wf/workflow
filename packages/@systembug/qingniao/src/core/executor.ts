@@ -463,7 +463,7 @@ export async function executePublish(
     if (!options.skipPublish && config.publish?.enabled !== false) {
         // 再次过滤私有包，确保不会发布私有包
         const publicPackages = packages.filter((pkg) => !pkg.private);
-        
+
         if (publicPackages.length === 0) {
             logger.warn("没有可发布的公共包（所有包都是私有的）");
             return;
@@ -502,7 +502,10 @@ export async function executePublish(
 
         // 确认发布
         if (!options.yes && config.prompts?.confirmPublish !== false) {
-            const shouldPublish = await confirm(`确认发布 ${publicPackages.length} 个包到 NPM?`, false);
+            const shouldPublish = await confirm(
+                `确认发布 ${publicPackages.length} 个包到 NPM?`,
+                false,
+            );
             if (!shouldPublish) {
                 throw new Error("已取消发布");
             }
