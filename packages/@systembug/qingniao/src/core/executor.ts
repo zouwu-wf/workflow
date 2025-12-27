@@ -498,7 +498,6 @@ export async function executePublish(
         }
 
         // 确认发布
-        logger.warn("准备发布到 NPM");
         if (!options.yes && config.prompts?.confirmPublish !== false) {
             const shouldPublish = await confirm(`确认发布 ${packages.length} 个包到 NPM?`, false);
             if (!shouldPublish) {
