@@ -461,6 +461,14 @@ export async function executePublish(
 
     // 6. 发布（如果未跳过）- 只验证构建产物存在，不执行构建
     if (!options.skipPublish && config.publish?.enabled !== false) {
+        // 再次过滤私有包，确保不会发布私有包
+        const publicPackages = packages.filter((pkg) => !pkg.private);
+        
+        if (publicPackages.length === 0) {
+            logger.warn("没有可发布的公共包（所有包都是私有的）");
+            return;
+        }
+
         // 发布前验证构建产物存在（不执行构建）
         if (!options.skipBuild && config.build?.enabled !== false) {
             const verifySpinner = ora("验证构建产物").start();
@@ -470,7 +478,7 @@ export async function executePublish(
         // 显示将要发布的包列表
         logger.info("📦 将要发布的包:");
         const existingPackages: Array<{ name: string; version: string }> = [];
-        for (const pkg of packages) {
+        for (const pkg of publicPackages) {
             const exists = checkPackageExists(pkg.name, pkg.version);
             const status = exists ? `(已存在 v${pkg.version})` : `(新版本 v${pkg.version})`;
             logger.info(`  • ${pkg.name} ${status}`);
@@ -494,7 +502,7 @@ export async function executePublish(
 
         // 确认发布
         if (!options.yes && config.prompts?.confirmPublish !== false) {
-            const shouldPublish = await confirm(`确认发布 ${packages.length} 个包到 NPM?`, false);
+            const shouldPublish = await confirm(`确认发布 ${publicPackages.length} 个包到 NPM?`, false);
             if (!shouldPublish) {
                 throw new Error("已取消发布");
             }
@@ -535,6 +543,9 @@ export async function executePublish(
                 throw new Error("已取消发布");
             }
         }
+
+        // 更新 context.packages 为只包含公共包
+        context.packages = publicPackages;
 
         // 发布到 NPM
         const publishSpinner = ora("发布到 NPM").start();
