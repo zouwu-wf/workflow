@@ -15,7 +15,6 @@ import { render } from "ink";
 import { writeFileSync, existsSync } from "fs";
 import { join } from "path";
 import { generateConfigTemplate } from "./commands/init";
-import { createLogger } from "./utils/logger";
 import React from "react";
 import { Box, Text } from "ink";
 
@@ -30,11 +29,6 @@ program
     .option("-f, --force", "强制覆盖已存在的配置文件")
     .option("--format <format>", "配置文件格式 (ts|js|json)", "ts")
     .action(async (options: { force?: boolean; format?: string }) => {
-        const logger = createLogger({ verbose: false, pretty: true });
-
-        logger.info("青鸟配置初始化");
-        logger.debug("蓬山此去无多路，青鸟殷勤为探看");
-
         const rootDir = process.cwd();
         const format = (options.format || "ts") as "ts" | "js" | "json";
         const configFileName = `qingniao.config.${format}`;
@@ -42,8 +36,13 @@ program
 
         // 检查文件是否已存在
         if (existsSync(configPath) && !options.force) {
-            logger.warn(`配置文件已存在: ${configFileName}`);
-            logger.info("使用 --force 选项可覆盖现有文件");
+            const { unmount } = render(
+                <Box flexDirection="column">
+                    <Text color="yellow">⚠ 配置文件已存在: {configFileName}</Text>
+                    <Text>使用 --force 选项可覆盖现有文件</Text>
+                </Box>,
+            );
+            await unmount();
             process.exit(1);
         }
 
@@ -86,7 +85,6 @@ program
                 );
                 await renderInstance.waitUntilExit();
             }
-            logger.error(errorObj);
             process.exit(1);
         }
     });
@@ -112,15 +110,6 @@ program
             verbose?: boolean;
             silent?: boolean;
         }) => {
-            const logger = createLogger({
-                verbose: options.verbose || false,
-                silent: options.silent || false,
-                pretty: !options.silent,
-            });
-
-            logger.info("🌌 青鸟发布流程");
-            logger.debug("蓬山此去无多路，青鸟殷勤为探看");
-
             // 加载配置（零配置自动检测）
             const { loadConfig } = await import("./config/loader");
             const config = await loadConfig(options.config);
@@ -162,7 +151,6 @@ program
                         )}
                     </Box>,
                 );
-                logger.error(errorObj);
                 process.exit(1);
             }
         },

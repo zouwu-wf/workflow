@@ -26,5 +26,4 @@ export * from "./core/hooks";
 // 导出工具函数
 export * from "./utils/exec";
 export * from "./utils/package";
-export * from "./utils/logger";
 export * from "./utils/auto-detect";

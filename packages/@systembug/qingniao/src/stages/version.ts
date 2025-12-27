@@ -6,9 +6,6 @@ import { readFileSync, writeFileSync, existsSync } from "fs";
 import { join } from "path";
 import { exec } from "../utils/exec";
 import type { Context, PublishConfig } from "../types";
-import { createLogger } from "../utils/logger";
-
-const logger = createLogger({ pretty: true });
 
 /**
  * 检测是否使用 changeset
@@ -113,7 +110,6 @@ export async function bumpVersionWithChangeset(
 
     const command = config.changeset?.versionCommand || `${pmCommand} changeset version`;
 
-    logger.info(`执行 changeset 版本更新: ${command}`);
     exec(command, { cwd: rootDir });
 
     // 获取更新后的版本
@@ -134,9 +130,7 @@ export async function applyVersionUpdate(
     if (strategy === "changeset") {
         return await bumpVersionWithChangeset(rootDir, config);
     } else if (strategy === "manual" && versionType) {
-        const currentVersion = getCurrentVersion(rootDir);
         const newVersion = bumpVersion(rootDir, versionType, context.packages);
-        logger.success(`版本已更新: v${currentVersion} → v${newVersion}`);
         return newVersion;
     } else {
         throw new Error("版本更新策略未指定或无效");
