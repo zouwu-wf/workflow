@@ -13,11 +13,12 @@
         "release:dry-run": "qingniao --dry-run"
     },
     "devDependencies": {
+        "@changesets/cli": "^2.29.8",
         "@systembug/qingniao": "workspace:*",
-        "turbo": "^2.3.3",
+        "eslint": "^8.57.0",
         "husky": "^9.1.7",
         "prettier": "^3.2.5",
-        "eslint": "^8.57.0",
+        "turbo": "^2.3.3",
         "typescript": "^5.3.3"
     },
     "packageManager": "pnpm@9.0.0",
