@@ -267,10 +267,10 @@ export async function executePublish(
                         if (createChangeset) {
                             const pmCommand =
                                 config.project?.packageManager === "pnpm"
-                                    ? "pnpm"
+                                    ? "pnpm exec"
                                     : config.project?.packageManager === "yarn"
                                       ? "yarn"
-                                      : "npm";
+                                      : "npx";
                             exec(`${pmCommand} changeset`, { cwd: rootDir });
                         } else {
                             throw new Error("已跳过创建 changeset");

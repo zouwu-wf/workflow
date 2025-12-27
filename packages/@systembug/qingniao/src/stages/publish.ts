@@ -26,10 +26,10 @@ export async function publishPackagesDryRun(
 ): Promise<void> {
     const pmCommand =
         config.project?.packageManager === "pnpm"
-            ? "pnpm"
+            ? "pnpm exec"
             : config.project?.packageManager === "yarn"
               ? "yarn"
-              : "npm";
+              : "npx";
 
     if (config.changeset?.enabled) {
         // 使用 changeset publish --dry-run

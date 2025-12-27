@@ -99,10 +99,10 @@ export async function bumpVersionWithChangeset(
 ): Promise<string> {
     const pmCommand =
         config.project?.packageManager === "pnpm"
-            ? "pnpm"
+            ? "pnpm exec"
             : config.project?.packageManager === "yarn"
               ? "yarn"
-              : "npm";
+              : "npx";
 
     const command = config.changeset?.versionCommand || `${pmCommand} changeset version`;
 
