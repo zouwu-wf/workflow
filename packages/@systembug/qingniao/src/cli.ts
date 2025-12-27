@@ -56,9 +56,9 @@ program
             logger.info(" - 配置文件完全可选，青鸟支持零配置");
             logger.info(" - 只需配置需要覆盖自动检测的部分");
             logger.info(" - 删除配置文件即可恢复零配置模式");
-        } catch (error: any) {
+        } catch (error: unknown) {
             const errorMessage = error instanceof Error ? error.message : String(error);
-            logger.error(`生成配置文件失败: ${errorMessage}`, error);
+            logger.error(`生成配置文件失败: ${errorMessage}`);
             process.exit(1);
         }
     });
@@ -105,9 +105,9 @@ program
                 });
 
                 logger.info("✓ 发布流程成功完成");
-            } catch (error: any) {
+            } catch (error: unknown) {
                 const errorMessage = error instanceof Error ? error.message : String(error);
-                logger.error(`✗ ${errorMessage}`, error);
+                logger.error(`✗ ${errorMessage}`);
                 process.exit(1);
             }
         },

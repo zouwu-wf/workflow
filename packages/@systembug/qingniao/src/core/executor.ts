@@ -141,7 +141,7 @@ export async function executePublish(
                 } catch (error: unknown) {
                     pullSpinner.fail("拉取失败，请手动解决冲突");
                     const errorMessage = error instanceof Error ? error.message : String(error);
-                    logger.error("拉取失败，请手动解决冲突", error);
+                    logger.error("拉取失败，请手动解决冲突");
                     throw new Error(`拉取失败，请手动解决冲突: ${errorMessage}`);
                 }
             } else {
@@ -511,9 +511,9 @@ export async function executePublish(
                 logger.warn("💡 提示: 发布需要 OTP 验证");
                 logger.info("   请重新运行发布命令");
                 logger.info("   或者在发布时准备好 OTP 并输入");
-            } else {
-                logger.error(`错误: ${errorMessage}`, error);
-            }
+                } else {
+                    logger.error(`错误: ${errorMessage}`);
+                }
             throw error;
         }
     }
