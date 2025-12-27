@@ -1527,26 +1527,26 @@ hooks: {
 
 ### 功能对照表（publish.mjs → qingniao）
 
-| publish.mjs 功能                                           | qingniao 实现             | 状态 |
-| ---------------------------------------------------------- | ------------------------- | ---- |
-| NPM 认证检查                                               | `stages/auth.ts`          | ✅   |
-| Git 状态检查                                               | `stages/git.ts`           | ✅   |
-| 远程分支检查与拉取                                         | `stages/git.ts`           | ✅   |
-| 询问是否更新版本                                           | `core/executor.tsx` (ink) | ✅   |
-| 选择版本更新方式                                           | `core/executor.tsx` (ink) | ✅   |
-| Manual 版本更新                                            | `stages/version.ts`       | ✅   |
-| Changeset 版本更新                                         | `stages/version.ts`       | ✅   |
-| 创建 changeset                                             | `core/executor.tsx` (ink) | ✅   |
-| 版本更新后 Git 操作                                        | `stages/git.ts`           | ✅   |
-| 构建前检查（clean, install, preLintBuild, lint, format, typecheck, test, build） | `core/executor.ts`       | ✅   |
-| 验证构建产物                                               | `stages/build.ts`         | ✅   |
-| 发布阶段验证构建产物（不执行构建）                         | `core/executor.ts`        | ✅   |
-| 显示要发布的包列表                                         | `core/executor.tsx`       | ✅   |
-| 检查已存在的包                                             | `stages/publish.ts`       | ✅   |
-| 确认发布                                                   | `core/executor.tsx` (ink) | ✅   |
-| Dry-run 测试                                               | `stages/publish.ts`       | ✅   |
-| 发布前 OTP 提示                                            | `core/executor.tsx` (ink) | ✅   |
-| 发布到 NPM                                                 | `stages/publish.ts`       | ✅   |
+| publish.mjs 功能                                                                 | qingniao 实现             | 状态 |
+| -------------------------------------------------------------------------------- | ------------------------- | ---- |
+| NPM 认证检查                                                                     | `stages/auth.ts`          | ✅   |
+| Git 状态检查                                                                     | `stages/git.ts`           | ✅   |
+| 远程分支检查与拉取                                                               | `stages/git.ts`           | ✅   |
+| 询问是否更新版本                                                                 | `core/executor.tsx` (ink) | ✅   |
+| 选择版本更新方式                                                                 | `core/executor.tsx` (ink) | ✅   |
+| Manual 版本更新                                                                  | `stages/version.ts`       | ✅   |
+| Changeset 版本更新                                                               | `stages/version.ts`       | ✅   |
+| 创建 changeset                                                                   | `core/executor.tsx` (ink) | ✅   |
+| 版本更新后 Git 操作                                                              | `stages/git.ts`           | ✅   |
+| 构建前检查（clean, install, preLintBuild, lint, format, typecheck, test, build） | `core/executor.ts`        | ✅   |
+| 验证构建产物                                                                     | `stages/build.ts`         | ✅   |
+| 发布阶段验证构建产物（不执行构建）                                               | `core/executor.ts`        | ✅   |
+| 显示要发布的包列表                                                               | `core/executor.tsx`       | ✅   |
+| 检查已存在的包                                                                   | `stages/publish.ts`       | ✅   |
+| 确认发布                                                                         | `core/executor.tsx` (ink) | ✅   |
+| Dry-run 测试                                                                     | `stages/publish.ts`       | ✅   |
+| 发布前 OTP 提示                                                                  | `core/executor.tsx` (ink) | ✅   |
+| 发布到 NPM                                                                       | `stages/publish.ts`       | ✅   |
 
 ### 技术栈
 
