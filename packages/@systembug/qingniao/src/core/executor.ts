@@ -213,11 +213,14 @@ export async function executePublish(
             let versionUpdateMethod: "changeset" | "manual" = "changeset";
             if (!options.yes) {
                 versionUpdateMethod = await select(
-                    "选择版本更新方式:",
+                    "如何更新版本号?",
                     [
-                        { label: "使用 changeset (推荐)", value: "changeset" as const },
                         {
-                            label: "手动选择版本类型 (major/minor/patch)",
+                            label: "使用 changeset (推荐) - 基于 .changeset 文件自动计算版本",
+                            value: "changeset" as const,
+                        },
+                        {
+                            label: "手动指定版本类型 - 直接选择 major/minor/patch",
                             value: "manual" as const,
                         },
                     ],
