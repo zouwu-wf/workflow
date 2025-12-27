@@ -65,6 +65,18 @@ npm install -g @systembug/qingniao
 npm install --save-dev @systembug/qingniao
 ```
 
+#### 可选依赖
+
+如果使用 changeset 进行版本管理，需要单独安装 `@changesets/cli`：
+
+```bash
+pnpm add -D @changesets/cli
+# 或
+npm install --save-dev @changesets/cli
+# 或
+yarn add -D @changesets/cli
+```
+
 ### 零配置使用
 
 ```bash
