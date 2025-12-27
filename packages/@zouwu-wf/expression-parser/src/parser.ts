@@ -4,11 +4,7 @@
  * 🌌 仙术功能：解析 {{...}} 模板语法，提取变量引用和表达式
  */
 
-import {
-    TemplateVariableReference,
-    ExpressionParseResult,
-    VariableType,
-} from "./types";
+import { TemplateVariableReference, ExpressionParseResult, VariableType } from "./types";
 import { parse as parseExpressionAST } from "./generated/parser";
 
 /**
@@ -27,32 +23,29 @@ const TEMPLATE_PATTERN = /\{\{([^}]+)\}\}/g;
  * 📜 简单变量路径模式
  */
 const SIMPLE_VARIABLE_PATTERN =
-    /^(inputs|variables|steps|loopContext|branchContext)\.[a-zA-Z_][a-zA-Z0-9_.\[\]]*$/;
+    /^(inputs|variables|steps|loopContext|branchContext)\.[a-zA-Z_][a-zA-Z0-9_.[\]]*$/;
 
 /**
  * 🔧 带默认值的变量模式
  */
-const VARIABLE_WITH_DEFAULT_PATTERN =
-    /^([a-zA-Z_][a-zA-Z0-9_.\[\]]*?)\s*\|\|\s*(.+)$/;
+const VARIABLE_WITH_DEFAULT_PATTERN = /^([a-zA-Z_][a-zA-Z0-9_.[\]]*?)\s*\|\|\s*(.+)$/;
 
 /**
  * 🌌 步骤输出模式
  */
-const STEP_OUTPUT_PATTERN =
-    /^steps\.([a-zA-Z_][a-zA-Z0-9_]*)\.output(?:\.(.+))?$/;
+const STEP_OUTPUT_PATTERN = /^steps\.([a-zA-Z_][a-zA-Z0-9_]*)\.output(?:\.(.+))?$/;
 
 /**
  * 📜 循环变量模式
  */
-const LOOP_VARIABLE_PATTERN =
-    /^(currentFile|fileIndex|loopContext\.[a-zA-Z_][a-zA-Z0-9_]*)$/;
+const LOOP_VARIABLE_PATTERN = /^(currentFile|fileIndex|loopContext\.[a-zA-Z_][a-zA-Z0-9_]*)$/;
 
 /**
  * 🔧 解析单个模板表达式
  */
 export function parseTemplateExpression(
     template: string,
-    expression: string
+    expression: string,
 ): TemplateVariableReference | null {
     const trimmed = expression.trim();
 
@@ -169,9 +162,7 @@ function parseDefaultValue(value: string): any {
 /**
  * 📜 从字符串中提取所有模板表达式
  */
-export function extractTemplateExpressions(
-    text: string
-): ExpressionParseResult {
+export function extractTemplateExpressions(text: string): ExpressionParseResult {
     const variables: TemplateVariableReference[] = [];
     const expressions: string[] = [];
     let hasTemplate = false;
@@ -204,7 +195,7 @@ export function extractTemplateExpressions(
  */
 export function extractTemplateExpressionsFromObject(
     obj: any,
-    path = "root"
+    path = "root",
 ): ExpressionParseResult[] {
     const results: ExpressionParseResult[] = [];
 
@@ -215,18 +206,11 @@ export function extractTemplateExpressionsFromObject(
         }
     } else if (Array.isArray(obj)) {
         obj.forEach((item, index) => {
-            results.push(
-                ...extractTemplateExpressionsFromObject(
-                    item,
-                    `${path}[${index}]`
-                )
-            );
+            results.push(...extractTemplateExpressionsFromObject(item, `${path}[${index}]`));
         });
     } else if (obj && typeof obj === "object") {
         for (const [key, value] of Object.entries(obj)) {
-            results.push(
-                ...extractTemplateExpressionsFromObject(value, `${path}.${key}`)
-            );
+            results.push(...extractTemplateExpressionsFromObject(value, `${path}.${key}`));
         }
     }
 
@@ -245,7 +229,7 @@ export function hasTemplateExpression(text: string): boolean {
  * 📜 获取所有变量引用（去重）
  */
 export function getAllVariableReferences(
-    results: ExpressionParseResult[]
+    results: ExpressionParseResult[],
 ): TemplateVariableReference[] {
     const variableMap = new Map<string, TemplateVariableReference>();
 

@@ -118,16 +118,42 @@ program
             logger.info("🌌 青鸟发布流程");
             logger.debug("蓬山此去无多路，青鸟殷勤为探看");
 
-            // 使用 ink 显示 UI
-            const { waitUntilExit } = render(
-                <Box flexDirection="column">
-                    <Text color="yellow">🚧 功能开发中...</Text>
-                    <Text>请参考 RFC 0005 了解设计规范</Text>
-                </Box>,
-            );
+            // 加载配置（零配置自动检测）
+            const { loadConfig } = await import("./config/loader");
+            const config = await loadConfig(options.config);
 
-            // TODO: 实现发布流程
-            await waitUntilExit();
+            // 创建上下文
+            const { createContext } = await import("./core/context");
+            const context = createContext(config, [], process.cwd());
+
+            // 执行发布流程
+            const { executePublish } = await import("./core/executor.js");
+
+            try {
+                await executePublish(config, context, {
+                    dryRun: options.dryRun,
+                    skipVersion: options.skipVersion,
+                    skipBuild: options.skipBuild,
+                    skipPublish: options.skipPublish,
+                    yes: options.yes,
+                });
+
+                // 显示成功消息
+                render(
+                    <Box flexDirection="column">
+                        <Text color="green">✓ 发布流程成功完成</Text>
+                    </Box>,
+                );
+            } catch (error: any) {
+                // 显示错误消息
+                render(
+                    <Box flexDirection="column">
+                        <Text color="red">✗ 发布流程失败: {error.message}</Text>
+                    </Box>,
+                );
+                logger.error(error);
+                process.exit(1);
+            }
         },
     );
 

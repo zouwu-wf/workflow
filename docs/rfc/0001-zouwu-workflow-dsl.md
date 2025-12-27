@@ -402,8 +402,8 @@ steps:
 | **定义 (DSL)**          | `@zouwu-wf/workflow` | Schema, Types               |
 | **解析 (String->Obj)**  | `@zouwu-wf/workflow` | 封装 js-yaml, 语法检查      |
 | **验证 (Obj->Obj)**     | `@zouwu-wf/workflow` | Schema Validation, 逻辑检查 |
-| **加载 (File->String)** | `@systembug/zouwu` | Node.js fs                  |
-| **编排 (Execution)**    | `@systembug/zouwu` | 状态机, 步骤流转            |
+| **加载 (File->String)** | `@systembug/zouwu`   | Node.js fs                  |
+| **编排 (Execution)**    | `@systembug/zouwu`   | 状态机, 步骤流转            |
 
 ### Phase 4: 依赖关系
 

@@ -1,13 +1,13 @@
-import fs from 'fs';
-import path from 'path';
+import fs from "fs";
+import path from "path";
 
-describe('Schema 文件完整性', () => {
-    const rootDir = path.join(__dirname, '..');
-    const schemasDir = path.join(rootDir, 'schemas');
+describe("Schema 文件完整性", () => {
+    const rootDir = path.join(__dirname, "..");
+    const schemasDir = path.join(rootDir, "schemas");
     const expectedSchemas = [
-        'workflow.schema.json',
-        'step-types.schema.json',
-        'template-syntax.schema.json',
+        "workflow.schema.json",
+        "step-types.schema.json",
+        "template-syntax.schema.json",
     ];
 
     expectedSchemas.forEach((schemaFile) => {
@@ -16,7 +16,7 @@ describe('Schema 文件完整性', () => {
 
             expect(fs.existsSync(schemaPath)).toBe(true);
 
-            const schemaContent = fs.readFileSync(schemaPath, 'utf-8');
+            const schemaContent = fs.readFileSync(schemaPath, "utf-8");
             const schema = JSON.parse(schemaContent);
 
             expect(schema.$schema).toBeDefined();

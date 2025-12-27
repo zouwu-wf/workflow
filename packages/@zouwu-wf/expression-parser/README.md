@@ -41,23 +41,23 @@ import {
     extractTemplateExpressions,
     validateTemplateExpression,
     parseTemplateExpression,
-} from '@zouwu-wf/expression-parser';
+} from "@zouwu-wf/expression-parser";
 
 // 提取模板表达式
-const result = extractTemplateExpressions('Hello {{inputs.name}}!');
+const result = extractTemplateExpressions("Hello {{inputs.name}}!");
 console.log(result.hasTemplate); // true
 console.log(result.variables); // [{ type: 'inputs', path: 'name', ... }]
 
 // 验证表达式
-const availableVars = new Set(['inputs.name', 'inputs.age']);
+const availableVars = new Set(["inputs.name", "inputs.age"]);
 const validation = validateTemplateExpression(
-    '{{inputs.name}} is {{inputs.age}} years old',
-    availableVars
+    "{{inputs.name}} is {{inputs.age}} years old",
+    availableVars,
 );
 console.log(validation.valid); // true
 
 // 解析单个表达式
-const parsed = parseTemplateExpression('{{inputs.userName}}', 'inputs.userName');
+const parsed = parseTemplateExpression("{{inputs.userName}}", "inputs.userName");
 console.log(parsed); // { type: 'inputs', path: 'userName', ... }
 ```
 
@@ -106,31 +106,31 @@ console.log(parsed); // { type: 'inputs', path: 'userName', ... }
 ### 简单变量引用
 
 ```typescript
-'{{inputs.userName}}';
-'{{variables.requestId}}';
-'{{steps.stepId.output}}';
+"{{inputs.userName}}";
+"{{variables.requestId}}";
+"{{steps.stepId.output}}";
 ```
 
 ### 带默认值
 
 ```typescript
 '{{inputs.name || "default"}}';
-'{{variables.count || 0}}';
+"{{variables.count || 0}}";
 ```
 
 ### 嵌套属性
 
 ```typescript
-'{{inputs.user.profile.name}}';
-'{{steps.validate.output.result}}';
+"{{inputs.user.profile.name}}";
+"{{steps.validate.output.result}}";
 ```
 
 ### 循环变量
 
 ```typescript
-'{{currentFile}}';
-'{{fileIndex}}';
-'{{loopContext.index}}';
+"{{currentFile}}";
+"{{fileIndex}}";
+"{{loopContext.index}}";
 ```
 
 ## 🧪 测试

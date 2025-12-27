@@ -2,7 +2,7 @@
  * 命令执行工具
  */
 
-import { execSync } from 'child_process';
+import { execSync } from "child_process";
 
 export interface ExecOptions {
     silent?: boolean;
@@ -16,9 +16,9 @@ export interface ExecOptions {
 export function exec(command: string, options: ExecOptions = {}): string {
     try {
         return execSync(command, {
-            stdio: options.silent ? 'pipe' : 'inherit',
+            stdio: options.silent ? "pipe" : "inherit",
             cwd: options.cwd || process.cwd(),
-            encoding: options.encoding || 'utf-8',
+            encoding: options.encoding || "utf-8",
         }) as string;
     } catch (error: any) {
         throw new Error(`命令执行失败: ${command} ${error.message}`);
@@ -28,15 +28,19 @@ export function exec(command: string, options: ExecOptions = {}): string {
 /**
  * 静默执行命令
  */
-export function execSilent(command: string, options: Omit<ExecOptions, 'silent'> = {}): string | null {
+export function execSilent(
+    command: string,
+    options: Omit<ExecOptions, "silent"> = {},
+): string | null {
     try {
         return execSync(command, {
-            stdio: 'pipe',
+            stdio: "pipe",
             cwd: options.cwd || process.cwd(),
-            encoding: options.encoding || 'utf-8',
-        }).toString().trim();
+            encoding: options.encoding || "utf-8",
+        })
+            .toString()
+            .trim();
     } catch {
         return null;
     }
 }
-

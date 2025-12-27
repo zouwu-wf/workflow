@@ -22,13 +22,7 @@ export default defineConfig({
             },
         },
         rollupOptions: {
-            external: [
-                "ajv",
-                "ajv-formats",
-                "js-yaml",
-                "@zouwu-wf/expression-parser",
-                "events",
-            ],
+            external: ["ajv", "ajv-formats", "js-yaml", "@zouwu-wf/expression-parser", "events"],
             output: {
                 preserveModules: false,
                 exports: "named",

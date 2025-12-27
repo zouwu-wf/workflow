@@ -89,66 +89,73 @@
 **自动检测流程**：
 
 1. **包管理器检测**
-   ```typescript
-   // 优先级顺序：
-   // 1. package.json 中的 packageManager 字段
-   // 2. 检测 lockfile: pnpm-lock.yaml -> pnpm, yarn.lock -> yarn, package-lock.json -> npm
-   // 3. 检测可执行文件: which pnpm/yarn/npm
-   ```
+
+    ```typescript
+    // 优先级顺序：
+    // 1. package.json 中的 packageManager 字段
+    // 2. 检测 lockfile: pnpm-lock.yaml -> pnpm, yarn.lock -> yarn, package-lock.json -> npm
+    // 3. 检测可执行文件: which pnpm/yarn/npm
+    ```
 
 2. **Workspace 类型检测**
-   ```typescript
-   // pnpm workspace: 检测 pnpm-workspace.yaml
-   // yarn workspace: 检测 package.json 中的 workspaces 字段
-   // npm workspace: 检测 package.json 中的 workspaces 字段
-   ```
+
+    ```typescript
+    // pnpm workspace: 检测 pnpm-workspace.yaml
+    // yarn workspace: 检测 package.json 中的 workspaces 字段
+    // npm workspace: 检测 package.json 中的 workspaces 字段
+    ```
 
 3. **包发现（自动）**
-   ```typescript
-   // pnpm: 使用 'pnpm list -r --depth -1 --json'
-   // yarn: 使用 'yarn workspaces list --json'
-   // npm: 使用 'npm ls --workspaces --json'
-   // 自动过滤: private 包、examples、test 等
-   ```
+
+    ```typescript
+    // pnpm: 使用 'pnpm list -r --depth -1 --json'
+    // yarn: 使用 'yarn workspaces list --json'
+    // npm: 使用 'npm ls --workspaces --json'
+    // 自动过滤: private 包、examples、test 等
+    ```
 
 4. **构建命令推断**
-   ```typescript
-   // 从 package.json scripts 自动推断：
-   // - 检测是否有 'build' 脚本 -> 使用 'pnpm build' 或 'turbo build'
-   // - 检测 turbo.json -> 使用 turbo 任务
-   // - 检测是否有 'lint', 'test', 'typecheck' -> 自动添加到构建步骤
-   ```
+
+    ```typescript
+    // 从 package.json scripts 自动推断：
+    // - 检测是否有 'build' 脚本 -> 使用 'pnpm build' 或 'turbo build'
+    // - 检测 turbo.json -> 使用 turbo 任务
+    // - 检测是否有 'lint', 'test', 'typecheck' -> 自动添加到构建步骤
+    ```
 
 5. **版本策略检测**
-   ```typescript
-   // 检测 .changeset 目录 -> 使用 changeset 策略
-   // 否则使用 manual 策略（交互式选择）
-   ```
+
+    ```typescript
+    // 检测 .changeset 目录 -> 使用 changeset 策略
+    // 否则使用 manual 策略（交互式选择）
+    ```
 
 6. **Turbo 集成（自动）**
-   ```typescript
-   // 检测 turbo.json -> 自动使用 turbo 构建
-   // 从 turbo.json 读取任务配置
-   ```
+
+    ```typescript
+    // 检测 turbo.json -> 自动使用 turbo 构建
+    // 从 turbo.json 读取任务配置
+    ```
 
 7. **构建产物路径推断**
-   ```typescript
-   // 自动检测每个包的构建产物：
-   // 1. 检查 package.json 中的 main/module/types 字段
-   // 2. 检查是否存在 dist/, build/, lib/ 目录
-   // 3. 检查 turbo.json 中的 outputs 配置
-   ```
+
+    ```typescript
+    // 自动检测每个包的构建产物：
+    // 1. 检查 package.json 中的 main/module/types 字段
+    // 2. 检查是否存在 dist/, build/, lib/ 目录
+    // 3. 检查 turbo.json 中的 outputs 配置
+    ```
 
 8. **构建步骤自动生成**
-   ```typescript
-   // 从 package.json scripts 自动生成构建步骤：
-   // - 如果有 'clean' -> 添加清理步骤
-   // - 如果有 'install' 或检测到 lockfile -> 添加安装步骤
-   // - 如果有 'lint' -> 添加代码检查步骤
-   // - 如果有 'typecheck' -> 添加类型检查步骤
-   // - 如果有 'test' -> 添加测试步骤
-   // - 如果有 'build' -> 添加构建步骤
-   ```
+    ```typescript
+    // 从 package.json scripts 自动生成构建步骤：
+    // - 如果有 'clean' -> 添加清理步骤
+    // - 如果有 'install' 或检测到 lockfile -> 添加安装步骤
+    // - 如果有 'lint' -> 添加代码检查步骤
+    // - 如果有 'typecheck' -> 添加类型检查步骤
+    // - 如果有 'test' -> 添加测试步骤
+    // - 如果有 'build' -> 添加构建步骤
+    ```
 
 **零配置示例**：
 
@@ -170,33 +177,33 @@ qingniao
 ```json
 // package.json (根目录)
 {
-  "name": "@zouwu-wf/zouwu-workflow",
-  "packageManager": "pnpm@9.0.0",
-  "scripts": {
-    "build": "turbo run build",
-    "test": "turbo run test",
-    "lint": "turbo run lint",
-    "typecheck": "turbo run typecheck"
-  }
+    "name": "@zouwu-wf/zouwu-workflow",
+    "packageManager": "pnpm@9.0.0",
+    "scripts": {
+        "build": "turbo run build",
+        "test": "turbo run test",
+        "lint": "turbo run lint",
+        "typecheck": "turbo run typecheck"
+    }
 }
 ```
 
 ```yaml
 # pnpm-workspace.yaml
 packages:
-  - "packages/*"
-  - "packages/@zouwu-wf/*"
+    - "packages/*"
+    - "packages/@zouwu-wf/*"
 ```
 
 ```json
 // turbo.json
 {
-  "tasks": {
-    "build": {
-      "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
+    "tasks": {
+        "build": {
+            "dependsOn": ["^build"],
+            "outputs": ["dist/**"]
+        }
     }
-  }
 }
 ```
 
@@ -242,22 +249,23 @@ packages:
 
 **自动推断的配置映射**：
 
-| 检测项 | 来源 | 默认行为 |
-|--------|------|----------|
-| 包管理器 | `packageManager` 字段或 lockfile | 自动选择 |
-| Workspace 类型 | `pnpm-workspace.yaml` 或 `package.json.workspaces` | 自动检测 |
-| 包列表 | workspace 命令输出 | 过滤私有包和 examples |
-| 构建命令 | `package.json.scripts` | 使用 `build`, `lint`, `test`, `typecheck` |
-| Turbo 使用 | `turbo.json` 存在 | 自动使用 turbo 任务 |
-| 版本策略 | `.changeset` 目录 | changeset 或 manual |
-| Git 分支 | 当前分支 | `main` 或 `master` |
-| 标签前缀 | 无 | `v` |
+| 检测项         | 来源                                               | 默认行为                                  |
+| -------------- | -------------------------------------------------- | ----------------------------------------- |
+| 包管理器       | `packageManager` 字段或 lockfile                   | 自动选择                                  |
+| Workspace 类型 | `pnpm-workspace.yaml` 或 `package.json.workspaces` | 自动检测                                  |
+| 包列表         | workspace 命令输出                                 | 过滤私有包和 examples                     |
+| 构建命令       | `package.json.scripts`                             | 使用 `build`, `lint`, `test`, `typecheck` |
+| Turbo 使用     | `turbo.json` 存在                                  | 自动使用 turbo 任务                       |
+| 版本策略       | `.changeset` 目录                                  | changeset 或 manual                       |
+| Git 分支       | 当前分支                                           | `main` 或 `master`                        |
+| 标签前缀       | 无                                                 | `v`                                       |
 
 #### 2.2 配置文件格式（可选，用于覆盖自动检测）
 
 **配置文件是完全可选的**，仅用于覆盖自动检测的结果。如果项目符合标准结构，**完全不需要配置文件**。
 
 **配置文件的角色**：
+
 - 🎯 **覆盖自动检测**：当自动检测的结果不符合需求时，使用配置文件覆盖
 - 🎯 **部分覆盖**：只需覆盖需要自定义的部分，其他保持自动检测
 - 🎯 **深度定制**：支持完全自定义的复杂场景
@@ -287,6 +295,7 @@ packages:
 ```
 
 **配置文件优先级**（从高到低）：
+
 1. 命令行 `--config` 指定的文件
 2. `qingniao.config.*` 文件
 3. `package.json` 中的 `qingniao` 字段
@@ -296,12 +305,12 @@ packages:
 
 - ✅ **零配置足够（推荐）**：标准 monorepo 结构、使用常见工具（turbo、changeset）
 - ⚙️ **需要配置文件（覆盖自动检测）**：
-  - 覆盖自动检测的构建步骤
-  - 覆盖自动检测的包过滤规则
-  - 覆盖自动检测的版本策略
-  - 覆盖自动检测的构建产物路径
-  - 添加自定义钩子函数
-  - 非标准的项目结构
+    - 覆盖自动检测的构建步骤
+    - 覆盖自动检测的包过滤规则
+    - 覆盖自动检测的版本策略
+    - 覆盖自动检测的构建产物路径
+    - 添加自定义钩子函数
+    - 非标准的项目结构
 
 **部分覆盖示例**：
 
@@ -309,66 +318,69 @@ packages:
 // qingniao.config.ts
 // 只覆盖构建步骤，其他保持自动检测
 export default {
-  build: {
-    steps: [
-      { name: '自定义清理', command: 'rm -rf dist' },
-      { name: '自定义构建', command: 'pnpm build:custom' }
-    ]
-  }
-  // 其他配置保持自动检测
+    build: {
+        steps: [
+            { name: "自定义清理", command: "rm -rf dist" },
+            { name: "自定义构建", command: "pnpm build:custom" },
+        ],
+    },
+    // 其他配置保持自动检测
 };
 ```
 
 ```json
 // package.json
 {
-  "qingniao": {
-    // 只覆盖 Git 分支配置
-    "git": {
-      "branch": "develop"
+    "qingniao": {
+        // 只覆盖 Git 分支配置
+        "git": {
+            "branch": "develop"
+        }
+        // 其他配置保持自动检测
     }
-    // 其他配置保持自动检测
-  }
 }
 ```
 
 **零配置实现细节**：
 
 1. **智能 Fallback 机制**
-   ```typescript
-   // 如果自动检测失败，使用合理的默认值
-   // 例如：如果检测不到 turbo.json，使用普通的构建命令
-   // 如果检测不到 changeset，使用 manual 版本策略
-   ```
+
+    ```typescript
+    // 如果自动检测失败，使用合理的默认值
+    // 例如：如果检测不到 turbo.json，使用普通的构建命令
+    // 如果检测不到 changeset，使用 manual 版本策略
+    ```
 
 2. **构建产物路径推断算法**
-   ```typescript
-   // 优先级顺序：
-   // 1. package.json 中的 main/module/types 字段的目录部分
-   // 2. 检查常见目录：dist/, build/, lib/, out/
-   // 3. turbo.json 中的 outputs 配置
-   // 4. 如果都找不到，跳过验证（警告但不失败）
-   ```
+
+    ```typescript
+    // 优先级顺序：
+    // 1. package.json 中的 main/module/types 字段的目录部分
+    // 2. 检查常见目录：dist/, build/, lib/, out/
+    // 3. turbo.json 中的 outputs 配置
+    // 4. 如果都找不到，跳过验证（警告但不失败）
+    ```
 
 3. **构建步骤生成规则**
-   ```typescript
-   // 自动生成的步骤顺序：
-   // 1. clean（如果存在）- skipOnError: true
-   // 2. install（如果检测到 lockfile 变化或不存在 node_modules）
-   // 3. lint（如果存在）
-   // 4. typecheck（如果存在）
-   // 5. test（如果存在）
-   // 6. build（必须存在，否则报错）
-   ```
+
+    ```typescript
+    // 自动生成的步骤顺序：
+    // 1. clean（如果存在）- skipOnError: true
+    // 2. install（如果检测到 lockfile 变化或不存在 node_modules）
+    // 3. lint（如果存在）
+    // 4. typecheck（如果存在）
+    // 5. test（如果存在）
+    // 6. build（必须存在，否则报错）
+    ```
 
 4. **包过滤规则（零配置）**
-   ```typescript
-   // 自动排除：
-   // - private: true 的包
-   // - 名称包含 'example', 'demo', 'test', 'sample' 的包
-   // - 路径包含 /examples/, /demos/, /tests/ 的包
-   // - 没有 version 字段的包
-   ```
+    ```typescript
+    // 自动排除：
+    // - private: true 的包
+    // - 名称包含 'example', 'demo', 'test', 'sample' 的包
+    // - 路径包含 /examples/, /demos/, /tests/ 的包
+    // - 没有 version 字段的包
+    ```
 
 #### 2.3 配置结构
 
@@ -376,154 +388,154 @@ export default {
 
 ```typescript
 interface PublishConfig {
-  // 项目元信息（可选，覆盖自动检测）
-  project?: {
-    name?: string;                    // 项目名称（默认: 从 package.json 读取）
-    rootDir?: string;                 // 项目根目录（默认: process.cwd()）
-    packageManager?: 'npm' | 'pnpm' | 'yarn'; // 包管理器（默认: 自动检测）
-  };
+    // 项目元信息（可选，覆盖自动检测）
+    project?: {
+        name?: string; // 项目名称（默认: 从 package.json 读取）
+        rootDir?: string; // 项目根目录（默认: process.cwd()）
+        packageManager?: "npm" | "pnpm" | "yarn"; // 包管理器（默认: 自动检测）
+    };
 
-  // Git 配置（可选，覆盖自动检测）
-  git?: {
-    enabled?: boolean;                // 是否启用 Git 检查（默认: true，自动检测）
-    branch?: string | string[];       // 允许的分支（默认: ['main', 'master']，自动检测当前分支）
-    requireClean?: boolean;            // 是否需要干净的工作区（默认: true）
-    requireUpToDate?: boolean;         // 是否需要与远程同步（默认: true）
-    autoPull?: boolean;                // 是否自动拉取更新（默认: true）
-    tagPrefix?: string;               // Git 标签前缀（默认: 'v'）
-    commitMessage?: string | ((version: string) => string); // 提交消息模板（默认: 自动生成）
-  };
+    // Git 配置（可选，覆盖自动检测）
+    git?: {
+        enabled?: boolean; // 是否启用 Git 检查（默认: true，自动检测）
+        branch?: string | string[]; // 允许的分支（默认: ['main', 'master']，自动检测当前分支）
+        requireClean?: boolean; // 是否需要干净的工作区（默认: true）
+        requireUpToDate?: boolean; // 是否需要与远程同步（默认: true）
+        autoPull?: boolean; // 是否自动拉取更新（默认: true）
+        tagPrefix?: string; // Git 标签前缀（默认: 'v'）
+        commitMessage?: string | ((version: string) => string); // 提交消息模板（默认: 自动生成）
+    };
 
-  // 版本管理配置（可选，覆盖自动检测）
-  version?: {
-    strategy?: 'changeset' | 'manual' | 'semver' | 'custom'; // 版本策略（默认: 自动检测 .changeset 目录）
-    bumpTypes?: ('major' | 'minor' | 'patch')[]; // 允许的版本类型（manual 模式，默认: 全部）
-    syncAll?: boolean;                 // 是否同步所有包的版本（默认: true）
-    syncWorkspaceDeps?: boolean;       // 是否同步 workspace 依赖的版本引用（默认: true）
-    files?: string[];                  // 需要更新版本的文件（默认: 自动检测所有 package.json）
-  };
+    // 版本管理配置（可选，覆盖自动检测）
+    version?: {
+        strategy?: "changeset" | "manual" | "semver" | "custom"; // 版本策略（默认: 自动检测 .changeset 目录）
+        bumpTypes?: ("major" | "minor" | "patch")[]; // 允许的版本类型（manual 模式，默认: 全部）
+        syncAll?: boolean; // 是否同步所有包的版本（默认: true）
+        syncWorkspaceDeps?: boolean; // 是否同步 workspace 依赖的版本引用（默认: true）
+        files?: string[]; // 需要更新版本的文件（默认: 自动检测所有 package.json）
+    };
 
-  // Changeset 配置（可选，覆盖自动检测，当 strategy 为 'changeset' 时）
-  changeset?: {
-    enabled?: boolean;                 // 是否启用 changeset（默认: 自动检测 .changeset 目录）
-    configPath?: string;               // changeset 配置文件路径（默认: '.changeset/config.json'）
-    createCommand?: string;            // 创建 changeset 的命令（默认: 根据包管理器自动生成）
-    versionCommand?: string;           // 应用版本更新的命令（默认: 根据包管理器自动生成）
-    publishCommand?: string;           // 发布命令（默认: 根据包管理器自动生成）
-    autoCreate?: boolean;              // 如果没有 changeset 文件，是否自动创建（默认: false，交互式提示）
-    skipVersion?: boolean;             // 是否跳过版本更新步骤（默认: false）
-    skipPublish?: boolean;             // 是否跳过发布步骤（默认: false）
-    readConfig?: boolean;              // 是否读取 .changeset/config.json（默认: true）
-  };
+    // Changeset 配置（可选，覆盖自动检测，当 strategy 为 'changeset' 时）
+    changeset?: {
+        enabled?: boolean; // 是否启用 changeset（默认: 自动检测 .changeset 目录）
+        configPath?: string; // changeset 配置文件路径（默认: '.changeset/config.json'）
+        createCommand?: string; // 创建 changeset 的命令（默认: 根据包管理器自动生成）
+        versionCommand?: string; // 应用版本更新的命令（默认: 根据包管理器自动生成）
+        publishCommand?: string; // 发布命令（默认: 根据包管理器自动生成）
+        autoCreate?: boolean; // 如果没有 changeset 文件，是否自动创建（默认: false，交互式提示）
+        skipVersion?: boolean; // 是否跳过版本更新步骤（默认: false）
+        skipPublish?: boolean; // 是否跳过发布步骤（默认: false）
+        readConfig?: boolean; // 是否读取 .changeset/config.json（默认: true）
+    };
 
-  // 构建和验证配置（可选，覆盖自动检测）
-  build?: {
-    enabled?: boolean;                 // 是否启用构建检查（默认: true）
-    steps?: BuildStep[];               // 构建步骤列表（默认: 从 package.json scripts 自动生成）
-    verifyArtifacts?: ArtifactCheck[]; // 构建产物验证（默认: 从 package.json 和目录自动推断）
-    useTurbo?: boolean;                // 是否使用 Turbo（默认: 自动检测 turbo.json）
-    turboConfigPath?: string;          // Turbo 配置文件路径（默认: 'turbo.json'）
-    turboTasks?: string[];             // 要执行的 Turbo 任务（默认: ['build']，从 turbo.json 读取）
-  };
+    // 构建和验证配置（可选，覆盖自动检测）
+    build?: {
+        enabled?: boolean; // 是否启用构建检查（默认: true）
+        steps?: BuildStep[]; // 构建步骤列表（默认: 从 package.json scripts 自动生成）
+        verifyArtifacts?: ArtifactCheck[]; // 构建产物验证（默认: 从 package.json 和目录自动推断）
+        useTurbo?: boolean; // 是否使用 Turbo（默认: 自动检测 turbo.json）
+        turboConfigPath?: string; // Turbo 配置文件路径（默认: 'turbo.json'）
+        turboTasks?: string[]; // 要执行的 Turbo 任务（默认: ['build']，从 turbo.json 读取）
+    };
 
-  // pnpm workspace 配置（可选，覆盖自动检测）
-  workspace?: {
-    enabled?: boolean;                  // 是否启用 workspace 模式（默认: 自动检测）
-    configPath?: string;                // workspace 配置文件路径（默认: 自动检测）
-    autoDetect?: boolean;               // 是否自动检测（默认: true）
-  };
+    // pnpm workspace 配置（可选，覆盖自动检测）
+    workspace?: {
+        enabled?: boolean; // 是否启用 workspace 模式（默认: 自动检测）
+        configPath?: string; // workspace 配置文件路径（默认: 自动检测）
+        autoDetect?: boolean; // 是否自动检测（默认: true）
+    };
 
-  // 包发现配置（可选，覆盖自动检测）
-  packages?: {
-    root?: string;                     // 包根目录（默认: 从 workspace 配置自动检测）
-    pattern?: string | string[];       // 包匹配模式（默认: 从 workspace 配置自动检测）
-    exclude?: string[];                // 排除的包模式（默认: 自动排除 examples, test 等）
-    filter?: (pkg: PackageInfo) => boolean; // 自定义过滤函数（默认: 自动过滤私有包）
-    usePnpmList?: boolean;             // 使用 workspace 命令发现包（默认: true，自动检测）
-  };
+    // 包发现配置（可选，覆盖自动检测）
+    packages?: {
+        root?: string; // 包根目录（默认: 从 workspace 配置自动检测）
+        pattern?: string | string[]; // 包匹配模式（默认: 从 workspace 配置自动检测）
+        exclude?: string[]; // 排除的包模式（默认: 自动排除 examples, test 等）
+        filter?: (pkg: PackageInfo) => boolean; // 自定义过滤函数（默认: 自动过滤私有包）
+        usePnpmList?: boolean; // 使用 workspace 命令发现包（默认: true，自动检测）
+    };
 
-  // 依赖关系处理配置（可选，覆盖自动检测）
-  dependencies?: {
-    respectDependencyOrder?: boolean;  // 是否考虑依赖顺序（默认: true）
-    buildOrder?: 'topological' | 'parallel' | 'custom'; // 构建顺序策略（默认: 'topological'）
-    customOrder?: (packages: PackageInfo[]) => PackageInfo[]; // 自定义排序函数
-  };
+    // 依赖关系处理配置（可选，覆盖自动检测）
+    dependencies?: {
+        respectDependencyOrder?: boolean; // 是否考虑依赖顺序（默认: true）
+        buildOrder?: "topological" | "parallel" | "custom"; // 构建顺序策略（默认: 'topological'）
+        customOrder?: (packages: PackageInfo[]) => PackageInfo[]; // 自定义排序函数
+    };
 
-  // NPM 发布配置（可选，覆盖自动检测）
-  publish?: {
-    enabled?: boolean;                 // 是否启用发布（默认: true）
-    registry?: string;                 // NPM registry（默认: 自动检测 npm config）
-    access?: 'public' | 'restricted';  // 发布访问级别（默认: 从 package.json 读取）
-    dryRun?: boolean;                  // 是否仅执行 dry-run（默认: false）
-    skipExisting?: boolean;            // 是否跳过已存在的版本（默认: false）
-    otpRequired?: boolean;              // 是否需要 OTP（默认: 自动检测）
-    replaceWorkspaceProtocols?: boolean; // 是否替换 workspace 协议（默认: true）
-    protocolReplacement?: 'version' | 'range' | 'custom'; // 替换策略（默认: 'version'）
-    customProtocolReplacer?: (pkg: PackageInfo, dep: string) => string; // 自定义替换函数
-  };
+    // NPM 发布配置（可选，覆盖自动检测）
+    publish?: {
+        enabled?: boolean; // 是否启用发布（默认: true）
+        registry?: string; // NPM registry（默认: 自动检测 npm config）
+        access?: "public" | "restricted"; // 发布访问级别（默认: 从 package.json 读取）
+        dryRun?: boolean; // 是否仅执行 dry-run（默认: false）
+        skipExisting?: boolean; // 是否跳过已存在的版本（默认: false）
+        otpRequired?: boolean; // 是否需要 OTP（默认: 自动检测）
+        replaceWorkspaceProtocols?: boolean; // 是否替换 workspace 协议（默认: true）
+        protocolReplacement?: "version" | "range" | "custom"; // 替换策略（默认: 'version'）
+        customProtocolReplacer?: (pkg: PackageInfo, dep: string) => string; // 自定义替换函数
+    };
 
-  // 预发布检查配置（可选，覆盖自动检测）
-  checks?: {
-    auth?: boolean;                    // 检查 NPM 认证（默认: true）
-    git?: boolean;                     // 检查 Git 状态（默认: true）
-    build?: boolean;                   // 检查构建（默认: true）
-    tests?: boolean;                   // 运行测试（默认: 从 package.json scripts 检测）
-    lint?: boolean;                    // 代码检查（默认: 从 package.json scripts 检测）
-    typecheck?: boolean;               // 类型检查（默认: 从 package.json scripts 检测）
-  };
+    // 预发布检查配置（可选，覆盖自动检测）
+    checks?: {
+        auth?: boolean; // 检查 NPM 认证（默认: true）
+        git?: boolean; // 检查 Git 状态（默认: true）
+        build?: boolean; // 检查构建（默认: true）
+        tests?: boolean; // 运行测试（默认: 从 package.json scripts 检测）
+        lint?: boolean; // 代码检查（默认: 从 package.json scripts 检测）
+        typecheck?: boolean; // 类型检查（默认: 从 package.json scripts 检测）
+    };
 
-  // 钩子函数（可选，添加自定义逻辑）
-  hooks?: {
-    // 版本管理钩子
-    beforeVersion?: (ctx: Context) => Promise<void>;
-    afterVersion?: (ctx: Context) => Promise<void>;
-    // Changeset 钩子
-    beforeChangesetCreate?: (ctx: Context) => Promise<void>;
-    afterChangesetCreate?: (ctx: Context) => Promise<void>;
-    beforeChangesetVersion?: (ctx: Context) => Promise<void>;
-    afterChangesetVersion?: (ctx: Context) => Promise<void>;
-    beforeChangesetPublish?: (ctx: Context) => Promise<void>;
-    afterChangesetPublish?: (ctx: Context) => Promise<void>;
-    // 构建钩子
-    beforeBuild?: (ctx: Context) => Promise<void>;
-    afterBuild?: (ctx: Context) => Promise<void>;
-    // 发布钩子
-    beforePublish?: (ctx: Context) => Promise<void>;
-    afterPublish?: (ctx: Context) => Promise<void>;
-  };
+    // 钩子函数（可选，添加自定义逻辑）
+    hooks?: {
+        // 版本管理钩子
+        beforeVersion?: (ctx: Context) => Promise<void>;
+        afterVersion?: (ctx: Context) => Promise<void>;
+        // Changeset 钩子
+        beforeChangesetCreate?: (ctx: Context) => Promise<void>;
+        afterChangesetCreate?: (ctx: Context) => Promise<void>;
+        beforeChangesetVersion?: (ctx: Context) => Promise<void>;
+        afterChangesetVersion?: (ctx: Context) => Promise<void>;
+        beforeChangesetPublish?: (ctx: Context) => Promise<void>;
+        afterChangesetPublish?: (ctx: Context) => Promise<void>;
+        // 构建钩子
+        beforeBuild?: (ctx: Context) => Promise<void>;
+        afterBuild?: (ctx: Context) => Promise<void>;
+        // 发布钩子
+        beforePublish?: (ctx: Context) => Promise<void>;
+        afterPublish?: (ctx: Context) => Promise<void>;
+    };
 
-  // 交互式提示配置（可选，覆盖默认行为）
-  prompts?: {
-    confirmVersion?: boolean;          // 是否确认版本更新（默认: true）
-    confirmPublish?: boolean;           // 是否确认发布（默认: true）
-    dryRunFirst?: boolean;             // 是否先执行 dry-run（默认: true）
-  };
+    // 交互式提示配置（可选，覆盖默认行为）
+    prompts?: {
+        confirmVersion?: boolean; // 是否确认版本更新（默认: true）
+        confirmPublish?: boolean; // 是否确认发布（默认: true）
+        dryRunFirst?: boolean; // 是否先执行 dry-run（默认: true）
+    };
 }
 
 // 构建步骤定义
 interface BuildStep {
-  name: string;                        // 步骤名称
-  command: string;                     // 执行的命令
-  cwd?: string;                        // 工作目录
-  silent?: boolean;                   // 是否静默执行
-  skipOnError?: boolean;            // 错误时是否跳过
-  condition?: (ctx: Context) => boolean; // 执行条件
+    name: string; // 步骤名称
+    command: string; // 执行的命令
+    cwd?: string; // 工作目录
+    silent?: boolean; // 是否静默执行
+    skipOnError?: boolean; // 错误时是否跳过
+    condition?: (ctx: Context) => boolean; // 执行条件
 }
 
 // 构建产物检查
 interface ArtifactCheck {
-  package: string;                     // 包名
-  path: string;                        // 产物路径（相对于项目根目录）
-  required?: boolean;                  // 是否必需（默认: true）
-  minFiles?: number;                   // 最小文件数（默认: 1）
+    package: string; // 包名
+    path: string; // 产物路径（相对于项目根目录）
+    required?: boolean; // 是否必需（默认: true）
+    minFiles?: number; // 最小文件数（默认: 1）
 }
 
 // 包信息
 interface PackageInfo {
-  name: string;
-  version: string;
-  path: string;
-  private?: boolean;
+    name: string;
+    version: string;
+    path: string;
+    private?: boolean;
 }
 ```
 
@@ -542,9 +554,9 @@ qingniao
 // qingniao.config.json
 // 只覆盖 Git 分支，其他全部自动检测
 {
-  "git": {
-    "branch": "develop"
-  }
+    "git": {
+        "branch": "develop"
+    }
 }
 ```
 
@@ -552,13 +564,11 @@ qingniao
 // package.json
 // 只覆盖构建步骤，其他保持自动检测
 {
-  "qingniao": {
-    "build": {
-      "steps": [
-        { "name": "自定义构建", "command": "pnpm build:custom" }
-      ]
+    "qingniao": {
+        "build": {
+            "steps": [{ "name": "自定义构建", "command": "pnpm build:custom" }]
+        }
     }
-  }
 }
 ```
 
@@ -566,100 +576,103 @@ qingniao
 
 ```json
 {
-  "project": {
-    "name": "Zouwu Workflow"
-  },
-  "git": {
-    "branch": "main"
-  },
-  "version": {
-    "strategy": "changeset"
-  },
-  "packages": {
-    "pattern": ["packages/@zouwu-wf/*"]
-  },
-  "build": {
-    "steps": [
-      { "name": "安装依赖", "command": "pnpm install --frozen-lockfile" },
-      { "name": "代码检查", "command": "pnpm lint" },
-      { "name": "类型检查", "command": "pnpm typecheck" },
-      { "name": "运行测试", "command": "pnpm test" },
-      { "name": "构建", "command": "turbo build" }
-    ],
-    "verifyArtifacts": [
-      { "package": "@zouwu-wf/workflow", "path": "packages/@zouwu-wf/workflow/dist" },
-      { "package": "@zouwu-wf/cli", "path": "packages/@zouwu-wf/cli/dist" }
-    ]
-  }
+    "project": {
+        "name": "Zouwu Workflow"
+    },
+    "git": {
+        "branch": "main"
+    },
+    "version": {
+        "strategy": "changeset"
+    },
+    "packages": {
+        "pattern": ["packages/@zouwu-wf/*"]
+    },
+    "build": {
+        "steps": [
+            { "name": "安装依赖", "command": "pnpm install --frozen-lockfile" },
+            { "name": "代码检查", "command": "pnpm lint" },
+            { "name": "类型检查", "command": "pnpm typecheck" },
+            { "name": "运行测试", "command": "pnpm test" },
+            { "name": "构建", "command": "turbo build" }
+        ],
+        "verifyArtifacts": [
+            { "package": "@zouwu-wf/workflow", "path": "packages/@zouwu-wf/workflow/dist" },
+            { "package": "@zouwu-wf/cli", "path": "packages/@zouwu-wf/cli/dist" }
+        ]
+    }
 }
 ```
 
 **高级配置（TypeScript，覆盖自动检测）**：
 
 ```typescript
-import { PublishConfig } from '@systembug/qingniao';
+import { PublishConfig } from "@systembug/qingniao";
 
 const config: PublishConfig = {
-  // 以下配置覆盖自动检测的结果
-  // 未配置的字段将使用自动检测的值
+    // 以下配置覆盖自动检测的结果
+    // 未配置的字段将使用自动检测的值
 
-  project: {
-    name: 'Zouwu Workflow', // 覆盖：默认从 package.json 读取
-    packageManager: 'pnpm',  // 覆盖：默认自动检测
-  },
-  git: {
-    branch: 'main',         // 覆盖：默认自动检测当前分支
-    tagPrefix: 'v',         // 覆盖：默认 'v'
-    commitMessage: (version) => `chore: release v${version}\n\n[skip ci]`, // 覆盖：默认自动生成
-  },
-  version: {
-    strategy: 'changeset',  // 覆盖：默认自动检测 .changeset 目录
-    syncAll: true,          // 覆盖：默认 true
-  },
-  changeset: {
-    versionCommand: 'pnpm changeset:version',  // 覆盖：默认根据包管理器自动生成
-    publishCommand: 'pnpm changeset:publish',  // 覆盖：默认根据包管理器自动生成
-  },
-  build: {
-    // 覆盖：默认从 package.json scripts 自动生成
-    steps: [
-      { name: '清理', command: 'pnpm clean', skipOnError: true },
-      { name: '安装依赖', command: 'pnpm install --frozen-lockfile' },
-      { name: '代码检查', command: 'pnpm lint' },
-      { name: '类型检查', command: 'pnpm typecheck' },
-      { name: '测试', command: 'pnpm test' },
-      { name: '构建', command: 'turbo build' },
-    ],
-    // 覆盖：默认从 package.json 和目录自动推断
-    verifyArtifacts: [
-      { package: '@zouwu-wf/workflow', path: 'packages/@zouwu-wf/workflow/dist' },
-      { package: '@zouwu-wf/cli', path: 'packages/@zouwu-wf/cli/dist' },
-      { package: '@zouwu-wf/expression-parser', path: 'packages/@zouwu-wf/expression-parser/dist' },
-      { package: '@zouwu-wf/logger', path: 'packages/@zouwu-wf/logger/dist' },
-    ],
-  },
-  packages: {
-    pattern: ['packages/@zouwu-wf/*'],  // 覆盖：默认从 workspace 配置自动检测
-    exclude: ['**/examples/**'],        // 覆盖：默认自动排除
-  },
-  publish: {
-    dryRun: false,        // 覆盖：默认 false
-    skipExisting: true,   // 覆盖：默认 false
-  },
-  hooks: {
-    // 添加自定义逻辑（零配置不支持）
-    beforeVersion: async (ctx) => {
-      console.log(`准备更新版本到 ${ctx.version}`);
+    project: {
+        name: "Zouwu Workflow", // 覆盖：默认从 package.json 读取
+        packageManager: "pnpm", // 覆盖：默认自动检测
     },
-    afterPublish: async (ctx) => {
-      console.log(`发布完成: ${ctx.version}`);
+    git: {
+        branch: "main", // 覆盖：默认自动检测当前分支
+        tagPrefix: "v", // 覆盖：默认 'v'
+        commitMessage: (version) => `chore: release v${version}\n\n[skip ci]`, // 覆盖：默认自动生成
     },
-  },
-  // 注意：以下配置未提供，将使用自动检测的值：
-  // - workspace: 自动检测 pnpm-workspace.yaml
-  // - dependencies: 自动分析依赖关系
-  // - checks: 自动从 package.json scripts 检测
-  // - prompts: 使用默认值
+    version: {
+        strategy: "changeset", // 覆盖：默认自动检测 .changeset 目录
+        syncAll: true, // 覆盖：默认 true
+    },
+    changeset: {
+        versionCommand: "pnpm changeset:version", // 覆盖：默认根据包管理器自动生成
+        publishCommand: "pnpm changeset:publish", // 覆盖：默认根据包管理器自动生成
+    },
+    build: {
+        // 覆盖：默认从 package.json scripts 自动生成
+        steps: [
+            { name: "清理", command: "pnpm clean", skipOnError: true },
+            { name: "安装依赖", command: "pnpm install --frozen-lockfile" },
+            { name: "代码检查", command: "pnpm lint" },
+            { name: "类型检查", command: "pnpm typecheck" },
+            { name: "测试", command: "pnpm test" },
+            { name: "构建", command: "turbo build" },
+        ],
+        // 覆盖：默认从 package.json 和目录自动推断
+        verifyArtifacts: [
+            { package: "@zouwu-wf/workflow", path: "packages/@zouwu-wf/workflow/dist" },
+            { package: "@zouwu-wf/cli", path: "packages/@zouwu-wf/cli/dist" },
+            {
+                package: "@zouwu-wf/expression-parser",
+                path: "packages/@zouwu-wf/expression-parser/dist",
+            },
+            { package: "@zouwu-wf/logger", path: "packages/@zouwu-wf/logger/dist" },
+        ],
+    },
+    packages: {
+        pattern: ["packages/@zouwu-wf/*"], // 覆盖：默认从 workspace 配置自动检测
+        exclude: ["**/examples/**"], // 覆盖：默认自动排除
+    },
+    publish: {
+        dryRun: false, // 覆盖：默认 false
+        skipExisting: true, // 覆盖：默认 false
+    },
+    hooks: {
+        // 添加自定义逻辑（零配置不支持）
+        beforeVersion: async (ctx) => {
+            console.log(`准备更新版本到 ${ctx.version}`);
+        },
+        afterPublish: async (ctx) => {
+            console.log(`发布完成: ${ctx.version}`);
+        },
+    },
+    // 注意：以下配置未提供，将使用自动检测的值：
+    // - workspace: 自动检测 pnpm-workspace.yaml
+    // - dependencies: 自动分析依赖关系
+    // - checks: 自动从 package.json scripts 检测
+    // - prompts: 使用默认值
 };
 
 export default config;
@@ -671,17 +684,15 @@ export default config;
 // qingniao.config.ts
 // 只覆盖需要自定义的部分，其他保持自动检测
 export default {
-  // 只覆盖 Git 分支配置
-  git: {
-    branch: 'develop'
-  },
-  // 只覆盖构建步骤
-  build: {
-    steps: [
-      { name: '自定义构建', command: 'pnpm build:custom' }
-    ]
-  }
-  // 其他所有配置保持自动检测
+    // 只覆盖 Git 分支配置
+    git: {
+        branch: "develop",
+    },
+    // 只覆盖构建步骤
+    build: {
+        steps: [{ name: "自定义构建", command: "pnpm build:custom" }],
+    },
+    // 其他所有配置保持自动检测
 };
 ```
 
@@ -697,29 +708,29 @@ export default {
 
 ```typescript
 interface WorkspaceConfig {
-  // pnpm workspace 配置
-  workspace?: {
-    enabled?: boolean;                  // 是否启用 workspace 模式（默认: 自动检测）
-    configPath?: string;                // workspace 配置文件路径（默认: 'pnpm-workspace.yaml'）
-    autoDetect?: boolean;                // 是否自动检测（默认: true）
-  };
+    // pnpm workspace 配置
+    workspace?: {
+        enabled?: boolean; // 是否启用 workspace 模式（默认: 自动检测）
+        configPath?: string; // workspace 配置文件路径（默认: 'pnpm-workspace.yaml'）
+        autoDetect?: boolean; // 是否自动检测（默认: true）
+    };
 
-  // 包发现增强（workspace 模式）
-  packages?: {
-    // 使用 pnpm 的包发现机制
-    usePnpmList?: boolean;              // 使用 'pnpm list -r --depth -1' 发现包（默认: true）
-    // 或者使用自定义模式
-    pattern?: string | string[];        // 包匹配模式（当 usePnpmList 为 false 时使用）
-    exclude?: string[];                // 排除的包模式
-    filter?: (pkg: PackageInfo) => boolean;
-  };
+    // 包发现增强（workspace 模式）
+    packages?: {
+        // 使用 pnpm 的包发现机制
+        usePnpmList?: boolean; // 使用 'pnpm list -r --depth -1' 发现包（默认: true）
+        // 或者使用自定义模式
+        pattern?: string | string[]; // 包匹配模式（当 usePnpmList 为 false 时使用）
+        exclude?: string[]; // 排除的包模式
+        filter?: (pkg: PackageInfo) => boolean;
+    };
 
-  // 依赖关系处理
-  dependencies?: {
-    respectDependencyOrder?: boolean;   // 是否考虑依赖顺序（默认: true）
-    buildOrder?: 'topological' | 'parallel' | 'custom'; // 构建顺序策略
-    customOrder?: (packages: PackageInfo[]) => PackageInfo[]; // 自定义排序函数
-  };
+    // 依赖关系处理
+    dependencies?: {
+        respectDependencyOrder?: boolean; // 是否考虑依赖顺序（默认: true）
+        buildOrder?: "topological" | "parallel" | "custom"; // 构建顺序策略
+        customOrder?: (packages: PackageInfo[]) => PackageInfo[]; // 自定义排序函数
+    };
 }
 ```
 
@@ -739,11 +750,11 @@ const packages = await execPnpmList();
 
 ```json
 {
-  "packages": {
-    "usePnpmList": false,
-    "pattern": ["packages/*", "packages/@zouwu-wf/*"],
-    "exclude": ["**/examples/**", "**/test/**"]
-  }
+    "packages": {
+        "usePnpmList": false,
+        "pattern": ["packages/*", "packages/@zouwu-wf/*"],
+        "exclude": ["**/examples/**", "**/test/**"]
+    }
 }
 ```
 
@@ -786,36 +797,36 @@ const packages = await execPnpmList();
 
 ```typescript
 interface PnpmFilterConfig {
-  // 使用 pnpm filter 执行命令
-  useFilter?: boolean;                 // 是否使用 pnpm filter（默认: true）
-  filterPattern?: string;               // filter 模式
-  recursive?: boolean;                  // 是否递归（默认: true）
+    // 使用 pnpm filter 执行命令
+    useFilter?: boolean; // 是否使用 pnpm filter（默认: true）
+    filterPattern?: string; // filter 模式
+    recursive?: boolean; // 是否递归（默认: true）
 }
 
 // 示例配置
 {
-  build: {
-    steps: [
-      {
-        name: '构建特定包',
-        command: 'pnpm --filter @zouwu-wf/workflow build',
-        // 或者使用配置
-        pnpmFilter: {
-          pattern: '@zouwu-wf/workflow',
-          recursive: false
-        }
-      },
-      {
-        name: '构建所有包',
-        command: 'turbo build',
-        // 或者
-        pnpmFilter: {
-          pattern: './packages/**',
-          recursive: true
-        }
-      }
-    ]
-  }
+    build: {
+        steps: [
+            {
+                name: "构建特定包",
+                command: "pnpm --filter @zouwu-wf/workflow build",
+                // 或者使用配置
+                pnpmFilter: {
+                    pattern: "@zouwu-wf/workflow",
+                    recursive: false,
+                },
+            },
+            {
+                name: "构建所有包",
+                command: "turbo build",
+                // 或者
+                pnpmFilter: {
+                    pattern: "./packages/**",
+                    recursive: true,
+                },
+            },
+        ];
+    }
 }
 ```
 
@@ -870,88 +881,91 @@ interface PnpmFilterConfig {
 #### 3.7 完整配置示例（pnpm workspace）
 
 ```typescript
-import { PublishConfig } from '@systembug/qingniao';
+import { PublishConfig } from "@systembug/qingniao";
 
 const config: PublishConfig = {
-  project: {
-    name: 'Zouwu Workflow',
-    packageManager: 'pnpm',             // 明确指定 pnpm
-  },
-
-  // pnpm workspace 配置
-  workspace: {
-    enabled: true,                       // 启用 workspace 模式
-    autoDetect: true,                    // 自动检测
-  },
-
-  // 包发现（使用 pnpm list）
-  packages: {
-    usePnpmList: true,                   // 使用 pnpm 命令发现包
-    exclude: ['**/examples/**', '**/test/**'],
-    filter: (pkg) => !pkg.private,         // 只发布非私有包
-  },
-
-  // 依赖关系处理
-  dependencies: {
-    respectDependencyOrder: true,        // 考虑依赖顺序
-    buildOrder: 'topological',          // 拓扑排序
-  },
-
-  // Git 配置
-  git: {
-    branch: 'main',
-    tagPrefix: 'v',
-  },
-
-  // 版本管理
-  version: {
-    strategy: 'changeset',
-    syncAll: true,                       // 同步所有包版本
-    syncWorkspaceDeps: true,             // 同步 workspace 依赖
-  },
-
-  // Changeset 配置
-  changeset: {
-    versionCommand: 'pnpm changeset:version',
-    publishCommand: 'pnpm changeset:publish',
-  },
-
-  // 构建配置
-  build: {
-    steps: [
-      { name: '清理', command: 'pnpm clean', skipOnError: true },
-      { name: '安装依赖', command: 'pnpm install --frozen-lockfile' },
-      { name: '代码检查', command: 'pnpm lint' },
-      { name: '类型检查', command: 'pnpm typecheck' },
-      { name: '测试', command: 'pnpm test' },
-      // 使用 turbo 构建（自动处理依赖顺序）
-      { name: '构建', command: 'turbo build' },
-    ],
-    verifyArtifacts: [
-      { package: '@zouwu-wf/workflow', path: 'packages/@zouwu-wf/workflow/dist' },
-      { package: '@zouwu-wf/cli', path: 'packages/@zouwu-wf/cli/dist' },
-      { package: '@zouwu-wf/expression-parser', path: 'packages/@zouwu-wf/expression-parser/dist' },
-      { package: '@zouwu-wf/logger', path: 'packages/@zouwu-wf/logger/dist' },
-    ],
-  },
-
-  // 发布配置
-  publish: {
-    replaceWorkspaceProtocols: true,     // 替换 workspace 协议
-    protocolReplacement: 'version',       // 使用版本号替换
-    skipExisting: true,                   // 跳过已存在的版本
-  },
-
-  // 钩子函数
-  hooks: {
-    beforeVersion: async (ctx) => {
-      // 确保所有 workspace 依赖已更新
-      await syncWorkspaceDependencies(ctx);
+    project: {
+        name: "Zouwu Workflow",
+        packageManager: "pnpm", // 明确指定 pnpm
     },
-    afterPublish: async (ctx) => {
-      console.log(`已发布 ${ctx.packages.length} 个包`);
+
+    // pnpm workspace 配置
+    workspace: {
+        enabled: true, // 启用 workspace 模式
+        autoDetect: true, // 自动检测
     },
-  },
+
+    // 包发现（使用 pnpm list）
+    packages: {
+        usePnpmList: true, // 使用 pnpm 命令发现包
+        exclude: ["**/examples/**", "**/test/**"],
+        filter: (pkg) => !pkg.private, // 只发布非私有包
+    },
+
+    // 依赖关系处理
+    dependencies: {
+        respectDependencyOrder: true, // 考虑依赖顺序
+        buildOrder: "topological", // 拓扑排序
+    },
+
+    // Git 配置
+    git: {
+        branch: "main",
+        tagPrefix: "v",
+    },
+
+    // 版本管理
+    version: {
+        strategy: "changeset",
+        syncAll: true, // 同步所有包版本
+        syncWorkspaceDeps: true, // 同步 workspace 依赖
+    },
+
+    // Changeset 配置
+    changeset: {
+        versionCommand: "pnpm changeset:version",
+        publishCommand: "pnpm changeset:publish",
+    },
+
+    // 构建配置
+    build: {
+        steps: [
+            { name: "清理", command: "pnpm clean", skipOnError: true },
+            { name: "安装依赖", command: "pnpm install --frozen-lockfile" },
+            { name: "代码检查", command: "pnpm lint" },
+            { name: "类型检查", command: "pnpm typecheck" },
+            { name: "测试", command: "pnpm test" },
+            // 使用 turbo 构建（自动处理依赖顺序）
+            { name: "构建", command: "turbo build" },
+        ],
+        verifyArtifacts: [
+            { package: "@zouwu-wf/workflow", path: "packages/@zouwu-wf/workflow/dist" },
+            { package: "@zouwu-wf/cli", path: "packages/@zouwu-wf/cli/dist" },
+            {
+                package: "@zouwu-wf/expression-parser",
+                path: "packages/@zouwu-wf/expression-parser/dist",
+            },
+            { package: "@zouwu-wf/logger", path: "packages/@zouwu-wf/logger/dist" },
+        ],
+    },
+
+    // 发布配置
+    publish: {
+        replaceWorkspaceProtocols: true, // 替换 workspace 协议
+        protocolReplacement: "version", // 使用版本号替换
+        skipExisting: true, // 跳过已存在的版本
+    },
+
+    // 钩子函数
+    hooks: {
+        beforeVersion: async (ctx) => {
+            // 确保所有 workspace 依赖已更新
+            await syncWorkspaceDependencies(ctx);
+        },
+        afterPublish: async (ctx) => {
+            console.log(`已发布 ${ctx.packages.length} 个包`);
+        },
+    },
 };
 
 export default config;
@@ -1019,15 +1033,15 @@ qingniao
 ```typescript
 // 从 .changeset/config.json 自动读取：
 interface ChangesetConfig {
-  $schema?: string;
-  changelog?: string | [string, any];
-  commit?: boolean;
-  fixed?: string[][];
-  linked?: string[][];
-  access?: 'public' | 'restricted';
-  baseBranch?: string;
-  updateInternalDependencies?: 'patch' | 'minor';
-  ignore?: string[];
+    $schema?: string;
+    changelog?: string | [string, any];
+    commit?: boolean;
+    fixed?: string[][];
+    linked?: string[][];
+    access?: "public" | "restricted";
+    baseBranch?: string;
+    updateInternalDependencies?: "patch" | "minor";
+    ignore?: string[];
 }
 
 // 青鸟会自动：
@@ -1056,22 +1070,22 @@ interface ChangesetConfig {
 ```typescript
 // qingniao.config.ts
 export default {
-  version: {
-    strategy: 'changeset',  // 明确指定使用 changeset
-  },
-  changeset: {
-    // 覆盖自动检测的命令
-    createCommand: 'pnpm changeset add',  // 覆盖默认命令
-    versionCommand: 'pnpm changeset:version',
-    publishCommand: 'pnpm changeset:publish',
+    version: {
+        strategy: "changeset", // 明确指定使用 changeset
+    },
+    changeset: {
+        // 覆盖自动检测的命令
+        createCommand: "pnpm changeset add", // 覆盖默认命令
+        versionCommand: "pnpm changeset:version",
+        publishCommand: "pnpm changeset:publish",
 
-    // 覆盖自动检测的配置路径
-    configPath: '.changeset/config.json',
+        // 覆盖自动检测的配置路径
+        configPath: ".changeset/config.json",
 
-    // 自定义 changeset 行为
-    autoCreate: true,  // 如果没有 changeset 文件，自动创建（非交互式）
-    skipVersion: false, // 是否跳过版本更新步骤
-  }
+        // 自定义 changeset 行为
+        autoCreate: true, // 如果没有 changeset 文件，自动创建（非交互式）
+        skipVersion: false, // 是否跳过版本更新步骤
+    },
 };
 ```
 
@@ -1400,89 +1414,128 @@ hooks: {
 
 ### 8. 日志和输出
 
-- **结构化日志**：支持不同日志级别（debug, info, warn, error）
-- **进度显示**：使用 Listr 显示任务进度
-- **彩色输出**：使用 chalk 提供友好的终端输出
-- **静默模式**：支持 CI/CD 环境的静默执行
+- **结构化日志**：使用 pino 支持不同日志级别（debug, info, warn, error）
+- **交互式 UI**：使用 ink (React for CLI) 提供丰富的交互式界面
+- **进度显示**：使用 ink 组件显示任务进度和状态
+- **彩色输出**：使用 pino-pretty 提供友好的终端输出
+- **静默模式**：支持 CI/CD 环境的静默执行（--yes 标志）
 
-## 实现计划
+### 9. 交互式组件（基于 Ink）
 
-### Phase 1: 核心框架（MVP）
+青鸟使用 **ink** 作为唯一的交互框架，提供以下组件：
 
-1. **零配置系统（优先）**
-   - 包管理器自动检测（packageManager 字段、lockfile）
-   - Workspace 类型自动检测（pnpm/yarn/npm）
-   - 包发现自动推断（workspace 命令）
-   - 构建命令自动推断（package.json scripts）
-   - 构建产物路径自动推断（package.json 字段、目录检测）
+1. **ConfirmDialog**：确认对话框（Yes/No 选择）
+2. **SelectList**：选择列表（多选项选择）
+3. **VersionSelector**：版本类型选择器（major/minor/patch）
 
-2. **配置系统**
-   - 配置文件加载器（支持多种格式）
-   - 配置验证器
-   - 默认配置合并
-   - 零配置与配置文件合并逻辑
+所有交互式提示都通过 ink 组件实现，确保一致的 UI 体验。
 
-3. **基础执行引擎**
-   - 命令执行工具
-   - 上下文管理
-   - 错误处理
+## 实现状态
 
-4. **基础阶段实现**
-   - NPM 认证检查
-   - Git 状态检查
-   - 版本管理（manual 模式）
-   - 包发现（零配置优先）
-   - **pnpm workspace 检测**（Phase 1.5）
-     - 自动检测 pnpm-workspace.yaml
-     - 使用 pnpm list 发现包
-     - 基础依赖关系分析
+### ✅ 已完成功能（2025-12-27）
 
-### Phase 2: 完整功能
+所有 `publish.mjs` 中的功能已完整实现，使用 **ink** 作为唯一的交互框架：
 
-1. **版本管理增强**
-   - **Changeset 深度集成**（优先）
-     - 自动检测 .changeset 目录
-     - 读取 .changeset/config.json 配置
-     - 自动生成 changeset 命令（根据包管理器）
-     - Changeset 文件检查和创建流程
-     - Changeset 版本更新集成
-     - Changeset 发布集成
-     - Changeset 与 Git 集成
-     - Changeset 与 CHANGELOG 集成
-     - Changeset 钩子支持
-   - Semver 自动升级
-   - 自定义版本策略
+#### Phase 1: 核心框架 ✅
 
-2. **构建系统**
-   - 构建步骤执行
-   - 产物验证
-   - 测试集成
+1. **零配置系统** ✅
+    - ✅ 包管理器自动检测（packageManager 字段、lockfile）
+    - ✅ Workspace 类型自动检测（pnpm/yarn/npm）
+    - ✅ 包发现自动推断（workspace 命令）
+    - ✅ 构建命令自动推断（package.json scripts）
+    - ✅ 构建产物路径自动推断（package.json 字段、目录检测）
 
-3. **发布流程**
-   - NPM 发布
-   - Dry-run 支持
-   - 版本检查
-   - **pnpm workspace 完整支持**（Phase 2.5）
-     - workspace 协议替换
-     - 依赖顺序构建和发布
-     - Turbo 集成
-     - 版本同步策略
+2. **配置系统** ✅
+    - ✅ 配置文件加载器（支持多种格式）
+    - ✅ 配置验证器
+    - ✅ 默认配置合并
+    - ✅ 零配置与配置文件合并逻辑
 
-### Phase 3: 高级特性
+3. **基础执行引擎** ✅
+    - ✅ 命令执行工具
+    - ✅ 上下文管理
+    - ✅ 错误处理
 
-1. **钩子系统**
-   - 钩子函数支持
-   - 插件机制
+4. **基础阶段实现** ✅
+    - ✅ NPM 认证检查
+    - ✅ Git 状态检查（包括分支验证、未提交更改检查、未推送提交检查）
+    - ✅ 远程分支检查与拉取
+    - ✅ 版本管理（manual 和 changeset 模式）
+    - ✅ 包发现（零配置优先）
+    - ✅ pnpm workspace 完整支持
 
-2. **CLI 增强**
-   - 交互式提示
-   - 进度显示
-   - 详细日志
+#### Phase 2: 完整功能 ✅
 
-3. **文档和示例**
-   - 完整文档
-   - 配置示例
-   - 迁移指南
+1. **版本管理增强** ✅
+    - ✅ **Changeset 深度集成**
+        - ✅ 自动检测 .changeset 目录
+        - ✅ 读取 .changeset/config.json 配置
+        - ✅ 自动生成 changeset 命令（根据包管理器）
+        - ✅ Changeset 文件检查和创建流程（交互式）
+        - ✅ Changeset 版本更新集成
+        - ✅ Changeset 发布集成
+    - ✅ Semver 自动升级（major/minor/patch）
+    - ✅ 版本更新后的 Git 操作（提交、标签、推送）
+
+2. **构建系统** ✅
+    - ✅ 构建步骤执行（clean, install, lint, typecheck, test, build）
+    - ✅ 产物验证
+    - ✅ 测试集成
+
+3. **发布流程** ✅
+    - ✅ NPM 发布
+    - ✅ Dry-run 支持
+    - ✅ 版本检查（检查已存在的包）
+    - ✅ 发布确认流程（交互式）
+    - ✅ OTP 提示支持（2FA）
+
+#### Phase 3: 高级特性 ✅
+
+1. **交互式 UI（基于 Ink）** ✅
+    - ✅ ConfirmDialog 组件（确认对话框）
+    - ✅ SelectList 组件（选择列表）
+    - ✅ VersionSelector 组件（版本类型选择）
+    - ✅ 所有交互式提示使用 ink 实现
+
+2. **CLI 增强** ✅
+    - ✅ 交互式提示（使用 ink）
+    - ✅ 进度显示（使用 ink）
+    - ✅ 详细日志（使用 pino）
+
+3. **文档和示例** ✅
+    - ✅ README 文档
+    - ✅ 使用指南
+    - ✅ 配置示例
+
+### 功能对照表（publish.mjs → qingniao）
+
+| publish.mjs 功能                                           | qingniao 实现             | 状态 |
+| ---------------------------------------------------------- | ------------------------- | ---- |
+| NPM 认证检查                                               | `stages/auth.ts`          | ✅   |
+| Git 状态检查                                               | `stages/git.ts`           | ✅   |
+| 远程分支检查与拉取                                         | `stages/git.ts`           | ✅   |
+| 询问是否更新版本                                           | `core/executor.tsx` (ink) | ✅   |
+| 选择版本更新方式                                           | `core/executor.tsx` (ink) | ✅   |
+| Manual 版本更新                                            | `stages/version.ts`       | ✅   |
+| Changeset 版本更新                                         | `stages/version.ts`       | ✅   |
+| 创建 changeset                                             | `core/executor.tsx` (ink) | ✅   |
+| 版本更新后 Git 操作                                        | `stages/git.ts`           | ✅   |
+| 构建前检查（clean, install, lint, typecheck, test, build） | `core/executor.tsx`       | ✅   |
+| 验证构建产物                                               | `stages/build.ts`         | ✅   |
+| 显示要发布的包列表                                         | `core/executor.tsx`       | ✅   |
+| 检查已存在的包                                             | `stages/publish.ts`       | ✅   |
+| 确认发布                                                   | `core/executor.tsx` (ink) | ✅   |
+| Dry-run 测试                                               | `stages/publish.ts`       | ✅   |
+| 发布前 OTP 提示                                            | `core/executor.tsx` (ink) | ✅   |
+| 发布到 NPM                                                 | `stages/publish.ts`       | ✅   |
+
+### 技术栈
+
+- **交互框架**：ink (React for CLI) - 唯一的交互框架
+- **日志系统**：pino + pino-pretty
+- **构建工具**：Vite
+- **类型系统**：TypeScript
+- **包管理**：pnpm workspace
 
 ## 迁移路径
 
@@ -1500,8 +1553,8 @@ hooks: {
 ```javascript
 // 硬编码的包列表
 const builds = [
-  ["@wsxjs/wsx-core", "packages/core/dist"],
-  ["@wsxjs/wsx-vite-plugin", "packages/vite-plugin/dist"],
+    ["@wsxjs/wsx-core", "packages/core/dist"],
+    ["@wsxjs/wsx-vite-plugin", "packages/vite-plugin/dist"],
 ];
 ```
 
@@ -1509,12 +1562,12 @@ const builds = [
 
 ```json
 {
-  "build": {
-    "verifyArtifacts": [
-      { "package": "@wsxjs/wsx-core", "path": "packages/core/dist" },
-      { "package": "@wsxjs/wsx-vite-plugin", "path": "packages/vite-plugin/dist" }
-    ]
-  }
+    "build": {
+        "verifyArtifacts": [
+            { "package": "@wsxjs/wsx-core", "path": "packages/core/dist" },
+            { "package": "@wsxjs/wsx-vite-plugin", "path": "packages/vite-plugin/dist" }
+        ]
+    }
 }
 ```
 
@@ -1537,16 +1590,16 @@ const builds = [
 ## 考虑的替代方案
 
 1. **保持现状**：继续使用硬编码脚本
-   - 优点：简单直接
-   - 缺点：难以重用和维护
+    - 优点：简单直接
+    - 缺点：难以重用和维护
 
 2. **使用现有工具**：如 `changesets`、`lerna` 等
-   - 优点：成熟稳定
-   - 缺点：功能固定，难以定制
+    - 优点：成熟稳定
+    - 缺点：功能固定，难以定制
 
 3. **模板系统**：提供脚本模板
-   - 优点：简单易用
-   - 缺点：仍需手动修改
+    - 优点：简单易用
+    - 缺点：仍需手动修改
 
 ## 后续工作
 
@@ -1565,4 +1618,3 @@ const builds = [
 ## 变更日志
 
 - **2025-01-XX**: 初始版本，定义通用发布工具设计规范
-

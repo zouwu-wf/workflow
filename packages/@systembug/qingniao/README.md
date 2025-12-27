@@ -76,6 +76,7 @@ qn
 ```
 
 工具会自动：
+
 - 检测 pnpm/yarn/npm workspace
 - 发现所有可发布的包
 - 检测并使用 changeset（如果存在）
@@ -88,9 +89,9 @@ qn
 // qingniao.config.json
 // 只覆盖 Git 分支，其他全部自动检测
 {
-  "git": {
-    "branch": "develop"
-  }
+    "git": {
+        "branch": "develop"
+    }
 }
 ```
 
@@ -117,20 +118,18 @@ qingniao
 
 ```typescript
 // qingniao.config.ts
-import { PublishConfig } from '@systembug/qingniao';
+import { PublishConfig } from "@systembug/qingniao";
 
 export default {
-  // 只覆盖需要自定义的部分
-  git: {
-    branch: 'main',
-    tagPrefix: 'v'
-  },
-  build: {
-    steps: [
-      { name: '自定义构建', command: 'pnpm build:custom' }
-    ]
-  }
-  // 其他配置保持自动检测
+    // 只覆盖需要自定义的部分
+    git: {
+        branch: "main",
+        tagPrefix: "v",
+    },
+    build: {
+        steps: [{ name: "自定义构建", command: "pnpm build:custom" }],
+    },
+    // 其他配置保持自动检测
 };
 ```
 
@@ -161,33 +160,33 @@ export default {
 ### 完整配置示例
 
 ```typescript
-import { PublishConfig } from '@systembug/qingniao';
+import { PublishConfig } from "@systembug/qingniao";
 
 const config: PublishConfig = {
-  project: {
-    name: 'My Project',
-    packageManager: 'pnpm'
-  },
-  git: {
-    branch: 'main',
-    tagPrefix: 'v'
-  },
-  version: {
-    strategy: 'changeset',
-    syncAll: true
-  },
-  build: {
-    steps: [
-      { name: '安装依赖', command: 'pnpm install --frozen-lockfile' },
-      { name: '代码检查', command: 'pnpm lint' },
-      { name: '类型检查', command: 'pnpm typecheck' },
-      { name: '测试', command: 'pnpm test' },
-      { name: '构建', command: 'turbo build' }
-    ]
-  },
-  publish: {
-    skipExisting: true
-  }
+    project: {
+        name: "My Project",
+        packageManager: "pnpm",
+    },
+    git: {
+        branch: "main",
+        tagPrefix: "v",
+    },
+    version: {
+        strategy: "changeset",
+        syncAll: true,
+    },
+    build: {
+        steps: [
+            { name: "安装依赖", command: "pnpm install --frozen-lockfile" },
+            { name: "代码检查", command: "pnpm lint" },
+            { name: "类型检查", command: "pnpm typecheck" },
+            { name: "测试", command: "pnpm test" },
+            { name: "构建", command: "turbo build" },
+        ],
+    },
+    publish: {
+        skipExisting: true,
+    },
 };
 
 export default config;
@@ -232,4 +231,3 @@ MIT License - 详见 [LICENSE](./LICENSE) 文件
 > —— 李商隐《无题》
 
 让代码发布如青鸟传递消息般优雅流畅！
-

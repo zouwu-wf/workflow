@@ -2,21 +2,143 @@
  * NPM 发布
  */
 
-import type { Context } from '../types';
+import { exec, execSilent } from "../utils/exec";
+import type { Context, PublishConfig } from "../types";
+import { createLogger } from "../utils/logger";
+
+const logger = createLogger({ pretty: true });
 
 /**
  * 检查包是否已存在
  */
 export function checkPackageExists(packageName: string, version: string): boolean {
-    // TODO: 实现包存在检查
-    return false;
+    try {
+        const info = execSilent(`npm view ${packageName}@${version} version 2>/dev/null`);
+        return info === version;
+    } catch {
+        return false;
+    }
+}
+
+/**
+ * 发布包到 NPM（dry-run）
+ */
+export async function publishPackagesDryRun(
+    config: PublishConfig,
+    context: Context,
+): Promise<void> {
+    const pmCommand =
+        config.project?.packageManager === "pnpm"
+            ? "pnpm"
+            : config.project?.packageManager === "yarn"
+              ? "yarn"
+              : "npm";
+
+    logger.info("执行 dry-run 测试...");
+
+    if (config.changeset?.enabled) {
+        // 使用 changeset publish --dry-run
+        const command =
+            config.changeset.publishCommand?.replace("publish", "publish --dry-run") ||
+            `${pmCommand} changeset publish --dry-run`;
+        exec(command, { cwd: context.rootDir });
+    } else {
+        // 对每个包执行 npm publish --dry-run
+        for (const pkg of context.packages) {
+            logger.info(`测试发布: ${pkg.name}@${pkg.version}`);
+            try {
+                exec("npm publish --dry-run", { cwd: pkg.path });
+                logger.success(`包 ${pkg.name} dry-run 通过`);
+            } catch (error: any) {
+                throw new Error(`包 ${pkg.name} dry-run 失败: ${error.message}`);
+            }
+        }
+    }
+
+    logger.success("Dry-run 测试完成");
 }
 
 /**
  * 发布包到 NPM
  */
-export async function publishPackages(context: Context): Promise<void> {
-    // TODO: 实现发布逻辑
-    throw new Error('发布功能开发中');
-}
+export async function publishPackages(config: PublishConfig, context: Context): Promise<void> {
+    const pmCommand =
+        config.project?.packageManager === "pnpm"
+            ? "pnpm"
+            : config.project?.packageManager === "yarn"
+              ? "yarn"
+              : "npm";
 
+    // 检查已存在的包
+    const existingPackages: Array<{ name: string; version: string }> = [];
+    for (const pkg of context.packages) {
+        if (checkPackageExists(pkg.name, pkg.version)) {
+            existingPackages.push({ name: pkg.name, version: pkg.version });
+        }
+    }
+
+    if (existingPackages.length > 0) {
+        logger.warn(`以下包版本已存在于 NPM:`);
+        existingPackages.forEach((pkg) => {
+            logger.warn(`  - ${pkg.name}@${pkg.version}`);
+        });
+
+        if (config.publish?.skipExisting) {
+            logger.info("将跳过已存在的包");
+        } else {
+            throw new Error("存在已发布的包版本，请更新版本号或设置 skipExisting: true");
+        }
+    }
+
+    logger.info("发布包到 NPM...");
+
+    if (config.changeset?.enabled) {
+        // 使用 changeset publish
+        const command = config.changeset.publishCommand || `${pmCommand} changeset publish`;
+        logger.info(`执行: ${command}`);
+
+        // 非静默模式，允许交互式输入 OTP
+        exec(command, {
+            cwd: context.rootDir,
+            silent: false, // 显示输出，允许交互式输入
+        });
+
+        logger.success("所有包已发布到 NPM");
+    } else {
+        // 逐个发布包
+        for (const pkg of context.packages) {
+            // 跳过已存在的包
+            if (config.publish?.skipExisting && checkPackageExists(pkg.name, pkg.version)) {
+                logger.info(`跳过已存在的包: ${pkg.name}@${pkg.version}`);
+                continue;
+            }
+
+            logger.info(`发布: ${pkg.name}@${pkg.version}`);
+            try {
+                // 替换 workspace 协议
+                if (config.publish?.replaceWorkspaceProtocols) {
+                    // TODO: 实现 workspace 协议替换
+                    // const pkgJsonPath = `${pkg.path}/package.json`;
+                }
+
+                exec("npm publish", {
+                    cwd: pkg.path,
+                    silent: false, // 允许交互式输入 OTP
+                });
+                logger.success(`包 ${pkg.name} 发布成功`);
+            } catch (error: any) {
+                const errorMessage = error.message || String(error);
+                if (
+                    errorMessage.includes("OTP") ||
+                    errorMessage.includes("one-time") ||
+                    errorMessage.includes("Enter one-time password")
+                ) {
+                    logger.warn("发布需要 OTP 验证，请重新运行发布命令");
+                    throw error;
+                } else {
+                    throw new Error(`包 ${pkg.name} 发布失败: ${errorMessage}`);
+                }
+            }
+        }
+    }
+}

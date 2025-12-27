@@ -53,7 +53,7 @@ export interface PublishConfig {
     project?: {
         name?: string;
         rootDir?: string;
-        packageManager?: 'npm' | 'pnpm' | 'yarn';
+        packageManager?: "npm" | "pnpm" | "yarn";
     };
 
     // Git 配置（可选，覆盖自动检测）
@@ -69,8 +69,8 @@ export interface PublishConfig {
 
     // 版本管理配置（可选，覆盖自动检测）
     version?: {
-        strategy?: 'changeset' | 'manual' | 'semver' | 'custom';
-        bumpTypes?: ('major' | 'minor' | 'patch')[];
+        strategy?: "changeset" | "manual" | "semver" | "custom";
+        bumpTypes?: ("major" | "minor" | "patch")[];
         syncAll?: boolean;
         syncWorkspaceDeps?: boolean;
         files?: string[];
@@ -97,6 +97,8 @@ export interface PublishConfig {
         useTurbo?: boolean;
         turboConfigPath?: string;
         turboTasks?: string[];
+        artifactPaths?: Record<string, string>;
+        skipMissingArtifacts?: boolean;
     };
 
     // pnpm workspace 配置（可选，覆盖自动检测）
@@ -118,7 +120,7 @@ export interface PublishConfig {
     // 依赖关系处理配置（可选，覆盖自动检测）
     dependencies?: {
         respectDependencyOrder?: boolean;
-        buildOrder?: 'topological' | 'parallel' | 'custom';
+        buildOrder?: "topological" | "parallel" | "custom";
         customOrder?: (packages: PackageInfo[]) => PackageInfo[];
     };
 
@@ -126,12 +128,12 @@ export interface PublishConfig {
     publish?: {
         enabled?: boolean;
         registry?: string;
-        access?: 'public' | 'restricted';
+        access?: "public" | "restricted";
         dryRun?: boolean;
         skipExisting?: boolean;
         otpRequired?: boolean;
         replaceWorkspaceProtocols?: boolean;
-        protocolReplacement?: 'version' | 'range' | 'custom';
+        protocolReplacement?: "version" | "range" | "custom";
         customProtocolReplacer?: (pkg: PackageInfo, dep: string) => string;
     };
 
@@ -172,4 +174,3 @@ export interface PublishConfig {
         dryRunFirst?: boolean;
     };
 }
-

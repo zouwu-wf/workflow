@@ -54,6 +54,6 @@ export default defineConfig({
             outDir: "dist",
             rollupTypes: true,
         }) as any,
+        react(),
     ],
 });
-

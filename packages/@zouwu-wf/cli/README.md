@@ -59,19 +59,19 @@ workflow version
 ### 编程接口
 
 ```typescript
-import { generateTypesFromSchema, generateValidatorsFromSchema } from '@zouwu-wf/cli';
+import { generateTypesFromSchema, generateValidatorsFromSchema } from "@zouwu-wf/cli";
 
 // 生成类型定义
 await generateTypesFromSchema({
-    schemaPath: './schemas/workflow.schema.json',
-    outputPath: './types/workflow.types.ts',
+    schemaPath: "./schemas/workflow.schema.json",
+    outputPath: "./types/workflow.types.ts",
     generateDocs: true,
 });
 
 // 生成验证器
 await generateValidatorsFromSchema({
-    schemaPath: './schemas/workflow.schema.json',
-    outputPath: './validators/workflow.validators.ts',
+    schemaPath: "./schemas/workflow.schema.json",
+    outputPath: "./validators/workflow.validators.ts",
     strict: true,
     chineseErrors: true,
 });

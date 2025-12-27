@@ -17,14 +17,12 @@ import { extractTemplateExpressions } from "./parser";
 export function validateVariableReferences(
     variables: TemplateVariableReference[],
     availableVariables: Set<string>,
-    path = "root"
+    path = "root",
 ): ExpressionValidationResult {
     const errors: ExpressionValidationError[] = [];
 
     for (const variable of variables) {
-        const variablePath = variable.path
-            ? `${variable.type}.${variable.path}`
-            : variable.type;
+        const variablePath = variable.path ? `${variable.type}.${variable.path}` : variable.type;
 
         // 检查基础路径是否存在
         let found = false;
@@ -67,7 +65,7 @@ export function validateVariableReferences(
 export function validateTemplateExpressionsInObject(
     obj: any,
     availableVariables: Set<string>,
-    path = "root"
+    path = "root",
 ): ExpressionValidationResult {
     const errors: ExpressionValidationError[] = [];
 
@@ -77,7 +75,7 @@ export function validateTemplateExpressionsInObject(
             const validation = validateTemplateExpression(
                 currentObj,
                 availableVariables,
-                currentPath
+                currentPath,
             );
             if (!validation.valid) {
                 errors.push(...validation.errors);
@@ -107,7 +105,7 @@ export function validateTemplateExpressionsInObject(
 export function validateTemplateExpression(
     text: string,
     availableVariables: Set<string>,
-    path = "root"
+    path = "root",
 ): ExpressionValidationResult {
     const result = extractTemplateExpressions(text);
 
@@ -118,9 +116,5 @@ export function validateTemplateExpression(
         };
     }
 
-    return validateVariableReferences(
-        result.variables,
-        availableVariables,
-        path
-    );
+    return validateVariableReferences(result.variables, availableVariables, path);
 }
