@@ -60,11 +60,16 @@ export function pullRemoteUpdates(branch = "main"): void {
 export function commitVersionUpdate(version: string, message?: string): void {
     const commitMessage = message || `chore: release v${version}\n\n[skip ci]`;
 
-    // 添加文件
+    // 添加文件：根目录 package.json 和所有子包的 package.json
     try {
-        exec("git add package.json packages/*/package.json CHANGELOG.md .changeset/", {
-            silent: true,
-        });
+        // 添加根目录 package.json
+        exec("git add package.json", { silent: true });
+        
+        // 添加所有 packages 目录下的 package.json（包括嵌套目录）
+        exec("git add packages/**/package.json", { silent: true });
+        
+        // 添加 CHANGELOG 和 changeset 文件
+        exec("git add CHANGELOG.md .changeset/", { silent: true });
     } catch {
         // 可能没有需要添加的文件
     }

@@ -24,9 +24,9 @@ export function readPackageJson(path: string): any {
 }
 
 /**
- * 发现包（使用 pnpm list）
+ * 发现所有包（使用 pnpm list，包括私有包）
  */
-export async function discoverPackagesWithPnpm(rootDir: string): Promise<PackageInfo[]> {
+export async function discoverAllPackagesWithPnpm(rootDir: string): Promise<PackageInfo[]> {
     try {
         const output = execSilent("pnpm list -r --depth -1 --json");
         if (!output) return [];
@@ -38,7 +38,7 @@ export async function discoverPackagesWithPnpm(rootDir: string): Promise<Package
         const processItem = (item: any) => {
             if (item.name && item.path) {
                 const pkgJson = readPackageJson(item.path);
-                if (pkgJson && !pkgJson.private) {
+                if (pkgJson) {
                     packages.push({
                         name: item.name,
                         version: pkgJson.version || "0.0.0",
@@ -62,9 +62,18 @@ export async function discoverPackagesWithPnpm(rootDir: string): Promise<Package
 }
 
 /**
- * 发现包（使用模式匹配）
+ * 发现包（使用 pnpm list，仅可发布的包）
  */
-export async function discoverPackagesWithPattern(
+export async function discoverPackagesWithPnpm(rootDir: string): Promise<PackageInfo[]> {
+    const allPackages = await discoverAllPackagesWithPnpm(rootDir);
+    // 过滤掉私有包
+    return allPackages.filter((pkg) => !pkg.private);
+}
+
+/**
+ * 发现所有包（使用模式匹配，包括私有包）
+ */
+export async function discoverAllPackagesWithPattern(
     rootDir: string,
     patterns: string[],
 ): Promise<PackageInfo[]> {
@@ -82,7 +91,7 @@ export async function discoverPackagesWithPattern(
             const packagePath = join(packagesDir, dir.name);
             const pkgJson = readPackageJson(packagePath);
 
-            if (pkgJson && pkgJson.name && !pkgJson.private) {
+            if (pkgJson && pkgJson.name) {
                 // 检查是否匹配模式
                 const matches = patterns.some((pattern) => {
                     // 简单的 glob 匹配
@@ -103,4 +112,16 @@ export async function discoverPackagesWithPattern(
     }
 
     return packages;
+}
+
+/**
+ * 发现包（使用模式匹配，仅可发布的包）
+ */
+export async function discoverPackagesWithPattern(
+    rootDir: string,
+    patterns: string[],
+): Promise<PackageInfo[]> {
+    const allPackages = await discoverAllPackagesWithPattern(rootDir, patterns);
+    // 过滤掉私有包
+    return allPackages.filter((pkg) => !pkg.private);
 }

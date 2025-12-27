@@ -6,6 +6,7 @@ import { readFileSync, writeFileSync, existsSync } from "fs";
 import { join } from "path";
 import { exec } from "../utils/exec";
 import type { Context, PublishConfig } from "../types";
+import { discoverAllPackagesWithPnpm, discoverAllPackagesWithPattern } from "../utils/package";
 
 /**
  * 检测是否使用 changeset
@@ -117,6 +118,37 @@ export async function bumpVersionWithChangeset(
 }
 
 /**
+ * 发现所有 workspace 包（包括私有包，但排除根目录），用于版本更新
+ */
+async function discoverAllWorkspacePackages(
+    rootDir: string,
+    config: PublishConfig,
+): Promise<Array<{ path: string }>> {
+    const workspace = config.workspace;
+    let allPackages: Array<{ path: string }> = [];
+
+    if (workspace?.enabled) {
+        allPackages = await discoverAllPackagesWithPnpm(rootDir);
+    } else if (config.packages?.pattern) {
+        const patterns = Array.isArray(config.packages.pattern)
+            ? config.packages.pattern
+            : [config.packages.pattern];
+        allPackages = await discoverAllPackagesWithPattern(rootDir, patterns);
+    } else {
+        // 默认使用 pnpm workspace
+        allPackages = await discoverAllPackagesWithPnpm(rootDir);
+    }
+
+    // 排除根目录的包（根目录的 package.json 会单独更新）
+    return allPackages.filter((pkg) => {
+        // 标准化路径进行比较
+        const normalizedPkgPath = pkg.path.replace(/\/$/, "");
+        const normalizedRootDir = rootDir.replace(/\/$/, "");
+        return normalizedPkgPath !== normalizedRootDir;
+    });
+}
+
+/**
  * 应用版本更新
  */
 export async function applyVersionUpdate(
@@ -130,7 +162,9 @@ export async function applyVersionUpdate(
     if (strategy === "changeset") {
         return await bumpVersionWithChangeset(rootDir, config);
     } else if (strategy === "manual" && versionType) {
-        const newVersion = bumpVersion(rootDir, versionType, context.packages);
+        // 发现所有 workspace 包（包括私有包）用于版本更新
+        const allPackages = await discoverAllWorkspacePackages(rootDir, config);
+        const newVersion = bumpVersion(rootDir, versionType, allPackages);
         return newVersion;
     } else {
         throw new Error("版本更新策略未指定或无效");
