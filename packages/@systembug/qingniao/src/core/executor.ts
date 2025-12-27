@@ -511,9 +511,9 @@ export async function executePublish(
                 logger.warn("💡 提示: 发布需要 OTP 验证");
                 logger.info("   请重新运行发布命令");
                 logger.info("   或者在发布时准备好 OTP 并输入");
-                } else {
-                    logger.error(`错误: ${errorMessage}`);
-                }
+            } else {
+                logger.error(`错误: ${errorMessage}`);
+            }
             throw error;
         }
     }
