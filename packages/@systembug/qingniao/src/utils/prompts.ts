@@ -28,15 +28,17 @@ export async function select<T = string>(
     defaultValue?: T,
 ): Promise<T> {
     const defaultIndex = defaultValue ? options.findIndex((opt) => opt.value === defaultValue) : 0;
-    const { selected } = await inquirer.prompt([
+    const { selectedValue } = await inquirer.prompt([
         {
             type: "list",
-            name: "selected",
+            name: "selectedValue",
             message,
-            choices: options.map((opt) => opt.label),
+            choices: options.map((opt) => ({
+                name: opt.label,
+                value: opt.value,
+            })),
             default: defaultIndex >= 0 ? defaultIndex : 0,
         },
     ]);
-    const selectedOption = options.find((opt) => opt.label === selected);
-    return selectedOption?.value ?? options[0].value;
+    return selectedValue;
 }
