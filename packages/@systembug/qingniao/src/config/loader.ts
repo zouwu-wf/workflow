@@ -97,7 +97,7 @@ function autoDetectConfig(rootDir: string): Partial<PublishConfig> {
         config.changeset = {
             enabled: true,
             versionCommand: `${pmCommand} changeset version`,
-            publishCommand: `${pmCommand} changeset:publish`,
+            publishCommand: `${pmCommand} changeset publish`,
         };
     }
 
