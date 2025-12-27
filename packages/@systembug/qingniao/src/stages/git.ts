@@ -64,10 +64,10 @@ export function commitVersionUpdate(version: string, message?: string): void {
     try {
         // 添加根目录 package.json
         exec("git add package.json", { silent: true });
-        
+
         // 添加所有 packages 目录下的 package.json（包括嵌套目录）
         exec("git add packages/**/package.json", { silent: true });
-        
+
         // 添加 CHANGELOG 和 changeset 文件
         exec("git add CHANGELOG.md .changeset/", { silent: true });
     } catch {
