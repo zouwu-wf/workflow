@@ -75,15 +75,18 @@ program
 
             await renderInstance.waitUntilExit();
         } catch (error: any) {
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            const errorObj = error instanceof Error ? error : new Error(errorMessage);
+            
             if (renderInstance) {
                 renderInstance = render(
                     <Box flexDirection="column">
-                        <Text color="red">✗ 生成配置文件失败: {error.message}</Text>
+                        <Text color="red">✗ 生成配置文件失败: {errorMessage}</Text>
                     </Box>,
                 );
                 await renderInstance.waitUntilExit();
             }
-            logger.error(error);
+            logger.error(errorObj);
             process.exit(1);
         }
     });
@@ -145,13 +148,21 @@ program
                     </Box>,
                 );
             } catch (error: any) {
+                const errorMessage = error instanceof Error ? error.message : String(error);
+                const errorObj = error instanceof Error ? error : new Error(errorMessage);
+                
                 // 显示错误消息
                 render(
                     <Box flexDirection="column">
-                        <Text color="red">✗ 发布流程失败: {error.message}</Text>
+                        <Text color="red">✗ 发布流程失败: {errorMessage}</Text>
+                        {errorObj.stack && (
+                            <Text color="gray" dimColor>
+                                {errorObj.stack.split("\n").slice(1, 4).join("\n")}
+                            </Text>
+                        )}
                     </Box>,
                 );
-                logger.error(error);
+                logger.error(errorObj);
                 process.exit(1);
             }
         },

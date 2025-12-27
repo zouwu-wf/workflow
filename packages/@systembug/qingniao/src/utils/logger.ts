@@ -9,7 +9,7 @@ export interface Logger {
     info(message: string, ...args: any[]): void;
     success(message: string, ...args: any[]): void;
     warn(message: string, ...args: any[]): void;
-    error(message: string, ...args: any[]): void;
+    error(message: string | Error, ...args: any[]): void;
     debug(message: string, ...args: any[]): void;
     child(bindings: Record<string, any>): Logger;
 }
@@ -37,6 +37,8 @@ export function createLogger(
                           colorize: true,
                           translateTime: "HH:MM:ss",
                           ignore: "pid,hostname",
+                          errorLikeObjectKeys: ["err", "error"],
+                          singleLine: false,
                       },
                   }
                 : undefined,
@@ -53,8 +55,23 @@ export function createLogger(
         warn: (message: string, ...args: any[]) => {
             pinoLogger.warn({ msg: message, args }, message);
         },
-        error: (message: string, ...args: any[]) => {
-            pinoLogger.error({ msg: message, args }, message);
+        error: (message: string | Error, ...args: any[]) => {
+            if (message instanceof Error) {
+                const error = message;
+                pinoLogger.error(
+                    {
+                        err: {
+                            message: error.message,
+                            stack: error.stack,
+                            name: error.name,
+                        },
+                        msg: error.message,
+                    },
+                    `✗ ${error.message}`,
+                );
+            } else {
+                pinoLogger.error({ msg: message, args }, `✗ ${message}`);
+            }
         },
         debug: (message: string, ...args: any[]) => {
             pinoLogger.debug({ msg: message, args }, message);
@@ -81,8 +98,23 @@ function createLoggerFromPino(pinoLogger: PinoLogger): Logger {
         warn: (message: string, ...args: any[]) => {
             pinoLogger.warn({ msg: message, args }, message);
         },
-        error: (message: string, ...args: any[]) => {
-            pinoLogger.error({ msg: message, args }, message);
+        error: (message: string | Error, ...args: any[]) => {
+            if (message instanceof Error) {
+                const error = message;
+                pinoLogger.error(
+                    {
+                        err: {
+                            message: error.message,
+                            stack: error.stack,
+                            name: error.name,
+                        },
+                        msg: error.message,
+                    },
+                    `✗ ${error.message}`,
+                );
+            } else {
+                pinoLogger.error({ msg: message, args }, `✗ ${message}`);
+            }
         },
         debug: (message: string, ...args: any[]) => {
             pinoLogger.debug({ msg: message, args }, message);
