@@ -77,7 +77,7 @@ program
         } catch (error: any) {
             const errorMessage = error instanceof Error ? error.message : String(error);
             const errorObj = error instanceof Error ? error : new Error(errorMessage);
-            
+
             if (renderInstance) {
                 renderInstance = render(
                     <Box flexDirection="column">
@@ -150,7 +150,7 @@ program
             } catch (error: any) {
                 const errorMessage = error instanceof Error ? error.message : String(error);
                 const errorObj = error instanceof Error ? error : new Error(errorMessage);
-                
+
                 // 显示错误消息
                 render(
                     <Box flexDirection="column">
