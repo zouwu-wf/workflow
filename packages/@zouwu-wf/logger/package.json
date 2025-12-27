@@ -1,16 +1,14 @@
 {
-    "name": "@zouwu-wf/workflow",
+    "name": "@zouwu-wf/logger",
     "version": "1.0.0",
-    "description": "驺吾工作流引擎 - 平台中立的工作流DSL和运行时",
+    "description": "平台中立的日志库 - 支持Node.js和浏览器",
     "keywords": [
-        "workflow",
-        "schema",
-        "validation",
-        "yaml",
-        "typescript",
-        "orchestration",
-        "dsl"
+        "logger",
+        "logging",
+        "platform-neutral",
+        "typescript"
     ],
+    "private": true,
     "author": "Albert Li <albert_lee@hotmail.com>",
     "license": "MIT",
     "type": "module",
@@ -19,7 +17,6 @@
     "types": "./dist/index.d.ts",
     "files": [
         "dist/",
-        "schemas/",
         "README.md"
     ],
     "exports": {
@@ -28,8 +25,6 @@
             "require": "./dist/index.cjs",
             "types": "./dist/index.d.ts"
         },
-        "./schemas": "./schemas/index.json",
-        "./schemas/*": "./schemas/*",
         "./package.json": "./package.json"
     },
     "scripts": {
@@ -39,19 +34,11 @@
         "test:coverage": "vitest run --coverage",
         "typecheck": "tsc --noEmit",
         "lint": "eslint src/ --ext .ts",
-        "format": "prettier --write src/ schemas/",
+        "format": "prettier --write src/",
         "dev": "vitest",
-        "prepublishOnly": "npm run typecheck && npm run build"
-    },
-    "dependencies": {
-        "@zouwu-wf/logger": "workspace:*",
-        "@zouwu-wf/expression-parser": "workspace:*",
-        "ajv": "^8.12.0",
-        "ajv-formats": "^2.1.1",
-        "js-yaml": "^4.1.0"
+        "prepublishOnly": "npm run lint && npm run typecheck && npm run test && npm run build"
     },
     "devDependencies": {
-        "@types/js-yaml": "^4.0.9",
         "@types/node": "^18.0.0",
         "@vitest/coverage-v8": "^1.0.0",
         "eslint": "^8.0.0",
@@ -60,9 +47,6 @@
         "vite": "^5.0.0",
         "vite-plugin-dts": "^3.0.0",
         "vitest": "^1.0.0"
-    },
-    "peerDependencies": {
-        "typescript": ">=4.0.0"
     },
     "engines": {
         "node": ">=16.0.0"

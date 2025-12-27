@@ -42,3 +42,4 @@ guide
 
 # TurboRepo cache
 .turbo
+**/generated/*

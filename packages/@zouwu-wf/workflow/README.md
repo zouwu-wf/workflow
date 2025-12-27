@@ -18,7 +18,7 @@
 **📦 相关包**：
 
 - `@zouwu-wf/cli` - 命令行工具包
-- `@systembug/logger` - 日志工具库
+- `@zouwu-wf/logger` - 日志工具库
 
 ## 🌟 核心特性
 
@@ -59,7 +59,7 @@ npm install @zouwu-wf/workflow
 
 ```typescript
 import { WorkflowOrchestrator, NodeWorkflowLoader } from "@zouwu-wf/workflow";
-import { createLogger } from "@systembug/logger";
+import { createLogger } from "@zouwu-wf/logger";
 
 // 初始化引擎
 const logger = createLogger();
