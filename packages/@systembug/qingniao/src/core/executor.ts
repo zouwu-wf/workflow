@@ -345,7 +345,7 @@ export async function executePublish(
         }
     }
 
-    // 5. 构建验证（如果未跳过）
+    // 5. 构建（如果未跳过）- 在版本更新之后，发布之前
     if (!options.skipBuild && config.build?.enabled !== false) {
         const pmCommand =
             config.project?.packageManager === "pnpm"
@@ -476,8 +476,14 @@ export async function executePublish(
         verifySpinner.succeed();
     }
 
-    // 6. 发布（如果未跳过）
+    // 6. 发布（如果未跳过）- 只验证构建产物存在，不执行构建
     if (!options.skipPublish && config.publish?.enabled !== false) {
+        // 发布前验证构建产物存在（不执行构建）
+        if (!options.skipBuild && config.build?.enabled !== false) {
+            const verifySpinner = ora("验证构建产物").start();
+            await verifyArtifacts(config, context);
+            verifySpinner.succeed();
+        }
         // 显示将要发布的包列表
         logger.info("📦 将要发布的包:");
         const existingPackages: Array<{ name: string; version: string }> = [];

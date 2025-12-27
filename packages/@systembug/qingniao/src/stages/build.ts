@@ -76,12 +76,7 @@ export async function executeBuildSteps(config: PublishConfig, context: Context)
     const buildSteps = config.build?.steps || [];
 
     if (buildSteps.length > 0) {
-        // 过滤掉 clean 步骤（已在构建之前执行）
-        const nonCleanSteps = buildSteps.filter(
-            (step) => step.name !== "clean" && !step.command?.includes("clean"),
-        );
-
-        for (const step of nonCleanSteps) {
+        for (const step of buildSteps) {
             if (step.condition && !step.condition(context)) {
                 continue;
             }
