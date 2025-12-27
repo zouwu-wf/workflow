@@ -12,13 +12,15 @@ import { SelectList } from "../components/SelectList";
  */
 export async function confirm(message: string, defaultValue = true): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
-        const { unmount } = render(
+        const instance = render(
             <ConfirmDialog
                 message={message}
                 defaultValue={defaultValue}
-                onConfirm={(confirmed) => {
+                onConfirm={async (confirmed) => {
+                    instance.unmount();
+                    // 等待一小段时间确保完全清理
+                    await new Promise((r) => setTimeout(r, 50));
                     resolve(confirmed);
-                    unmount();
                 }}
             />,
         );
@@ -34,14 +36,16 @@ export async function select<T = string>(
     defaultValue?: T,
 ): Promise<T> {
     return new Promise<T>((resolve) => {
-        const { unmount } = render(
+        const instance = render(
             <SelectList
                 message={message}
                 options={options}
                 defaultValue={defaultValue}
-                onSelect={(value) => {
+                onSelect={async (value) => {
+                    instance.unmount();
+                    // 等待一小段时间确保完全清理
+                    await new Promise((r) => setTimeout(r, 50));
                     resolve(value);
-                    unmount();
                 }}
             />,
         );
