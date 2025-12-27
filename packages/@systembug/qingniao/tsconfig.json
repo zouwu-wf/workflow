@@ -14,7 +14,6 @@
         "sourceMap": true,
         "resolveJsonModule": true,
         "moduleResolution": "bundler",
-        "jsx": "react-jsx",
         "types": ["node"],
         "typeRoots": ["./node_modules/@types"],
         "baseUrl": ".",
@@ -22,7 +21,7 @@
             "@/*": ["src/*"]
         }
     },
-    "include": ["src/**/*", "src/**/*.tsx"],
+    "include": ["src/**/*"],
     "exclude": ["node_modules", "dist", "tests", "**/*.test.ts", "**/*.test.tsx"]
 }
 

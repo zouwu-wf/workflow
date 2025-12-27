@@ -145,6 +145,7 @@ export interface PublishConfig {
         tests?: boolean;
         lint?: boolean;
         typecheck?: boolean;
+        format?: boolean;
     };
 
     // 钩子函数（可选，添加自定义逻辑）

@@ -1,6 +1,5 @@
 import { defineConfig } from "vite";
 import { resolve } from "path";
-import react from "@vitejs/plugin-react";
 import dts from "vite-plugin-dts";
 
 export default defineConfig({
@@ -13,7 +12,7 @@ export default defineConfig({
         lib: {
             entry: {
                 index: resolve(__dirname, "src/index.ts"),
-                cli: resolve(__dirname, "src/cli.tsx"),
+                cli: resolve(__dirname, "src/cli.ts"),
             },
             formats: ["es", "cjs"],
             fileName: (format, entryName) => {
@@ -27,11 +26,9 @@ export default defineConfig({
             external: [
                 "chalk",
                 "commander",
-                "ink",
-                "react",
+                "ora",
+                "inquirer",
                 "listr2",
-                "pino",
-                "pino-pretty",
                 "fs",
                 "path",
                 "url",
@@ -47,13 +44,11 @@ export default defineConfig({
         minify: false,
     },
     plugins: [
-        react(),
         dts({
-            include: ["src/**/*.ts", "src/**/*.tsx"],
-            exclude: ["src/**/*.test.ts", "src/**/*.test.tsx", "src/**/__tests__/**"],
+            include: ["src/**/*.ts"],
+            exclude: ["src/**/*.test.ts", "src/**/__tests__/**"],
             outDir: "dist",
             rollupTypes: true,
         }) as any,
-        react(),
     ],
 });

@@ -11,12 +11,17 @@
  */
 
 import { Command } from "commander";
-import { render } from "ink";
 import { writeFileSync, existsSync } from "fs";
 import { join } from "path";
 import { generateConfigTemplate } from "./commands/init";
-import React from "react";
-import { Box, Text } from "ink";
+import ora from "ora";
+import { createLogger } from "@systembug/diting";
+
+// 创建 logger 实例
+const logger = createLogger({
+    context: "qingniao:cli",
+    level: 1, // INFO
+});
 
 const program = new Command();
 
@@ -36,54 +41,24 @@ program
 
         // 检查文件是否已存在
         if (existsSync(configPath) && !options.force) {
-            const { unmount } = render(
-                <Box flexDirection="column">
-                    <Text color="yellow">⚠ 配置文件已存在: {configFileName}</Text>
-                    <Text>使用 --force 选项可覆盖现有文件</Text>
-                </Box>,
-            );
-            await unmount();
+            logger.warn(`配置文件已存在: ${configFileName}`);
+            logger.info("使用 --force 选项可覆盖现有文件");
             process.exit(1);
         }
 
-        // 使用 ink 显示进度
-        let renderInstance: ReturnType<typeof render> | null = null;
-
         try {
-            // 显示加载状态
-            renderInstance = render(
-                <Box flexDirection="column">
-                    <Text color="cyan">⏳ 正在生成配置文件...</Text>
-                </Box>,
-            );
-
+            const spinner = ora("正在生成配置文件").start();
             const content = generateConfigTemplate(format);
             writeFileSync(configPath, content, "utf-8");
+            spinner.succeed(`配置文件已生成: ${configFileName}`);
 
-            // 重新渲染成功消息
-            renderInstance = render(
-                <Box flexDirection="column">
-                    <Text color="green">✓ 配置文件已生成: {configFileName}</Text>
-                    <Text> </Text>
-                    <Text color="blue">💡 提示：</Text>
-                    <Text> - 配置文件完全可选，青鸟支持零配置</Text>
-                    <Text> - 只需配置需要覆盖自动检测的部分</Text>
-                    <Text> - 删除配置文件即可恢复零配置模式</Text>
-                </Box>,
-            );
-
-            await renderInstance.waitUntilExit();
+            logger.info("💡 提示：");
+            logger.info(" - 配置文件完全可选，青鸟支持零配置");
+            logger.info(" - 只需配置需要覆盖自动检测的部分");
+            logger.info(" - 删除配置文件即可恢复零配置模式");
         } catch (error: any) {
             const errorMessage = error instanceof Error ? error.message : String(error);
-
-            if (renderInstance) {
-                renderInstance = render(
-                    <Box flexDirection="column">
-                        <Text color="red">✗ 生成配置文件失败: {errorMessage}</Text>
-                    </Box>,
-                );
-                await renderInstance.waitUntilExit();
-            }
+            logger.error(`生成配置文件失败: ${errorMessage}`, error);
             process.exit(1);
         }
     });
@@ -129,24 +104,14 @@ program
                     yes: options.yes,
                 });
 
-                // 显示成功消息
-                render(
-                    <Box flexDirection="column">
-                        <Text color="green">✓ 发布流程成功完成</Text>
-                    </Box>,
-                );
+                logger.info("✓ 发布流程成功完成");
             } catch (error: any) {
                 const errorMessage = error instanceof Error ? error.message : String(error);
-
-                // 显示错误消息（不显示堆栈跟踪）
-                render(
-                    <Box flexDirection="column">
-                        <Text color="red">✗ {errorMessage}</Text>
-                    </Box>,
-                );
+                logger.error(`✗ ${errorMessage}`, error);
                 process.exit(1);
             }
         },
     );
 
 program.parse();
+
