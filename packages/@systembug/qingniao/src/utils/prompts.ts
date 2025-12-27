@@ -30,14 +30,15 @@ export async function select<T = string>(
     const defaultIndex = defaultValue ? options.findIndex((opt) => opt.value === defaultValue) : 0;
     const { selectedValue } = await inquirer.prompt([
         {
-            type: "list",
+            type: "rawlist",
             name: "selectedValue",
             message,
             choices: options.map((opt) => ({
                 name: opt.label,
                 value: opt.value,
             })),
-            default: defaultIndex >= 0 ? defaultIndex : 0,
+            default: defaultIndex >= 0 ? defaultIndex + 1 : 1,
+            pageSize: 10,
         },
     ]);
     return selectedValue;
