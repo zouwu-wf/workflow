@@ -96,7 +96,7 @@ function autoDetectConfig(rootDir: string): Partial<PublishConfig> {
             packageManager === "pnpm" ? "pnpm" : packageManager === "yarn" ? "yarn" : "npm";
         config.changeset = {
             enabled: true,
-            versionCommand: `${pmCommand} changeset:version`,
+            versionCommand: `${pmCommand} changeset version`,
             publishCommand: `${pmCommand} changeset:publish`,
         };
     }
