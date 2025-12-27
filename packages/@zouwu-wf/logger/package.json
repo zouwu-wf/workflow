@@ -1,6 +1,6 @@
 {
   "name": "@zouwu-wf/logger",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "平台中立的日志库 - 支持Node.js和浏览器",
   "keywords": [
     "logger",
