@@ -2,3 +2,4 @@ packages:
     - "apps/*"
     - "packages/*"
     - "packages/@zouwu-wf/*"
+    - "packages/@systembug/*"

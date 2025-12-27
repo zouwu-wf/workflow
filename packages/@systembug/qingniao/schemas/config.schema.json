@@ -1,0 +1,99 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "青鸟发布工具配置",
+    "description": "青鸟发布工具的配置文件 Schema",
+    "type": "object",
+    "properties": {
+        "project": {
+            "type": "object",
+            "properties": {
+                "name": { "type": "string" },
+                "rootDir": { "type": "string" },
+                "packageManager": {
+                    "type": "string",
+                    "enum": ["npm", "pnpm", "yarn"]
+                }
+            }
+        },
+        "git": {
+            "type": "object",
+            "properties": {
+                "enabled": { "type": "boolean" },
+                "branch": {
+                    "oneOf": [
+                        { "type": "string" },
+                        { "type": "array", "items": { "type": "string" } }
+                    ]
+                },
+                "requireClean": { "type": "boolean" },
+                "requireUpToDate": { "type": "boolean" },
+                "autoPull": { "type": "boolean" },
+                "tagPrefix": { "type": "string" }
+            }
+        },
+        "version": {
+            "type": "object",
+            "properties": {
+                "strategy": {
+                    "type": "string",
+                    "enum": ["changeset", "manual", "semver", "custom"]
+                },
+                "syncAll": { "type": "boolean" },
+                "syncWorkspaceDeps": { "type": "boolean" }
+            }
+        },
+        "changeset": {
+            "type": "object",
+            "properties": {
+                "enabled": { "type": "boolean" },
+                "configPath": { "type": "string" },
+                "createCommand": { "type": "string" },
+                "versionCommand": { "type": "string" },
+                "publishCommand": { "type": "string" }
+            }
+        },
+        "build": {
+            "type": "object",
+            "properties": {
+                "enabled": { "type": "boolean" },
+                "useTurbo": { "type": "boolean" },
+                "turboConfigPath": { "type": "string" },
+                "turboTasks": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                }
+            }
+        },
+        "packages": {
+            "type": "object",
+            "properties": {
+                "root": { "type": "string" },
+                "pattern": {
+                    "oneOf": [
+                        { "type": "string" },
+                        { "type": "array", "items": { "type": "string" } }
+                    ]
+                },
+                "exclude": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                },
+                "usePnpmList": { "type": "boolean" }
+            }
+        },
+        "publish": {
+            "type": "object",
+            "properties": {
+                "enabled": { "type": "boolean" },
+                "registry": { "type": "string" },
+                "access": {
+                    "type": "string",
+                    "enum": ["public", "restricted"]
+                },
+                "dryRun": { "type": "boolean" },
+                "skipExisting": { "type": "boolean" },
+                "replaceWorkspaceProtocols": { "type": "boolean" }
+            }
+        }
+    }
+}

@@ -10,6 +10,7 @@ This directory contains RFCs for the **Zouwu Workflow** engine and DSL.
 | [0002](./0002-workflow-syntax-specification.md) | Zouwu Workflow Syntax Specification   | Draft  |
 | [0003](./0003-vscode-syntax-highlighting.md)    | VSCode Syntax Highlighting for .zouwu | Draft  |
 | [0004](./0004-workflow-visualization.md)        | Workflow Visualization Logic          | Draft  |
+| [0005](./0005-universal-publish-tool.md)        | Universal Publish Tool Design         | Draft  |
 
 ## RFC Process
 

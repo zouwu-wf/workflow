@@ -1,0 +1,78 @@
+{
+    "name": "@systembug/qingniao",
+    "version": "0.1.0",
+    "description": "青鸟 - 零配置优先的通用发布工具，专为 monorepo 项目设计",
+    "keywords": [
+        "publish",
+        "release",
+        "monorepo",
+        "changeset",
+        "npm",
+        "workspace",
+        "zero-config",
+        "automation"
+    ],
+    "author": "Albert Li <albert_lee@hotmail.com>",
+    "license": "MIT",
+    "type": "module",
+    "main": "./dist/index.cjs",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.ts",
+    "bin": {
+        "qingniao": "./dist/cli.mjs",
+        "qn": "./dist/cli.mjs"
+    },
+    "files": [
+        "dist/",
+        "schemas/",
+        "README.md"
+    ],
+    "exports": {
+        ".": {
+            "import": "./dist/index.mjs",
+            "require": "./dist/index.cjs",
+            "types": "./dist/index.d.ts"
+        },
+        "./schemas": "./schemas/config.schema.json",
+        "./schemas/*": "./schemas/*",
+        "./package.json": "./package.json"
+    },
+    "scripts": {
+        "build": "vite build",
+        "test": "vitest run --passWithNoTests",
+        "test:watch": "vitest",
+        "test:coverage": "vitest run --coverage --passWithNoTests",
+        "typecheck": "tsc --noEmit",
+        "lint": "eslint src/ --ext .ts --ext .tsx",
+        "format": "prettier --write src/ schemas/",
+        "dev": "vitest",
+        "prepublishOnly": "npm run typecheck && npm run build"
+    },
+    "dependencies": {
+        "chalk": "^4.1.2",
+        "commander": "^9.5.0",
+        "ink": "^6.6.0",
+        "listr2": "^8.0.1",
+        "pino": "^9.0.0",
+        "pino-pretty": "^11.0.0",
+        "react": "^19.0.0"
+    },
+    "devDependencies": {
+        "@types/node": "^18.0.0",
+        "@types/react": "^19.0.0",
+        "@vitejs/plugin-react": "^5.1.2",
+        "@vitest/coverage-v8": "^1.0.0",
+        "eslint": "^8.0.0",
+        "prettier": "^3.0.0",
+        "typescript": "^5.0.0",
+        "vite": "^5.0.0",
+        "vite-plugin-dts": "^3.0.0",
+        "vitest": "^1.0.0"
+    },
+    "peerDependencies": {
+        "typescript": ">=4.0.0"
+    },
+    "engines": {
+        "node": ">=16.0.0"
+    }
+}
