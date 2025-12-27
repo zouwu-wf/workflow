@@ -436,6 +436,7 @@ interface PublishConfig {
         useTurbo?: boolean; // 是否使用 Turbo（默认: 自动检测 turbo.json）
         turboConfigPath?: string; // Turbo 配置文件路径（默认: 'turbo.json'）
         turboTasks?: string[]; // 要执行的 Turbo 任务（默认: ['build']，从 turbo.json 读取）
+        preLintBuild?: string[]; // 在 lint 之前构建特定包（如 eslint-plugin）（默认: []）
     };
 
     // pnpm workspace 配置（可选，覆盖自动检测）
@@ -482,6 +483,7 @@ interface PublishConfig {
         tests?: boolean; // 运行测试（默认: 从 package.json scripts 检测）
         lint?: boolean; // 代码检查（默认: 从 package.json scripts 检测）
         typecheck?: boolean; // 类型检查（默认: 从 package.json scripts 检测）
+        format?: boolean; // 代码格式检查（默认: 从 package.json scripts 检测）
     };
 
     // 钩子函数（可选，添加自定义逻辑）
@@ -1363,21 +1365,31 @@ qingniao --yes
    ├─ 创建标签
    └─ 推送到远程
 
-4. 构建验证
-   ├─ 执行构建步骤
-   ├─ 验证构建产物
-   └─ 运行测试
+4. 构建验证（在版本更新之后，发布之前）
+   ├─ 清理旧的构建产物（clean）
+   ├─ 安装依赖（install）
+   ├─ 在 lint 之前构建特定包（preLintBuild，可选）
+   ├─ 代码质量检查（lint, format, typecheck, test）
+   ├─ 执行构建步骤（build）
+   └─ 验证构建产物（verifyArtifacts）
 
 5. 发布准备
    ├─ 发现可发布的包
    ├─ 检查已存在的版本
    └─ 确认发布列表
 
-6. 发布执行
+6. 发布执行（不执行构建，只验证构建产物）
+   ├─ 验证构建产物存在（不重新构建）
    ├─ Dry-run（可选）
    ├─ 正式发布
    └─ 验证发布结果
 ```
+
+**重要流程说明**：
+
+- **构建阶段**：在版本更新之后、发布之前执行，包括清理、安装、检查、构建和验证
+- **发布阶段**：不执行构建，只验证构建产物存在，然后发布
+- **正确的流程顺序**：版本更新 → 构建（clean → build → verify）→ 发布（只验证，不构建）
 
 ### 6. 钩子系统
 
@@ -1414,27 +1426,27 @@ hooks: {
 
 ### 8. 日志和输出
 
-- **结构化日志**：使用 pino 支持不同日志级别（debug, info, warn, error）
-- **交互式 UI**：使用 ink (React for CLI) 提供丰富的交互式界面
-- **进度显示**：使用 ink 组件显示任务进度和状态
-- **彩色输出**：使用 pino-pretty 提供友好的终端输出
+- **结构化日志**：使用 `@systembug/diting` 提供统一的日志系统，支持不同日志级别（debug, info, warn, error）
+- **交互式 UI**：使用 `ora` 显示进度和状态，使用 `inquirer` 提供交互式提示
+- **进度显示**：使用 `ora` spinner 显示任务进度和状态
+- **彩色输出**：使用 `chalk` 提供友好的终端输出
 - **静默模式**：支持 CI/CD 环境的静默执行（--yes 标志）
 
-### 9. 交互式组件（基于 Ink）
+### 9. 交互式组件（基于 Inquirer）
 
-青鸟使用 **ink** 作为唯一的交互框架，提供以下组件：
+青鸟使用 **inquirer** 作为交互框架，提供以下功能：
 
-1. **ConfirmDialog**：确认对话框（Yes/No 选择）
-2. **SelectList**：选择列表（多选项选择）
-3. **VersionSelector**：版本类型选择器（major/minor/patch）
+1. **确认对话框**：使用 `inquirer.prompt` 的 `confirm` 类型（Yes/No 选择）
+2. **选择列表**：使用 `inquirer.prompt` 的 `rawlist` 类型（多选项选择）
+3. **版本类型选择**：使用 `rawlist` 选择版本类型（major/minor/patch）
 
-所有交互式提示都通过 ink 组件实现，确保一致的 UI 体验。
+所有交互式提示都通过 `inquirer` 实现，确保一致的 CLI 体验。
 
 ## 实现状态
 
-### ✅ 已完成功能（2025-12-27）
+### ✅ 已完成功能（2025-01-XX）
 
-所有 `publish.mjs` 中的功能已完整实现，使用 **ink** 作为唯一的交互框架：
+所有 `publish.mjs` 中的功能已完整实现，使用 **ora** 和 **inquirer** 作为交互框架：
 
 #### Phase 1: 核心框架 ✅
 
@@ -1463,6 +1475,7 @@ hooks: {
     - ✅ 版本管理（manual 和 changeset 模式）
     - ✅ 包发现（零配置优先）
     - ✅ pnpm workspace 完整支持
+    - ✅ 所有 workspace 包版本更新（排除根包）
 
 #### Phase 2: 完整功能 ✅
 
@@ -1470,15 +1483,19 @@ hooks: {
     - ✅ **Changeset 深度集成**
         - ✅ 自动检测 .changeset 目录
         - ✅ 读取 .changeset/config.json 配置
-        - ✅ 自动生成 changeset 命令（根据包管理器）
+        - ✅ 自动生成 changeset 命令（使用 `pnpm exec` 或 `npx`）
         - ✅ Changeset 文件检查和创建流程（交互式）
         - ✅ Changeset 版本更新集成
         - ✅ Changeset 发布集成
     - ✅ Semver 自动升级（major/minor/patch）
     - ✅ 版本更新后的 Git 操作（提交、标签、推送）
+    - ✅ 显示所有将被更新版本的包列表
 
 2. **构建系统** ✅
-    - ✅ 构建步骤执行（clean, install, lint, typecheck, test, build）
+    - ✅ 构建步骤执行（clean, install, preLintBuild, lint, format, typecheck, test, build）
+    - ✅ 清理步骤在构建之前执行（如果 build.steps 中包含 clean，先执行；否则执行默认清理）
+    - ✅ 在 lint 之前构建特定包（preLintBuild 配置）
+    - ✅ 代码格式检查（优先使用 format:check 或 prettier --check，避免修改文件）
     - ✅ 产物验证
     - ✅ 测试集成
 
@@ -1488,19 +1505,20 @@ hooks: {
     - ✅ 版本检查（检查已存在的包）
     - ✅ 发布确认流程（交互式）
     - ✅ OTP 提示支持（2FA）
+    - ✅ **发布阶段不执行构建，只验证构建产物存在**
 
 #### Phase 3: 高级特性 ✅
 
-1. **交互式 UI（基于 Ink）** ✅
-    - ✅ ConfirmDialog 组件（确认对话框）
-    - ✅ SelectList 组件（选择列表）
-    - ✅ VersionSelector 组件（版本类型选择）
-    - ✅ 所有交互式提示使用 ink 实现
+1. **交互式 UI（基于 Inquirer）** ✅
+    - ✅ 确认对话框（使用 `inquirer.prompt` 的 `confirm` 类型）
+    - ✅ 选择列表（使用 `inquirer.prompt` 的 `rawlist` 类型）
+    - ✅ 版本类型选择（使用 `rawlist`）
+    - ✅ 所有交互式提示使用 inquirer 实现
 
 2. **CLI 增强** ✅
-    - ✅ 交互式提示（使用 ink）
-    - ✅ 进度显示（使用 ink）
-    - ✅ 详细日志（使用 pino）
+    - ✅ 交互式提示（使用 inquirer）
+    - ✅ 进度显示（使用 ora spinner）
+    - ✅ 详细日志（使用 @systembug/diting）
 
 3. **文档和示例** ✅
     - ✅ README 文档
@@ -1520,8 +1538,9 @@ hooks: {
 | Changeset 版本更新                                         | `stages/version.ts`       | ✅   |
 | 创建 changeset                                             | `core/executor.tsx` (ink) | ✅   |
 | 版本更新后 Git 操作                                        | `stages/git.ts`           | ✅   |
-| 构建前检查（clean, install, lint, typecheck, test, build） | `core/executor.tsx`       | ✅   |
+| 构建前检查（clean, install, preLintBuild, lint, format, typecheck, test, build） | `core/executor.ts`       | ✅   |
 | 验证构建产物                                               | `stages/build.ts`         | ✅   |
+| 发布阶段验证构建产物（不执行构建）                         | `core/executor.ts`        | ✅   |
 | 显示要发布的包列表                                         | `core/executor.tsx`       | ✅   |
 | 检查已存在的包                                             | `stages/publish.ts`       | ✅   |
 | 确认发布                                                   | `core/executor.tsx` (ink) | ✅   |
@@ -1531,8 +1550,8 @@ hooks: {
 
 ### 技术栈
 
-- **交互框架**：ink (React for CLI) - 唯一的交互框架
-- **日志系统**：pino + pino-pretty
+- **交互框架**：inquirer（交互式提示）+ ora（进度显示）
+- **日志系统**：@systembug/diting（统一日志系统，基于 chalk 和 pino）
 - **构建工具**：Vite
 - **类型系统**：TypeScript
 - **包管理**：pnpm workspace
