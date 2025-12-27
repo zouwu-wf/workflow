@@ -246,6 +246,8 @@ ${
 
   // 构建配置（自动检测：${hasTurbo ? "检测到 turbo.json，使用 Turbo" : "未检测到 Turbo"}）
   // build: {
+  //   // 在 lint 之前构建特定包（如 eslint-plugin）
+  //   // preLintBuild: ['@wsxjs/eslint-plugin-wsx'],
   //   // 构建步骤（自动生成：从 package.json scripts 检测）
   //   // 检测到的脚本：${buildSteps.length > 0 ? buildSteps.join(", ") : "无"}
   //   steps: [

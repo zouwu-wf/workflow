@@ -159,6 +159,7 @@ export default {
 - **自动推断**：从 package.json scripts 自动生成构建步骤
 - **产物验证**：自动检测和验证构建产物
 - **依赖顺序**：按依赖关系拓扑排序构建
+- **Pre-lint 构建**：支持在 lint 之前构建特定包（如 eslint-plugin）
 
 ### NPM 发布
 
