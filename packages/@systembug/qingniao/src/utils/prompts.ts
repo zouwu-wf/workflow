@@ -40,4 +40,3 @@ export async function select<T = string>(
     const selectedOption = options.find((opt) => opt.label === selected);
     return selectedOption?.value ?? options[0].value;
 }
-
