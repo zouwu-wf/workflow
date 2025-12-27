@@ -356,7 +356,9 @@ export async function executePublish(
 
         // 清理旧的构建产物（在构建之前，仅在未配置 build.steps 时执行）
         const buildSteps = config.build?.steps || [];
-        const hasCleanInSteps = buildSteps.some((step) => step.name === "clean" || step.command?.includes("clean"));
+        const hasCleanInSteps = buildSteps.some(
+            (step) => step.name === "clean" || step.command?.includes("clean"),
+        );
         if (!hasCleanInSteps) {
             try {
                 const cleanSpinner = ora("清理旧的构建产物").start();

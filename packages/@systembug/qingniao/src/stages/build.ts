@@ -76,7 +76,16 @@ export async function executeBuildSteps(config: PublishConfig, context: Context)
     const buildSteps = config.build?.steps || [];
 
     if (buildSteps.length > 0) {
-        for (const step of buildSteps) {
+        // 确保 clean 步骤总是在最前面执行
+        const cleanSteps = buildSteps.filter(
+            (step) => step.name === "clean" || step.command?.includes("clean"),
+        );
+        const otherSteps = buildSteps.filter(
+            (step) => step.name !== "clean" && !step.command?.includes("clean"),
+        );
+        const orderedSteps = [...cleanSteps, ...otherSteps];
+
+        for (const step of orderedSteps) {
             if (step.condition && !step.condition(context)) {
                 continue;
             }
