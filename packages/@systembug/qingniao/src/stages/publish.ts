@@ -55,10 +55,10 @@ export async function publishPackagesDryRun(
 export async function publishPackages(config: PublishConfig, context: Context): Promise<void> {
     const pmCommand =
         config.project?.packageManager === "pnpm"
-            ? "pnpm"
+            ? "pnpm exec"
             : config.project?.packageManager === "yarn"
               ? "yarn"
-              : "npm";
+              : "npx";
 
     // 检查已存在的包
     const existingPackages: Array<{ name: string; version: string }> = [];
