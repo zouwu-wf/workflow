@@ -354,22 +354,10 @@ export async function executePublish(
                   ? "yarn"
                   : "npm";
 
-        // 清理旧的构建产物（如果 build.steps 中不包含 clean，则执行默认清理）
-        const buildSteps = config.build?.steps || [];
-        const hasCleanInSteps = buildSteps.some(
-            (step) => step.name === "clean" || step.command?.includes("clean"),
-        );
-
-        if (!hasCleanInSteps) {
-            // 如果 build.steps 中不包含 clean，执行默认的清理
-            try {
-                const cleanSpinner = ora("清理旧的构建产物").start();
-                exec(`${pmCommand} clean`, { cwd: rootDir, silent: true });
-                cleanSpinner.succeed();
-            } catch {
-                // 某些包可能没有 clean 脚本，忽略错误
-            }
-        }
+        // 清理旧的构建产物（如果 build.steps 中包含 clean，会在 executeBuildSteps 中执行）
+        // 如果 build.steps 中不包含 clean，且需要清理，可以在这里执行
+        // 但为了简化流程，我们完全依赖 build.steps 中的 clean 步骤
+        // 如果用户需要清理，应该在 build.steps 中配置
 
         // 安装依赖
         const spinner = ora("安装依赖").start();

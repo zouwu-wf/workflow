@@ -76,6 +76,7 @@ export async function executeBuildSteps(config: PublishConfig, context: Context)
     const buildSteps = config.build?.steps || [];
 
     if (buildSteps.length > 0) {
+        // 按顺序执行所有构建步骤（包括 clean，如果配置了的话）
         for (const step of buildSteps) {
             if (step.condition && !step.condition(context)) {
                 continue;
