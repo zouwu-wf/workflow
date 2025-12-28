@@ -12,8 +12,8 @@ importers:
         specifier: ^2.29.8
         version: 2.29.8(@types/node@18.19.130)
       '@systembug/qingniao':
-        specifier: workspace:*
-        version: link:packages/@systembug/qingniao
+        specifier: ^0.0.7
+        version: 0.0.7(@changesets/cli@2.29.8(@types/node@18.19.130))(@types/node@18.19.130)(typescript@5.9.3)
       eslint:
         specifier: ^8.57.0
         version: 8.57.1
@@ -1480,6 +1480,18 @@ packages:
 
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
+
+  '@systembug/diting@0.0.7':
+    resolution: {integrity: sha512-uqZ3C3duW0f0NLg74axDSCG69IxwUlo7q6crXL1/ZAHcTDudMMmBeYP3BYd3/DBhM6SOcZ8e38teXwyE35/8WQ==}
+    engines: {node: '>=16.0.0'}
+
+  '@systembug/qingniao@0.0.7':
+    resolution: {integrity: sha512-825jwxm07uIbH5S1ovSkhsnmFiV4BfBfQxKsjVHv4GS5WOPtugPTlmI72dId8ai8JYRndgBdxpE4P/iHd6n6EA==}
+    engines: {node: '>=16.0.0'}
+    hasBin: true
+    peerDependencies:
+      '@changesets/cli': ^2.0.0
+      typescript: '>=4.0.0'
 
   '@ts-morph/common@0.19.0':
     resolution: {integrity: sha512-Unz/WHmd4pGax91rdIKWi51wnVUW11QttMEPpBiBgIewnc9UQIX7UDLxr5vRlqeByXCwhkF6VabSsI0raWcyAQ==}
@@ -4111,6 +4123,7 @@ packages:
   whatwg-encoding@3.1.1:
     resolution: {integrity: sha512-6qN4hJdMwfYBtE3YBTTHhoeuUrDBPZmbQaxWAqSALV/MeEnR5z1xd8UKud2RAkFoPkmB+hli1TZSnyi84xz1vQ==}
     engines: {node: '>=18'}
+    deprecated: Use @exodus/bytes instead for a more spec-conformant and faster implementation
 
   whatwg-mimetype@3.0.0:
     resolution: {integrity: sha512-nt+N2dzIutVRxARx1nghPKGv1xHikU7HKdfafKkLNLindmPU/ch3U31NOCGGA/dmPcmb1VlofO0vnKAcsm0o/Q==}
@@ -5543,6 +5556,24 @@ snapshots:
       '@sinonjs/commons': 3.0.1
 
   '@standard-schema/spec@1.1.0': {}
+
+  '@systembug/diting@0.0.7':
+    dependencies:
+      chalk: 5.6.2
+      pino: 9.14.0
+
+  '@systembug/qingniao@0.0.7(@changesets/cli@2.29.8(@types/node@18.19.130))(@types/node@18.19.130)(typescript@5.9.3)':
+    dependencies:
+      '@changesets/cli': 2.29.8(@types/node@18.19.130)
+      '@systembug/diting': 0.0.7
+      chalk: 4.1.2
+      commander: 9.5.0
+      inquirer: 13.1.0(@types/node@18.19.130)
+      listr2: 8.3.3
+      ora: 9.0.0
+      typescript: 5.9.3
+    transitivePeerDependencies:
+      - '@types/node'
 
   '@ts-morph/common@0.19.0':
     dependencies:
