@@ -2,12 +2,12 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import dts from "vite-plugin-dts";
 import { resolve } from "path";
-// @ts-ignore - vite-plugin-monaco-editor 是 CommonJS 模块
-import * as monacoEditorPluginModule from "vite-plugin-monaco-editor";
+import { createRequire } from "module";
+import { fileURLToPath } from "url";
 
-// 处理 CommonJS 模块的默认导出（Vite 在 ESM 中导入 CommonJS 时可能需要访问 default）
-const monacoEditorPlugin =
-    (monacoEditorPluginModule as any).default || monacoEditorPluginModule;
+// 使用 createRequire 导入 CommonJS 模块
+const require = createRequire(import.meta.url);
+const monacoEditorPlugin = require("vite-plugin-monaco-editor").default;
 
 // 前端构建配置（用于开发和生产构建）
 const clientConfig = defineConfig({
