@@ -21,7 +21,7 @@ importers:
         specifier: ^9.1.7
         version: 9.1.7
       nx:
-        specifier: 22.3.3
+        specifier: ^22.3.3
         version: 22.3.3
       prettier:
         specifier: ^3.2.5
@@ -29,64 +29,6 @@ importers:
       typescript:
         specifier: ^5.3.3
         version: 5.9.3
-
-  packages/@systembug/qingniao:
-    dependencies:
-      '@changesets/cli':
-        specifier: ^2.0.0
-        version: 2.29.8(@types/node@18.19.130)
-      '@systembug/diting':
-        specifier: ^0.0.7
-        version: 0.0.7
-      chalk:
-        specifier: ^4.1.2
-        version: 4.1.2
-      commander:
-        specifier: ^9.5.0
-        version: 9.5.0
-      inquirer:
-        specifier: ^13.1.0
-        version: 13.1.0(@types/node@18.19.130)
-      listr2:
-        specifier: ^8.0.1
-        version: 8.3.3
-      ora:
-        specifier: ^9.0.0
-        version: 9.0.0
-    devDependencies:
-      '@types/inquirer':
-        specifier: ^9.0.9
-        version: 9.0.9
-      '@types/node':
-        specifier: ^18.0.0
-        version: 18.19.130
-      '@types/react':
-        specifier: ^19.0.0
-        version: 19.2.7
-      '@vitejs/plugin-react':
-        specifier: ^5.1.2
-        version: 5.1.2(vite@5.4.21(@types/node@18.19.130)(less@4.5.1)(sass@1.97.1)(terser@5.44.1))
-      '@vitest/coverage-v8':
-        specifier: ^1.0.0
-        version: 1.6.1(vitest@1.6.1(@types/node@18.19.130)(happy-dom@17.6.3)(jsdom@23.2.0)(less@4.5.1)(sass@1.97.1)(terser@5.44.1))
-      eslint:
-        specifier: ^8.0.0
-        version: 8.57.1
-      prettier:
-        specifier: ^3.0.0
-        version: 3.7.4
-      typescript:
-        specifier: ^5.0.0
-        version: 5.9.3
-      vite:
-        specifier: ^5.0.0
-        version: 5.4.21(@types/node@18.19.130)(less@4.5.1)(sass@1.97.1)(terser@5.44.1)
-      vite-plugin-dts:
-        specifier: ^3.0.0
-        version: 3.9.1(@types/node@18.19.130)(rollup@4.54.0)(typescript@5.9.3)(vite@5.4.21(@types/node@18.19.130)(less@4.5.1)(sass@1.97.1)(terser@5.44.1))
-      vitest:
-        specifier: ^1.0.0
-        version: 1.6.1(@types/node@18.19.130)(happy-dom@17.6.3)(jsdom@23.2.0)(less@4.5.1)(sass@1.97.1)(terser@5.44.1)
 
   packages/@zouwu-wf/cli:
     dependencies:
@@ -1990,9 +1932,6 @@ packages:
   '@types/gradient-string@1.1.6':
     resolution: {integrity: sha512-LkaYxluY4G5wR1M4AKQUal2q61Di1yVVCw42ImFTuaIoQVgmV0WP1xUaLB8zwb47mp82vWTpePI9JmrjEnJ7nQ==}
 
-  '@types/inquirer@9.0.9':
-    resolution: {integrity: sha512-/mWx5136gts2Z2e5izdoRCo46lPp5TMs9R15GTSsgg/XnZyxDWVqoVU3R9lWnccKpqwsJLvRoxbCjoJtZB7DSw==}
-
   '@types/istanbul-lib-coverage@2.0.6':
     resolution: {integrity: sha512-2QF/t/auWm0lsy8XtKVPG19v3sSOQlJe/YHZgfjb/KBBHOGSV+J2q/S671rcq9uTBrLAXmZpqJiaQbMT+zNU1w==}
 
@@ -2054,9 +1993,6 @@ packages:
 
   '@types/stack-utils@2.0.3':
     resolution: {integrity: sha512-9aEbYZ3TbYMznPdcdr3SmIrLXwC/AKZXQeCf9Pgao5CKb8CyHuEX5jzWPTkvregvhRJHcpRO6BFoGW9ycaOkYw==}
-
-  '@types/through@0.0.33':
-    resolution: {integrity: sha512-HsJ+z3QuETzP3cswwtzt2vEIiHBk/dCcHGhbmG5X3ecnwFD/lPrMpliGXxSCg03L9AhrdwA4Oz/qfspkDW+xGQ==}
 
   '@types/tinycolor2@1.4.6':
     resolution: {integrity: sha512-iEN8J0BoMnsWBqjVbWH/c0G0Hh7O21lpR2/+PrvAVgWdzL7eexIFm4JN/Wn10PTcmNdtS6U67r499mlWMXOxNw==}
@@ -7295,11 +7231,6 @@ snapshots:
     dependencies:
       '@types/tinycolor2': 1.4.6
 
-  '@types/inquirer@9.0.9':
-    dependencies:
-      '@types/through': 0.0.33
-      rxjs: 7.8.2
-
   '@types/istanbul-lib-coverage@2.0.6': {}
 
   '@types/istanbul-lib-report@3.0.3':
@@ -7357,10 +7288,6 @@ snapshots:
   '@types/semver@7.7.1': {}
 
   '@types/stack-utils@2.0.3': {}
-
-  '@types/through@0.0.33':
-    dependencies:
-      '@types/node': 18.19.130
 
   '@types/tinycolor2@1.4.6': {}
 
