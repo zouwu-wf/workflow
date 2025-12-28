@@ -25,11 +25,13 @@ const monacoEditorPlugin = require("vite-plugin-monaco-editor").default;
 ```
 
 **优点：**
+
 - 兼容性好，适用于所有 Node.js 版本（12.2.0+）
 - 明确处理 CommonJS 模块
 - 不需要异步处理
 
 **缺点：**
+
 - 需要额外的导入语句
 - 代码稍微冗长
 
@@ -44,7 +46,7 @@ import react from "@vitejs/plugin-react";
 // 使用异步配置函数
 export default defineConfig(async () => {
     const { default: monacoEditorPlugin } = await import("vite-plugin-monaco-editor");
-    
+
     return {
         plugins: [
             react(),
@@ -58,11 +60,13 @@ export default defineConfig(async () => {
 ```
 
 **优点：**
+
 - 更符合 ESM 规范
 - 代码更简洁
 - Vite 官方支持异步配置函数（自 Vite 2.9.0+）
 
 **缺点：**
+
 - 需要将配置函数改为异步
 - 如果配置中有多个 CommonJS 模块，需要多个 await
 - 某些工具可能不完全支持异步配置
@@ -108,4 +112,3 @@ Vite 会自动将 CommonJS 模块转换为 ESM，但这**仅适用于应用代�
 - [Node.js createRequire 文档](https://nodejs.org/api/module.html#module_module_createrequire_filename)
 - [Vite 配置文档](https://vitejs.dev/config/)
 - [ESM 和 CommonJS 互操作](https://nodejs.org/api/esm.html#esm_interop_with_commonjs)
-
