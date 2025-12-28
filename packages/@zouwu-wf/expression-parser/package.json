@@ -1,6 +1,6 @@
 {
   "name": "@zouwu-wf/expression-parser",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "驺吾工作流表达式解析器 - 解析和验证 {{...}} 模板语法",
   "type": "module",
   "keywords": [

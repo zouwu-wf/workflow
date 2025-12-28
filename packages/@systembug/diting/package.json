@@ -1,6 +1,6 @@
 {
   "name": "@systembug/diting",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "谛听 - 平台中立的日志库，使用 chalk 和 pino 进行日志记录",
   "keywords": [
     "logger",
