@@ -1,6 +1,6 @@
 {
   "name": "@systembug/qingniao",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "青鸟 - 零配置优先的通用发布工具，专为 monorepo 项目设计",
   "keywords": [
     "publish",
