@@ -1,29 +1,29 @@
 {
-    "name": "zouwu-workflow",
-    "version": "0.0.3",
-    "private": true,
-    "scripts": {
-        "build": "turbo run build",
-        "test": "turbo run test",
-        "lint": "turbo run lint",
-        "typecheck": "turbo run typecheck",
-        "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-        "prepare": "husky",
-        "release": "qingniao",
-        "release:dry-run": "qingniao --dry-run"
-    },
-    "devDependencies": {
-        "@changesets/cli": "^2.29.8",
-        "@systembug/qingniao": "workspace:*",
-        "eslint": "^8.57.0",
-        "husky": "^9.1.7",
-        "prettier": "^3.2.5",
-        "turbo": "^2.3.3",
-        "typescript": "^5.3.3"
-    },
-    "packageManager": "pnpm@9.0.0",
-    "volta": {
-        "node": "22.10.0",
-        "pnpm": "9.0.0"
-    }
+  "name": "zouwu-workflow",
+  "version": "0.0.4",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "prepare": "husky",
+    "release": "qingniao",
+    "release:dry-run": "qingniao --dry-run"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.29.8",
+    "@systembug/qingniao": "workspace:*",
+    "eslint": "^8.57.0",
+    "husky": "^9.1.7",
+    "prettier": "^3.2.5",
+    "turbo": "^2.3.3",
+    "typescript": "^5.3.3"
+  },
+  "packageManager": "pnpm@9.0.0",
+  "volta": {
+    "node": "22.10.0",
+    "pnpm": "9.0.0"
+  }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@zouwu-wf/cli",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "驺吾工作流命令行工具 - CLI工具包",
   "type": "module",
   "keywords": [

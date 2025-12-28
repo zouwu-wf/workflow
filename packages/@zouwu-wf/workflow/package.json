@@ -1,6 +1,6 @@
 {
   "name": "@zouwu-wf/workflow",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "驺吾工作流引擎 - 平台中立的工作流DSL和运行时",
   "keywords": [
     "workflow",
