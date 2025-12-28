@@ -14,6 +14,7 @@ import ReactFlow, {
 } from "reactflow";
 import "reactflow/dist/style.css";
 import { Button, LoadingMessage } from "@zouwu-wf/components";
+import YamlPreviewModal from "../components/YamlPreviewModal";
 import type { WorkflowInfo } from "../../shared/types";
 import "./WorkflowCanvas.css";
 
@@ -25,6 +26,9 @@ function WorkflowCanvasInner({ workflow }: WorkflowCanvasProps) {
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
     const [loading, setLoading] = useState(true);
+    const [showYamlPreview, setShowYamlPreview] = useState(false);
+    const [yamlContent, setYamlContent] = useState("");
+    const [loadingYaml, setLoadingYaml] = useState(false);
 
     // 加载工作流数据并转换为图形
     useEffect(() => {
@@ -85,6 +89,25 @@ function WorkflowCanvasInner({ workflow }: WorkflowCanvasProps) {
         [setEdges],
     );
 
+    // 处理预览 YAML 按钮点击
+    const handlePreviewYaml = useCallback(async () => {
+        setLoadingYaml(true);
+        try {
+            const response = await fetch(`/api/workflows/${workflow.id}/raw`);
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            const data = await response.json();
+            setYamlContent(data.content || "");
+            setShowYamlPreview(true);
+        } catch (err) {
+            console.error("Failed to load YAML:", err);
+            alert(`无法加载 YAML: ${err instanceof Error ? err.message : String(err)}`);
+        } finally {
+            setLoadingYaml(false);
+        }
+    }, [workflow.id]);
+
     if (loading) {
         return (
             <div className="canvas-loading">
@@ -100,11 +123,12 @@ function WorkflowCanvasInner({ workflow }: WorkflowCanvasProps) {
                 <div className="canvas-actions">
                     <Button>保存</Button>
                     <Button>验证</Button>
-                    <Button>预览 YAML</Button>
+                    <Button onClick={handlePreviewYaml} disabled={loadingYaml}>
+                        {loadingYaml ? "加载中..." : "预览 YAML"}
+                    </Button>
                 </div>
             </div>
             <div className="canvas-content">
-                {/* @ts-expect-error - React 18/19 type compatibility issue with reactflow */}
                 <ReactFlow
                     nodes={nodes}
                     edges={edges}
@@ -116,21 +140,24 @@ function WorkflowCanvasInner({ workflow }: WorkflowCanvasProps) {
                     fitView={true}
                     nodeTypes={{}}
                 >
-                    {/* @ts-expect-error - React 18/19 type compatibility issue with reactflow */}
                     <Background />
-                    {/* @ts-expect-error - React 18/19 type compatibility issue with reactflow */}
                     <Controls />
-                    {/* @ts-expect-error - React 18/19 type compatibility issue with reactflow */}
                     <MiniMap />
                 </ReactFlow>
             </div>
+            <YamlPreviewModal
+                isOpen={showYamlPreview}
+                yamlContent={yamlContent}
+                workflowName={workflow.name}
+                onClose={() => setShowYamlPreview(false)}
+                readOnly={true}
+            />
         </div>
     );
 }
 
 function WorkflowCanvas({ workflow }: WorkflowCanvasProps) {
     return (
-        // @ts-expect-error - React 18/19 type compatibility issue with reactflow
         <ReactFlowProvider>
             <WorkflowCanvasInner workflow={workflow} />
         </ReactFlowProvider>

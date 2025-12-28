@@ -1,11 +1,17 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import dts from "vite-plugin-dts";
+import monacoEditorPlugin from "vite-plugin-monaco-editor";
 import { resolve } from "path";
 
 // 前端构建配置（用于开发和生产构建）
 const clientConfig = defineConfig({
-    plugins: [react()],
+    plugins: [
+        react(),
+        monacoEditorPlugin({
+            languageWorkers: ["editorWorkerService", "typescript", "json", "html"],
+        }),
+    ],
     root: ".",
     build: {
         outDir: "dist/client",
@@ -50,7 +56,7 @@ const clientConfig = defineConfig({
         },
     },
     optimizeDeps: {
-        include: ["@zouwu-wf/components", "@zouwu-wf/graph", "react-arborist"],
+        include: ["@zouwu-wf/components", "@zouwu-wf/graph", "react-arborist", "@monaco-editor/react"],
     },
 });
 

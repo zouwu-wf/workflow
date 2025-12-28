@@ -1,0 +1,68 @@
+/* YAML 预览模态框样式 */
+
+.yaml-preview-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.yaml-preview-modal-content {
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 1200px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.yaml-preview-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid #e0e0e0;
+    background: linear-gradient(to bottom, #f5f5f5 0%, #ffffff 100%);
+}
+
+.yaml-preview-modal-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+}
+
+.yaml-preview-modal-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.yaml-preview-modal-body {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Windows XP 风格调整 */
+.yaml-preview-modal-content {
+    border: 2px solid #aca899;
+    box-shadow: 
+        0 2px 4px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.yaml-preview-modal-header {
+    background: linear-gradient(to bottom, #ece9d8 0%, #f5f5f5 100%);
+    border-bottom: 1px solid #aca899;
+}
+
