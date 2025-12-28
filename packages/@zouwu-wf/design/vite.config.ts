@@ -3,7 +3,6 @@ import react from "@vitejs/plugin-react";
 import dts from "vite-plugin-dts";
 import { resolve } from "path";
 import { createRequire } from "module";
-import { fileURLToPath } from "url";
 
 // 使用 createRequire 导入 CommonJS 模块
 const require = createRequire(import.meta.url);
