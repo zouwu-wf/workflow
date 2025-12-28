@@ -104,6 +104,7 @@ function WorkflowCanvasInner({ workflow }: WorkflowCanvasProps) {
                 </div>
             </div>
             <div className="canvas-content">
+                {/* @ts-expect-error - React 18/19 type compatibility issue with reactflow */}
                 <ReactFlow
                     nodes={nodes}
                     edges={edges}
@@ -115,8 +116,11 @@ function WorkflowCanvasInner({ workflow }: WorkflowCanvasProps) {
                     fitView={true}
                     nodeTypes={{}}
                 >
+                    {/* @ts-expect-error - React 18/19 type compatibility issue with reactflow */}
                     <Background />
+                    {/* @ts-expect-error - React 18/19 type compatibility issue with reactflow */}
                     <Controls />
+                    {/* @ts-expect-error - React 18/19 type compatibility issue with reactflow */}
                     <MiniMap />
                 </ReactFlow>
             </div>
@@ -126,6 +130,7 @@ function WorkflowCanvasInner({ workflow }: WorkflowCanvasProps) {
 
 function WorkflowCanvas({ workflow }: WorkflowCanvasProps) {
     return (
+        // @ts-expect-error - React 18/19 type compatibility issue with reactflow
         <ReactFlowProvider>
             <WorkflowCanvasInner workflow={workflow} />
         </ReactFlowProvider>

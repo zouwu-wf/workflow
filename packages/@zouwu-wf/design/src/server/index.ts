@@ -22,11 +22,11 @@ const __dirname = dirname(__filename);
 export async function startServer(options: ServerOptions) {
     const { port, host, workflowDir, open, watch: enableWatch } = options;
 
-    let app = new Elysia().use(cors());
+    let app: any = new Elysia().use(cors());
 
     // API 路由必须在静态文件服务之前注册，确保优先级
     app = app
-        .get("/api/workflows", async ({ set }) => {
+        .get("/api/workflows", async ({ set }: any) => {
             set.headers["Content-Type"] = "application/json";
             const workflows = await discoverWorkflows(workflowDir);
             return {
@@ -34,7 +34,7 @@ export async function startServer(options: ServerOptions) {
                 directory: workflowDir,
             };
         })
-        .get("/api/workflows/:id", async ({ params, set, error }) => {
+        .get("/api/workflows/:id", async ({ params, set }: any) => {
             set.headers["Content-Type"] = "application/json";
             try {
                 const workflowYaml = await readWorkflow(params.id, workflowDir);
@@ -44,23 +44,26 @@ export async function startServer(options: ServerOptions) {
                     graph,
                 };
             } catch (err: any) {
-                return error(404, { error: err.message || "工作流不存在" });
+                set.status = 404;
+                return { error: err.message || "工作流不存在" };
             }
         })
-        .get("/api/workflows/:id/raw", async ({ params, error }) => {
+        .get("/api/workflows/:id/raw", async ({ params, set }: any) => {
             try {
                 const result = await getWorkflowRaw(params.id, workflowDir);
                 return result;
             } catch (err: any) {
-                return error(404, { error: err.message || "工作流不存在" });
+                set.status = 404;
+                return { error: err.message || "工作流不存在" };
             }
         })
-        .post("/api/workflows", async ({ body, error }) => {
+        .post("/api/workflows", async ({ body, set }: any) => {
             try {
                 const { id, name, description, version, subPath } = body as any;
 
                 if (!id || !name) {
-                    return error(400, { error: "缺少必需字段: id 和 name" });
+                    set.status = 400;
+                    return { error: "缺少必需字段: id 和 name" };
                 }
 
                 const filePath = await createWorkflow(
@@ -72,10 +75,11 @@ export async function startServer(options: ServerOptions) {
                 const workflow = await readWorkflow(id, workflowDir);
                 return { workflow, filePath };
             } catch (err: any) {
-                return error(400, { error: err.message || "创建工作流失败" });
+                set.status = 400;
+                return { error: err.message || "创建工作流失败" };
             }
         })
-        .put("/api/workflows/:id", async ({ params, body, error }) => {
+        .put("/api/workflows/:id", async ({ params, body, set }: any) => {
             try {
                 const bodyData = body as any;
 
@@ -93,11 +97,13 @@ export async function startServer(options: ServerOptions) {
                 }
 
                 if (!workflowData || !workflowData.id) {
-                    return error(400, { error: "无效的工作流数据" });
+                    set.status = 400;
+                    return { error: "无效的工作流数据" };
                 }
 
                 if (workflowData.id !== params.id) {
-                    return error(400, { error: "工作流 ID 不匹配" });
+                    set.status = 400;
+                    return { error: "工作流 ID 不匹配" };
                 }
 
                 const filePath = await saveWorkflow(params.id, workflowData, workflowDir);
@@ -105,18 +111,20 @@ export async function startServer(options: ServerOptions) {
 
                 return { workflow, filePath };
             } catch (err: any) {
-                return error(400, { error: err.message || "保存工作流失败" });
+                set.status = 400;
+                return { error: err.message || "保存工作流失败" };
             }
         })
-        .delete("/api/workflows/:id", async ({ params, error }) => {
+        .delete("/api/workflows/:id", async ({ params, set }: any) => {
             try {
                 const filePath = await deleteWorkflow(params.id, workflowDir);
                 return { success: true, filePath };
             } catch (err: any) {
-                return error(404, { error: err.message || "删除工作流失败" });
+                set.status = 404;
+                return { error: err.message || "删除工作流失败" };
             }
         })
-        .get("/api/directory", async ({ set }) => {
+        .get("/api/directory", async ({ set }: any) => {
             set.headers["Content-Type"] = "application/json";
             const workflows = await discoverWorkflows(workflowDir);
             return {
@@ -155,7 +163,7 @@ export async function startServer(options: ServerOptions) {
         }
     }
 
-    app = app.get("/", ({ set }) => {
+    app = app.get("/", ({ set }: any) => {
         if (designPageHtml) {
             set.headers["Content-Type"] = "text/html; charset=utf-8";
             return designPageHtml;
