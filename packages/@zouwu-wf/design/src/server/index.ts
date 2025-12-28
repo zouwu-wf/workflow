@@ -14,6 +14,7 @@ import {
     getWorkflowRaw,
 } from "./workflow-manager.js";
 import { yamlToGraph, graphToYaml } from "@zouwu-wf/graph";
+import { validateWorkflow } from "@zouwu-wf/workflow";
 import type { ServerOptions } from "../shared/types.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -55,6 +56,31 @@ export async function startServer(options: ServerOptions) {
             } catch (err: any) {
                 set.status = 404;
                 return { error: err.message || "工作流不存在" };
+            }
+        })
+        .get("/api/workflows/:id/validate", async ({ params, set }: any) => {
+            set.headers["Content-Type"] = "application/json";
+            try {
+                const workflowYaml = await readWorkflow(params.id, workflowDir);
+                const validationResult = validateWorkflow(workflowYaml);
+                return {
+                    valid: validationResult.valid,
+                    errors: validationResult.errors || [],
+                    workflowId: params.id,
+                };
+            } catch (err: any) {
+                set.status = 500;
+                return {
+                    valid: false,
+                    errors: [
+                        {
+                            path: "root",
+                            message: err.message || "验证过程发生错误",
+                            value: null,
+                        },
+                    ],
+                    workflowId: params.id,
+                };
             }
         })
         .post("/api/workflows", async ({ body, set }: any) => {

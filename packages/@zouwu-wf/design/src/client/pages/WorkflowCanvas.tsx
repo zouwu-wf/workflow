@@ -15,6 +15,7 @@ import ReactFlow, {
 import "reactflow/dist/style.css";
 import { Button, LoadingMessage } from "@zouwu-wf/components";
 import YamlPreviewModal from "../components/YamlPreviewModal";
+import ValidationResultModal from "../components/ValidationResultModal";
 import type { WorkflowInfo } from "../../shared/types";
 import "./WorkflowCanvas.css";
 
@@ -29,6 +30,12 @@ function WorkflowCanvasInner({ workflow }: WorkflowCanvasProps) {
     const [showYamlPreview, setShowYamlPreview] = useState(false);
     const [yamlContent, setYamlContent] = useState("");
     const [loadingYaml, setLoadingYaml] = useState(false);
+    const [showValidationResult, setShowValidationResult] = useState(false);
+    const [validationResult, setValidationResult] = useState<{
+        valid: boolean;
+        errors: Array<{ path: string; message: string; value?: any }>;
+    } | null>(null);
+    const [validating, setValidating] = useState(false);
 
     // 加载工作流数据并转换为图形
     useEffect(() => {
@@ -108,6 +115,37 @@ function WorkflowCanvasInner({ workflow }: WorkflowCanvasProps) {
         }
     }, [workflow.id]);
 
+    // 处理验证按钮点击
+    const handleValidate = useCallback(async () => {
+        setValidating(true);
+        try {
+            const response = await fetch(`/api/workflows/${workflow.id}/validate`);
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            const data = await response.json();
+            setValidationResult({
+                valid: data.valid,
+                errors: data.errors || [],
+            });
+            setShowValidationResult(true);
+        } catch (err) {
+            console.error("Failed to validate workflow:", err);
+            setValidationResult({
+                valid: false,
+                errors: [
+                    {
+                        path: "root",
+                        message: `验证请求失败: ${err instanceof Error ? err.message : String(err)}`,
+                    },
+                ],
+            });
+            setShowValidationResult(true);
+        } finally {
+            setValidating(false);
+        }
+    }, [workflow.id]);
+
     if (loading) {
         return (
             <div className="canvas-loading">
@@ -122,7 +160,9 @@ function WorkflowCanvasInner({ workflow }: WorkflowCanvasProps) {
                 <h2>{workflow.name}</h2>
                 <div className="canvas-actions">
                     <Button>保存</Button>
-                    <Button>验证</Button>
+                    <Button onClick={handleValidate} disabled={validating}>
+                        {validating ? "验证中..." : "验证"}
+                    </Button>
                     <Button onClick={handlePreviewYaml} disabled={loadingYaml}>
                         {loadingYaml ? "加载中..." : "预览 YAML"}
                     </Button>
@@ -156,6 +196,15 @@ function WorkflowCanvasInner({ workflow }: WorkflowCanvasProps) {
                 onClose={() => setShowYamlPreview(false)}
                 readOnly={true}
             />
+            {validationResult && (
+                <ValidationResultModal
+                    isOpen={showValidationResult}
+                    onClose={() => setShowValidationResult(false)}
+                    valid={validationResult.valid}
+                    errors={validationResult.errors}
+                    workflowName={workflow.name}
+                />
+            )}
         </div>
     );
 }
