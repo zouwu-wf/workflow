@@ -2,10 +2,6 @@
 import { program } from "commander";
 import { startServer } from "./server/index.js";
 import * as path from "path";
-import { fileURLToPath } from "url";
-
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
 
 // 读取 package.json 获取版本
 import packageJson from "../package.json" with { type: "json" };
