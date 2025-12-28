@@ -163,13 +163,19 @@ export async function applyVersionUpdate(
     const rootDir = context.rootDir;
     const strategy = config.version?.strategy || "manual";
 
-    if (strategy === "changeset") {
-        return await bumpVersionWithChangeset(rootDir, config);
-    } else if (strategy === "manual" && versionType) {
+    // 如果提供了 versionType，优先使用手动更新（无论配置中的策略是什么）
+    if (versionType) {
         // 发现所有 workspace 包（包括私有包）用于版本更新
         const allPackages = await discoverAllWorkspacePackages(rootDir, config);
         const newVersion = bumpVersion(rootDir, versionType, allPackages);
         return newVersion;
+    }
+
+    // 如果没有提供 versionType，则根据配置的策略执行
+    if (strategy === "changeset") {
+        return await bumpVersionWithChangeset(rootDir, config);
+    } else if (strategy === "manual") {
+        throw new Error("手动更新策略需要提供版本类型 (major/minor/patch)");
     } else {
         throw new Error("版本更新策略未指定或无效");
     }
