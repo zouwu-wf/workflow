@@ -80,6 +80,12 @@ npx zouwu-design
 
 详细的本地开发指南请查看 [DEV.md](./DEV.md)。
 
+## 常见问题
+
+### CommonJS 模块导入问题
+
+如果在 Vite 配置中遇到 CommonJS 模块导入问题，请查看 [COMMONJS_IMPORT.md](./COMMONJS_IMPORT.md) 了解解决方案。
+
 ### 快速开始
 
 **前置要求：** 需要安装 **Bun** 运行时
