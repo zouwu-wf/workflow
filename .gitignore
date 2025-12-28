@@ -40,6 +40,14 @@ guide
 .vitepress/cache
 .vitepress/dist
 
-# TurboRepo cache
+# TurboRepo cache (legacy, can be removed after migration)
 .turbo
+**/.turbo
+
+# Nx cache and workspace data
+.nx/cache
+.nx/workspace-data
+.nx/daemon
+
+# Generated files
 **/generated/*

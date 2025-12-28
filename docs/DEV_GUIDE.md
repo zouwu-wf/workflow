@@ -18,16 +18,16 @@
 ### 必需工具
 
 1. **Node.js** (推荐使用 Volta 管理版本)
-   - 版本：22.10.0（通过 Volta 自动管理）
-   - 安装：项目使用 Volta，会自动使用正确的版本
+    - 版本：22.10.0（通过 Volta 自动管理）
+    - 安装：项目使用 Volta，会自动使用正确的版本
 
 2. **pnpm** (包管理器)
-   - 版本：9.0.0（通过 Volta 自动管理）
-   - 安装：`npm install -g pnpm@9.0.0`
+    - 版本：9.0.0（通过 Volta 自动管理）
+    - 安装：`npm install -g pnpm@9.0.0`
 
 3. **Bun** (仅用于 `@zouwu-wf/design` 包)
-   - 安装：`curl -fsSL https://bun.sh/install | bash`
-   - 验证：`bun --version`
+    - 安装：`curl -fsSL https://bun.sh/install | bash`
+    - 验证：`bun --version`
 
 ### 可选工具
 
@@ -77,6 +77,7 @@ pnpm install
 ```
 
 这会自动：
+
 - 安装所有工作区包的依赖
 - 链接 workspace 依赖
 - 设置 Git hooks（Husky）
@@ -209,6 +210,7 @@ pnpm dev
 ```
 
 **访问**：
+
 - 前端界面：`http://localhost:3001`
 - API 端点：`http://localhost:3000/api/*`
 
@@ -384,10 +386,11 @@ pnpm --filter @zouwu-wf/workflow typecheck
 ### Q: 修改依赖包不生效？
 
 1. 确认依赖包已重新构建：
-   ```bash
-   cd packages/@zouwu-wf/components
-   pnpm build
-   ```
+
+    ```bash
+    cd packages/@zouwu-wf/components
+    pnpm build
+    ```
 
 2. 重启使用该包的开发服务器
 
@@ -508,4 +511,3 @@ chore: 构建/工具
 ---
 
 **Happy Coding! 🚀**
-
