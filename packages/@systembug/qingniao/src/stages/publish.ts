@@ -41,7 +41,10 @@ export async function publishPackagesDryRun(
         // 对每个包执行 npm publish --dry-run
         for (const pkg of context.packages) {
             try {
-                exec("npm publish --dry-run", { cwd: pkg.path });
+                // Scoped packages 需要 --access public 才能发布为公共包
+                const isScoped = pkg.name.startsWith("@");
+                const accessFlag = isScoped ? " --access public" : "";
+                exec(`npm publish --dry-run${accessFlag}`, { cwd: pkg.path });
             } catch (error: any) {
                 throw new Error(`包 ${pkg.name} dry-run 失败: ${error.message}`);
             }
@@ -100,7 +103,10 @@ export async function publishPackages(config: PublishConfig, context: Context): 
                     // const pkgJsonPath = `${pkg.path}/package.json`;
                 }
 
-                exec("npm publish", {
+                // Scoped packages 需要 --access public 才能发布为公共包
+                const isScoped = pkg.name.startsWith("@");
+                const accessFlag = isScoped ? " --access public" : "";
+                exec(`npm publish${accessFlag}`, {
                     cwd: pkg.path,
                     silent: false, // 允许交互式输入 OTP
                 });

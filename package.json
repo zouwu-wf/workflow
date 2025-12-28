@@ -1,5 +1,5 @@
 {
-    "name": "@zouwu-wf/zouwu-workflow",
+    "name": "zouwu-workflow",
     "version": "0.0.2",
     "private": true,
     "scripts": {
