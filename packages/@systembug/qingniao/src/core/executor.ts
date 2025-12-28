@@ -214,7 +214,7 @@ export async function executePublish(
             }
 
             // 选择版本更新方式
-            let versionUpdateMethod: "changeset" | "manual" = "changeset";
+            let versionUpdateMethod: "changeset" | "manual" | "semver" = "changeset";
             if (!options.yes) {
                 versionUpdateMethod = await select(
                     "如何更新版本号?",
@@ -222,6 +222,10 @@ export async function executePublish(
                         {
                             label: "使用 changeset (推荐) - 自动根据变更文件计算版本",
                             value: "changeset" as const,
+                        },
+                        {
+                            label: "自动检测 (semver) - 基于 Conventional Commits 自动决定版本类型",
+                            value: "semver" as const,
                         },
                         {
                             label: "手动选择 - 直接指定 major/minor/patch",
@@ -232,8 +236,14 @@ export async function executePublish(
                 );
             } else {
                 // 非交互模式，根据配置选择
-                versionUpdateMethod =
-                    config.version?.strategy === "changeset" ? "changeset" : "manual";
+                const strategy = config.version?.strategy || "changeset";
+                if (strategy === "semver") {
+                    versionUpdateMethod = "semver";
+                } else if (strategy === "changeset") {
+                    versionUpdateMethod = "changeset";
+                } else {
+                    versionUpdateMethod = "manual";
+                }
             }
 
             if (versionUpdateMethod === "manual") {
@@ -265,6 +275,11 @@ export async function executePublish(
                 const spinner = ora("更新版本号").start();
                 newVersion = await applyVersionUpdate(config, context, versionType);
                 spinner.succeed(`版本已更新到 ${newVersion}`);
+            } else if (versionUpdateMethod === "semver") {
+                // 使用 semver 自动检测
+                const spinner = ora("自动检测版本类型并更新版本号").start();
+                newVersion = await applyVersionUpdate(config, context);
+                spinner.succeed(`版本已自动更新到 ${newVersion}`);
             } else {
                 // 使用 changeset
                 const hasChangeset = hasChangesetFiles(rootDir);

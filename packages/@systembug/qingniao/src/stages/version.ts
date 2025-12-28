@@ -4,7 +4,7 @@
 
 import { readFileSync, writeFileSync, existsSync } from "fs";
 import { join } from "path";
-import { exec } from "../utils/exec";
+import { exec, execSilent } from "../utils/exec";
 import type { Context, PublishConfig } from "../types";
 import { discoverAllPackagesWithPnpm, discoverAllPackagesWithPattern } from "../utils/package";
 
@@ -91,6 +91,66 @@ export function bumpVersion(
 }
 
 /**
+ * 基于 Conventional Commits 自动检测版本类型
+ * 从上次 tag 到当前 HEAD 的 commits 中分析版本类型
+ */
+export function detectVersionTypeFromCommits(_rootDir: string): "major" | "minor" | "patch" {
+    // 获取最新的 tag
+    const latestTag = execSilent("git describe --tags --abbrev=0 2>/dev/null");
+    const since = latestTag ? `${latestTag}..HEAD` : "HEAD";
+
+    // 获取所有 commits
+    const commits = execSilent(`git log ${since} --pretty=format:"%s%n%b" 2>/dev/null`) || "";
+
+    if (!commits.trim()) {
+        // 没有新的 commits，返回 patch
+        return "patch";
+    }
+
+    let hasBreaking = false;
+    let hasFeature = false;
+    let hasFix = false;
+
+    // 分析每个 commit
+    const commitLines = commits.split("\n");
+    for (const line of commitLines) {
+        const trimmed = line.trim();
+
+        // 检查 BREAKING CHANGE
+        if (
+            trimmed.includes("BREAKING CHANGE") ||
+            trimmed.includes("BREAKING:") ||
+            trimmed.match(/^[^:]+!:/) // 例如: feat!: breaking change
+        ) {
+            hasBreaking = true;
+            break; // 一旦发现 breaking change，直接返回 major
+        }
+
+        // 检查 feature (feat:)
+        if (trimmed.match(/^feat(\(.+\))?:/i)) {
+            hasFeature = true;
+        }
+
+        // 检查 fix (fix:)
+        if (trimmed.match(/^fix(\(.+\))?:/i)) {
+            hasFix = true;
+        }
+    }
+
+    // 优先级：breaking > feature > fix > patch
+    if (hasBreaking) {
+        return "major";
+    } else if (hasFeature) {
+        return "minor";
+    } else if (hasFix) {
+        return "patch";
+    } else {
+        // 默认返回 patch
+        return "patch";
+    }
+}
+
+/**
  * 使用 changeset 更新版本
  */
 export async function bumpVersionWithChangeset(
@@ -110,6 +170,23 @@ export async function bumpVersionWithChangeset(
 
     // 获取更新后的版本
     return getCurrentVersion(rootDir);
+}
+
+/**
+ * 使用 semver 策略自动更新版本（基于 Conventional Commits）
+ */
+export async function bumpVersionWithSemver(
+    rootDir: string,
+    config: PublishConfig,
+): Promise<string> {
+    // 自动检测版本类型
+    const versionType = detectVersionTypeFromCommits(rootDir);
+
+    // 发现所有 workspace 包
+    const allPackages = await discoverAllWorkspacePackages(rootDir, config);
+
+    // 执行版本更新
+    return bumpVersion(rootDir, versionType, allPackages);
 }
 
 /**
@@ -174,6 +251,8 @@ export async function applyVersionUpdate(
     // 如果没有提供 versionType，则根据配置的策略执行
     if (strategy === "changeset") {
         return await bumpVersionWithChangeset(rootDir, config);
+    } else if (strategy === "semver") {
+        return await bumpVersionWithSemver(rootDir, config);
     } else if (strategy === "manual") {
         throw new Error("手动更新策略需要提供版本类型 (major/minor/patch)");
     } else {
