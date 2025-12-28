@@ -22,11 +22,12 @@ import {
     createGitTag,
     pushToRemote,
 } from "../stages/git";
-import { hasChangesetFiles } from "../utils/auto-detect";
+import { hasChangesetFiles as checkHasChangesetFiles, detectChangeset } from "../utils/auto-detect";
 import { discoverAllWorkspacePackages } from "../stages/version";
 import { confirm, select } from "../utils/prompts";
 import chalk from "chalk";
 import { createLogger } from "@systembug/diting";
+import { readPackageJson } from "../utils/package";
 
 // 创建 logger 实例
 const logger = createLogger({
@@ -52,6 +53,24 @@ function showPackageList(
 /**
  * 执行发布流程
  */
+/**
+ * 检查 publishConfig.namespace 并发出警告
+ */
+function checkPublishConfigNamespace(rootDir: string): void {
+    const rootPkg = readPackageJson(rootDir);
+    if (rootPkg?.publishConfig?.namespace) {
+        logger.warn(
+            chalk.yellow(`⚠️  警告: 检测到 package.json 中存在 publishConfig.namespace 配置`),
+        );
+        logger.warn(chalk.yellow(`   NPM 不支持 publishConfig.namespace，此配置将被忽略。`));
+        logger.warn(
+            chalk.yellow(
+                `   如需使用命名空间，请考虑使用 scoped packages (如 @namespace/package-name)`,
+            ),
+        );
+    }
+}
+
 export async function executePublish(
     config: PublishConfig,
     context: Context,
@@ -64,6 +83,9 @@ export async function executePublish(
     },
 ): Promise<void> {
     const rootDir = context.rootDir;
+
+    // 检查 publishConfig.namespace 配置
+    checkPublishConfigNamespace(rootDir);
 
     // 1. 检查 NPM 认证
     if (config.checks?.auth !== false) {
@@ -213,36 +235,54 @@ export async function executePublish(
                 }
             }
 
+            // 优先检查 changeset：如果有 changeset 就使用它，否则使用其他方式
+            const hasChangeset = detectChangeset(rootDir);
+            const hasChangesetFiles = hasChangeset && checkHasChangesetFiles(rootDir);
+
             // 选择版本更新方式
             let versionUpdateMethod: "changeset" | "manual" | "semver" = "changeset";
             if (!options.yes) {
-                versionUpdateMethod = await select(
-                    "如何更新版本号?",
-                    [
-                        {
-                            label: "使用 changeset (推荐) - 自动根据变更文件计算版本",
-                            value: "changeset" as const,
-                        },
-                        {
-                            label: "自动检测 (semver) - 基于 Conventional Commits 自动决定版本类型",
-                            value: "semver" as const,
-                        },
-                        {
-                            label: "手动选择 - 直接指定 major/minor/patch",
-                            value: "manual" as const,
-                        },
-                    ],
-                    "changeset",
-                );
+                // 如果有 changeset，优先推荐使用 changeset
+                const defaultMethod = hasChangeset ? "changeset" : "semver";
+                const options = [
+                    ...(hasChangeset
+                        ? [
+                              {
+                                  label: "使用 changeset (推荐) - 自动根据变更文件计算版本",
+                                  value: "changeset" as const,
+                              },
+                          ]
+                        : []),
+                    {
+                        label: "自动检测 (semver) - 基于 Conventional Commits 自动决定版本类型",
+                        value: "semver" as const,
+                    },
+                    {
+                        label: "手动选择 - 直接指定 major/minor/patch",
+                        value: "manual" as const,
+                    },
+                ];
+
+                versionUpdateMethod = await select("如何更新版本号?", options, defaultMethod);
             } else {
-                // 非交互模式，根据配置选择
-                const strategy = config.version?.strategy || "changeset";
-                if (strategy === "semver") {
-                    versionUpdateMethod = "semver";
-                } else if (strategy === "changeset") {
+                // 非交互模式：优先检查 changeset，如果有就使用，否则根据配置选择
+                if (hasChangeset) {
                     versionUpdateMethod = "changeset";
                 } else {
-                    versionUpdateMethod = "manual";
+                    const strategy = config.version?.strategy || "semver";
+                    if (strategy === "semver") {
+                        versionUpdateMethod = "semver";
+                    } else if (strategy === "changeset") {
+                        // 配置要求 changeset 但没有检测到，降级到 semver
+                        logger.warn(
+                            chalk.yellow(
+                                "⚠️  配置要求使用 changeset，但未检测到 .changeset 目录，将使用 semver 自动检测",
+                            ),
+                        );
+                        versionUpdateMethod = "semver";
+                    } else {
+                        versionUpdateMethod = "manual";
+                    }
                 }
             }
 
@@ -282,8 +322,7 @@ export async function executePublish(
                 spinner.succeed(`版本已自动更新到 ${newVersion}`);
             } else {
                 // 使用 changeset
-                const hasChangeset = hasChangesetFiles(rootDir);
-                if (!hasChangeset) {
+                if (!hasChangesetFiles) {
                     if (!options.yes) {
                         const createChangeset = await confirm("是否创建 changeset?", true);
                         if (createChangeset) {
