@@ -1,8 +1,15 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import dts from "vite-plugin-dts";
-import monacoEditorPlugin from "vite-plugin-monaco-editor";
 import { resolve } from "path";
+// @ts-ignore - vite-plugin-monaco-editor 是 CommonJS 模块，需要特殊处理
+import monacoEditorPluginModule from "vite-plugin-monaco-editor";
+
+// 处理 CommonJS 模块的默认导出
+const monacoEditorPlugin =
+    typeof monacoEditorPluginModule === "function"
+        ? monacoEditorPluginModule
+        : monacoEditorPluginModule.default || monacoEditorPluginModule;
 
 // 前端构建配置（用于开发和生产构建）
 const clientConfig = defineConfig({
@@ -56,7 +63,12 @@ const clientConfig = defineConfig({
         },
     },
     optimizeDeps: {
-        include: ["@zouwu-wf/components", "@zouwu-wf/graph", "react-arborist", "@monaco-editor/react"],
+        include: [
+            "@zouwu-wf/components",
+            "@zouwu-wf/graph",
+            "react-arborist",
+            "@monaco-editor/react",
+        ],
     },
 });
 

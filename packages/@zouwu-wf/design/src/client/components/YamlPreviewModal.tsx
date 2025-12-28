@@ -40,10 +40,7 @@ function YamlPreviewModal({
 
     return (
         <div className="yaml-preview-modal-overlay" onClick={onClose}>
-            <div
-                className="yaml-preview-modal-content"
-                onClick={(e) => e.stopPropagation()}
-            >
+            <div className="yaml-preview-modal-content" onClick={(e) => e.stopPropagation()}>
                 <div className="yaml-preview-modal-header">
                     <h3>YAML 预览{workflowName ? `: ${workflowName}` : ""}</h3>
                     <div className="yaml-preview-modal-actions">
@@ -51,6 +48,7 @@ function YamlPreviewModal({
                     </div>
                 </div>
                 <div className="yaml-preview-modal-body">
+                    {/* @ts-expect-error - React 18/19 type compatibility issue with @monaco-editor/react */}
                     <Editor
                         height="80vh"
                         defaultLanguage="yaml"
@@ -81,4 +79,3 @@ function YamlPreviewModal({
 }
 
 export default YamlPreviewModal;
-
