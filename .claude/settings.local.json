@@ -1,0 +1,7 @@
+{
+  "enabledMcpjsonServers": [
+    "memory",
+    "executeautomation-playwright-server"
+  ],
+  "enableAllProjectMcpServers": true
+}

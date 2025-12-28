@@ -1,0 +1,96 @@
+{
+    "name": "@zouwu-wf/design",
+    "version": "0.0.7",
+    "description": "驺吾工作流可视化设计工具 - 基于 Bun 和 React Flow 的工作流设计器",
+    "type": "module",
+    "keywords": [
+        "workflow",
+        "visualization",
+        "design",
+        "react-flow",
+        "bun",
+        "elysia"
+    ],
+    "author": "Albert Li <albert_lee@hotmail.com>",
+    "license": "MIT",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "bin": {
+        "zouwu-design": "./dist/cli.js"
+    },
+    "files": [
+        "dist/",
+        "README.md",
+        "ARCHITECTURE.md"
+    ],
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.mjs",
+            "require": "./dist/index.js"
+        },
+        "./package.json": "./package.json"
+    },
+    "scripts": {
+        "build": "vite build",
+        "build:client": "BUILD_CLIENT=true vite build",
+        "build:lib": "vite build",
+        "build:cli": "bun build src/cli.ts --outdir dist --target bun --minify",
+        "build:all": "pnpm build:lib && pnpm build:client && pnpm build:cli",
+        "dev": "concurrently \"pnpm dev:server\" \"pnpm dev:client\"",
+        "dev:server": "bun --watch run src/cli.ts",
+        "dev:client": "BUILD_CLIENT=true vite",
+        "dev:debug": "concurrently \"bun --inspect --watch run src/cli.ts\" \"pnpm dev:client\"",
+        "dev:no-watch": "bun run src/cli.ts",
+        "start": "bun run dist/cli.js",
+        "typecheck": "tsc --noEmit",
+        "lint": "eslint src/ --ext .ts,.tsx",
+        "format": "prettier --write src/",
+        "prepublishOnly": "npm run typecheck && npm run build:all"
+    },
+    "dependencies": {
+        "@elysiajs/cors": "^1.1.0",
+        "@elysiajs/static": "^1.1.0",
+        "@zouwu-wf/workflow": "workspace:*",
+        "@zouwu-wf/components": "workspace:*",
+        "@zouwu-wf/graph": "workspace:*",
+        "chokidar": "^3.5.3",
+        "commander": "^9.5.0",
+        "elysia": "^1.1.0",
+        "glob": "^13.0.0",
+        "js-yaml": "^4.1.0",
+        "open": "^10.1.0",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "reactflow": "^11.10.0",
+        "yaml": "^2.3.0",
+        "zustand": "^4.4.0"
+    },
+    "peerDependencies": {
+        "bun": ">=1.0.0"
+    },
+    "devDependencies": {
+        "@types/chokidar": "^2.1.3",
+        "@types/js-yaml": "^4.0.9",
+        "@types/node": "^18.19.0",
+        "@types/react": "^18.2.0",
+        "@types/react-dom": "^18.2.0",
+        "@vitejs/plugin-react": "^5.1.2",
+        "concurrently": "^9.2.1",
+        "@typescript-eslint/eslint-plugin": "^6.0.0",
+        "@typescript-eslint/parser": "^6.0.0",
+        "eslint": "^8.0.0",
+        "eslint-plugin-react": "^7.33.0",
+        "eslint-plugin-react-hooks": "^4.6.0",
+        "prettier": "^3.0.0",
+        "typescript": "^5.0.0",
+        "vite": "^5.4.0",
+        "vite-plugin-dts": "^3.0.0"
+    },
+    "engines": {
+        "bun": ">=1.0.0"
+    },
+    "publishConfig": {
+        "access": "public"
+    }
+}

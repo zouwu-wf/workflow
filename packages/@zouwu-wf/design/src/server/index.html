@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>驺吾工作流可视化设计工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 16px;
+            padding: 3rem;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+        
+        .status {
+            background: #f0f0f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .status-item:last-child {
+            border-bottom: none;
+        }
+        
+        .status-label {
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .status-value {
+            color: #667eea;
+            font-family: monospace;
+        }
+        
+        .api-list {
+            text-align: left;
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .api-list h3 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        
+        .api-item {
+            padding: 0.5rem 0;
+            font-family: monospace;
+            color: #667eea;
+        }
+        
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            border-radius: 4px;
+            color: #856404;
+            margin-top: 2rem;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌌 驺吾工作流可视化设计工具</h1>
+        <p class="subtitle">基于 Bun 和 React Flow 的工作流设计器</p>
+        
+        <div class="status">
+            <div class="status-item">
+                <span class="status-label">服务器状态</span>
+                <span class="status-value" id="server-status">
+                    <span class="loading"></span>检查中...
+                </span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">工作流目录</span>
+                <span class="status-value" id="workflow-dir">-</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">工作流数量</span>
+                <span class="status-value" id="workflow-count">
+                    <span class="loading"></span>加载中...
+                </span>
+            </div>
+        </div>
+        
+        <div class="api-list">
+            <h3>📡 API 端点</h3>
+            <div class="api-item">GET /api/workflows - 获取工作流列表</div>
+            <div class="api-item">GET /api/workflows/:id - 获取单个工作流</div>
+            <div class="api-item">GET /api/directory - 获取目录信息</div>
+            <div class="api-item">POST /api/workflows - 创建新工作流</div>
+            <div class="api-item">PUT /api/workflows/:id - 更新工作流</div>
+            <div class="api-item">DELETE /api/workflows/:id - 删除工作流</div>
+        </div>
+        
+        <div class="note">
+            <strong>ℹ️ 提示：</strong> 前端界面正在开发中，当前仅提供 API 服务。
+            您可以使用上述 API 端点来管理工作流。
+        </div>
+    </div>
+    
+    <script>
+        // 检查服务器状态
+        fetch('/api/directory')
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('server-status').innerHTML = '✅ 运行中';
+                document.getElementById('workflow-dir').textContent = data.path || '-';
+                document.getElementById('workflow-count').textContent = data.workflows || 0;
+            })
+            .catch(err => {
+                document.getElementById('server-status').innerHTML = '❌ 连接失败';
+                console.error('API 请求失败:', err);
+            });
+    </script>
+</body>
+</html>
+

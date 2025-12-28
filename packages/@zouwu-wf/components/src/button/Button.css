@@ -1,0 +1,37 @@
+/* Windows 95 按钮样式 */
+.win95-button {
+    background: var(--win95-gray, #c0c0c0);
+    border: 2px outset var(--win95-gray, #c0c0c0);
+    color: var(--win95-black, #000000);
+    padding: 2px 12px;
+    font-family: 'MS Sans Serif', 'MS UI Gothic', 'Segoe UI', sans-serif;
+    font-size: 11px;
+    cursor: pointer;
+    min-height: 21px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+}
+
+.win95-button:hover:not(:disabled) {
+    border-color: var(--win95-white, #ffffff) var(--win95-dark-gray, #808080) var(--win95-dark-gray, #808080) var(--win95-white, #ffffff);
+}
+
+.win95-button:active:not(:disabled),
+.win95-button:focus:not(:disabled) {
+    border-style: inset;
+    border-color: var(--win95-dark-gray, #808080) var(--win95-white, #ffffff) var(--win95-white, #ffffff) var(--win95-dark-gray, #808080);
+    outline: none;
+}
+
+.win95-button:disabled {
+    color: var(--win95-dark-gray, #808080);
+    cursor: not-allowed;
+    border-color: var(--win95-dark-gray, #808080);
+}
+
+.win95-button-primary {
+    /* 主按钮可以有不同的样式，目前与默认相同 */
+}
+

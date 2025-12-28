@@ -1,0 +1,235 @@
+/* Windows 95 主题样式 */
+
+/* Windows 95 经典颜色 */
+:root {
+    --win95-gray: #c0c0c0;
+    --win95-dark-gray: #808080;
+    --win95-light-gray: #e0e0e0;
+    --win95-white: #ffffff;
+    --win95-black: #000000;
+    --win95-blue: #000080;
+    --win95-dark-blue: #000040;
+    --win95-light-blue: #a0a0ff;
+    --win95-red: #ff0000;
+    --win95-yellow: #ffff00;
+}
+
+/* 全局样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "MS Sans Serif", "MS UI Gothic", "Segoe UI", sans-serif;
+    font-size: 11px;
+    background: var(--win95-gray);
+    color: var(--win95-black);
+    overflow: hidden;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+#root {
+    width: 100vw;
+    height: 100vh;
+}
+
+/* Windows 95 3D 边框工具类 */
+.win95-inset {
+    border-style: inset;
+    border-width: 2px;
+    border-color: var(--win95-dark-gray) var(--win95-white) var(--win95-white)
+        var(--win95-dark-gray);
+}
+
+.win95-outset {
+    border-style: outset;
+    border-width: 2px;
+    border-color: var(--win95-white) var(--win95-dark-gray) var(--win95-dark-gray)
+        var(--win95-white);
+}
+
+.win95-pressed {
+    border-style: inset;
+    border-width: 2px;
+    border-color: var(--win95-dark-gray) var(--win95-white) var(--win95-white)
+        var(--win95-dark-gray);
+}
+
+/* 应用容器 */
+.app-container {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--win95-gray);
+}
+
+/* 左侧面板：工作流树（现在由 ResizableSplitter 管理） */
+.sidebar {
+    width: 100%;
+    height: 100%;
+    background: var(--win95-gray);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* 右侧面板：React Flow 画布（现在由 ResizableSplitter 管理） */
+.main-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--win95-gray);
+}
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    color: var(--win95-black);
+    background: var(--win95-gray);
+}
+
+.empty-state h2 {
+    margin-bottom: 0.5rem;
+    color: var(--win95-black);
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.empty-state p {
+    color: var(--win95-dark-gray);
+    font-size: 11px;
+}
+
+/* Windows 95 按钮样式 */
+.win95-button {
+    background: var(--win95-gray);
+    border: 2px outset var(--win95-gray);
+    color: var(--win95-black);
+    padding: 2px 12px;
+    font-family: "MS Sans Serif", sans-serif;
+    font-size: 11px;
+    cursor: pointer;
+    min-height: 21px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+}
+
+.win95-button:hover {
+    border-color: var(--win95-white) var(--win95-dark-gray) var(--win95-dark-gray)
+        var(--win95-white);
+}
+
+.win95-button:active,
+.win95-button:focus {
+    border-style: inset;
+    border-color: var(--win95-dark-gray) var(--win95-white) var(--win95-white)
+        var(--win95-dark-gray);
+    outline: none;
+}
+
+.win95-button:disabled {
+    color: var(--win95-dark-gray);
+    cursor: not-allowed;
+    border-color: var(--win95-dark-gray);
+}
+
+/* Windows 95 输入框样式 */
+.win95-input {
+    background: var(--win95-white);
+    border: 2px inset var(--win95-gray);
+    border-color: var(--win95-dark-gray) var(--win95-white) var(--win95-white)
+        var(--win95-dark-gray);
+    padding: 2px 4px;
+    font-family: "MS Sans Serif", sans-serif;
+    font-size: 11px;
+    color: var(--win95-black);
+    min-height: 19px;
+}
+
+.win95-input:focus {
+    outline: 1px dotted var(--win95-black);
+    outline-offset: -3px;
+}
+
+.win95-input:disabled {
+    background: var(--win95-gray);
+    color: var(--win95-dark-gray);
+    cursor: not-allowed;
+}
+
+/* Windows 95 滚动条样式 */
+.win95-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--win95-gray) var(--win95-light-gray);
+}
+
+.win95-scrollbar::-webkit-scrollbar {
+    width: 16px;
+    height: 16px;
+}
+
+.win95-scrollbar::-webkit-scrollbar-track {
+    background: var(--win95-gray);
+    border: 1px inset var(--win95-gray);
+}
+
+.win95-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--win95-gray);
+    border: 2px outset var(--win95-gray);
+    border-color: var(--win95-white) var(--win95-dark-gray) var(--win95-dark-gray)
+        var(--win95-white);
+}
+
+.win95-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--win95-light-gray);
+}
+
+.win95-scrollbar::-webkit-scrollbar-button {
+    background: var(--win95-gray);
+    border: 1px outset var(--win95-gray);
+    width: 16px;
+    height: 16px;
+}
+
+.win95-scrollbar::-webkit-scrollbar-button:hover {
+    background: var(--win95-light-gray);
+}
+
+.win95-scrollbar::-webkit-scrollbar-button:active {
+    border-style: inset;
+}
+
+/* Windows 95 窗口标题栏样式 */
+.win95-titlebar {
+    background: linear-gradient(to right, var(--win95-blue), var(--win95-dark-blue));
+    color: var(--win95-white);
+    padding: 2px 4px;
+    font-size: 11px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    height: 18px;
+    user-select: none;
+}
+
+/* Windows 95 面板样式 */
+.win95-panel {
+    background: var(--win95-gray);
+    border: 2px inset var(--win95-gray);
+    padding: 4px;
+}

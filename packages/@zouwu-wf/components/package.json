@@ -1,0 +1,58 @@
+{
+    "name": "@zouwu-wf/components",
+    "version": "0.1.0",
+    "description": "驺吾工作流可重用组件库 - 包含树形组件、工作流列表等",
+    "type": "module",
+    "main": "./dist/index.mjs",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.mjs",
+            "require": "./dist/index.cjs"
+        },
+        "./tree": {
+            "types": "./dist/tree.d.ts",
+            "import": "./dist/tree.mjs",
+            "require": "./dist/tree.cjs"
+        }
+    },
+    "files": [
+        "dist/",
+        "README.md"
+    ],
+    "scripts": {
+        "build": "vite build",
+        "dev": "vite build --watch",
+        "typecheck": "tsc --noEmit",
+        "lint": "eslint src --ext .ts,.tsx",
+        "format": "prettier --write src/",
+        "prepublishOnly": "npm run typecheck && npm run build"
+    },
+    "dependencies": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-arborist": "^3.0.0"
+    },
+    "devDependencies": {
+        "@types/react": "^18.2.0",
+        "@types/react-dom": "^18.2.0",
+        "@vitejs/plugin-react": "^5.1.2",
+        "@typescript-eslint/eslint-plugin": "^6.0.0",
+        "@typescript-eslint/parser": "^6.0.0",
+        "eslint": "^8.0.0",
+        "eslint-plugin-react": "^7.33.0",
+        "eslint-plugin-react-hooks": "^4.6.0",
+        "prettier": "^3.0.0",
+        "typescript": "^5.0.0",
+        "vite": "^5.4.0",
+        "vite-plugin-dts": "^3.0.0"
+    },
+    "peerDependencies": {
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0"
+    },
+    "publishConfig": {
+        "access": "public"
+    }
+}

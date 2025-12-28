@@ -1,0 +1,86 @@
+.workflow-canvas {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  background: var(--win95-gray);
+}
+
+.canvas-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px;
+  border-bottom: 2px inset var(--win95-gray);
+  background: var(--win95-gray);
+}
+
+.canvas-header h2 {
+  font-size: 11px;
+  color: var(--win95-black);
+  font-weight: bold;
+  font-family: 'MS Sans Serif', sans-serif;
+}
+
+.canvas-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.canvas-actions button {
+  padding: 2px 12px;
+  background: var(--win95-gray);
+  color: var(--win95-black);
+  border: 2px outset var(--win95-gray);
+  cursor: pointer;
+  font-size: 11px;
+  font-family: 'MS Sans Serif', sans-serif;
+  min-height: 21px;
+}
+
+.canvas-actions button:hover {
+  border-color: var(--win95-white) var(--win95-dark-gray) var(--win95-dark-gray) var(--win95-white);
+}
+
+.canvas-actions button:active {
+  border-style: inset;
+  border-color: var(--win95-dark-gray) var(--win95-white) var(--win95-white) var(--win95-dark-gray);
+}
+
+.canvas-content {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.canvas-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #000000;
+  background: #ece9d8;
+  font-size: 11px;
+  font-family: "Tahoma", "Segoe UI", sans-serif;
+}
+
+.loading-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #d4d0c8;
+  border-top: 3px solid #3a75c4;
+  border-right: 3px solid #3a75c4;
+  border-bottom: 3px solid #3a75c4;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 8px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+

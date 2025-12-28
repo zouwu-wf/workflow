@@ -1,0 +1,316 @@
+.workflow-tree {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: #ece9d8;
+    min-width: 0;
+    min-height: 0;
+}
+
+.tree-header {
+  padding: 6px;
+  background: #ece9d8;
+  border-bottom: 1px solid #aca899;
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.tree-header h2 {
+  font-size: 11px;
+  margin: 0;
+  color: #000000;
+  font-weight: bold;
+  font-family: "Tahoma", "Segoe UI", sans-serif;
+}
+
+.refresh-btn {
+  background: linear-gradient(to bottom, #ece9d8 0%, #d4d0c8 100%);
+  border: 1px solid #aca899;
+  border-radius: 3px;
+  padding: 3px 8px;
+  cursor: pointer;
+  font-size: 11px;
+  font-family: "Tahoma", "Segoe UI", sans-serif;
+  min-width: 24px;
+  min-height: 23px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset;
+  transition: background 0.1s ease;
+}
+
+.refresh-btn:hover:not(:disabled) {
+  background: linear-gradient(to bottom, #f5f3ea 0%, #e8e4d8 100%);
+  border-color: #8b8878;
+}
+
+.refresh-btn:active:not(:disabled) {
+  background: linear-gradient(to bottom, #d4d0c8 0%, #ece9d8 100%);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
+}
+
+.refresh-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.search-box {
+  margin-bottom: 0.75rem;
+}
+
+.search-input {
+  width: 100%;
+  padding: 3px 5px;
+  background: #ffffff;
+  border: 1px solid #aca899;
+  border-radius: 2px;
+  font-size: 11px;
+  font-family: "Tahoma", "Segoe UI", sans-serif;
+  min-height: 21px;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset;
+}
+
+.search-input:focus {
+  outline: 1px dotted #000000;
+  outline-offset: -2px;
+  border-color: #3a75c4;
+  box-shadow: 0 0 3px rgba(58, 117, 196, 0.3);
+}
+
+.search-input:disabled {
+  background: #ece9d8;
+  color: #808080;
+  cursor: not-allowed;
+}
+
+.new-workflow-btn {
+  width: 100%;
+  padding: 3px 14px;
+  background: linear-gradient(to bottom, #ece9d8 0%, #d4d0c8 100%);
+  color: #000000;
+  border: 1px solid #aca899;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 11px;
+  font-family: "Tahoma", "Segoe UI", sans-serif;
+  font-weight: normal;
+  min-height: 23px;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset;
+  transition: background 0.1s ease;
+}
+
+.new-workflow-btn:hover:not(:disabled) {
+  background: linear-gradient(to bottom, #f5f3ea 0%, #e8e4d8 100%);
+  border-color: #8b8878;
+}
+
+.new-workflow-btn:active:not(:disabled) {
+  background: linear-gradient(to bottom, #d4d0c8 0%, #ece9d8 100%);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
+}
+
+.new-workflow-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.tree-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px;
+  background: #ece9d8;
+}
+
+.tree-content.winxp-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #d4d0c8 #ece9d8;
+}
+
+/* react-arborist 树节点 Windows XP 样式覆盖 */
+.tree-content [data-tree] {
+    background: #ece9d8;
+    font-family: "Tahoma", "Segoe UI", sans-serif;
+}
+
+.tree-content [data-tree-node] {
+    background: transparent;
+    color: #000000;
+    font-size: 11px;
+    padding: 0;
+    border-radius: 2px;
+    transition: background 0.15s ease;
+}
+
+.tree-content [data-tree-node]:hover {
+    background-color: #316ac5;
+    color: #ffffff;
+}
+
+.tree-content [data-tree-node][aria-selected="true"] {
+    background-color: #316ac5;
+    color: #ffffff;
+}
+
+.folder-node {
+  user-select: none;
+}
+
+.folder-item {
+  display: flex;
+  align-items: center;
+  padding: 2px 4px;
+  cursor: pointer;
+  color: #000000;
+  font-size: 11px;
+  font-family: "Tahoma", "Segoe UI", sans-serif;
+  border-radius: 2px;
+  transition: background 0.15s ease;
+}
+
+.folder-item:hover {
+  background: #316ac5;
+  color: #ffffff;
+}
+
+.folder-icon {
+  margin-right: 0.5rem;
+  font-size: 1rem;
+}
+
+.folder-name {
+  flex: 1;
+  font-weight: normal;
+  color: #000000;
+  font-family: 'MS Sans Serif', sans-serif;
+}
+
+.folder-content {
+  margin-left: 0;
+}
+
+.workflow-item {
+  display: flex;
+  align-items: center;
+  padding: 2px 4px;
+  cursor: pointer;
+  gap: 4px;
+  color: #000000;
+  font-size: 11px;
+  font-family: "Tahoma", "Segoe UI", sans-serif;
+  border-radius: 2px;
+  transition: background 0.15s ease;
+}
+
+.workflow-item:hover {
+  background: #316ac5;
+  color: #ffffff;
+}
+
+.workflow-item.selected {
+  background: #316ac5;
+  color: #ffffff;
+}
+
+.workflow-icon {
+  font-size: 1rem;
+}
+
+.workflow-name {
+  flex: 1;
+  color: #000000;
+  font-size: 11px;
+  font-family: "Tahoma", "Segoe UI", sans-serif;
+}
+
+.workflow-version {
+  font-size: 10px;
+  color: #000000;
+  background: linear-gradient(to bottom, #ece9d8 0%, #d4d0c8 100%);
+  padding: 1px 6px;
+  border: 1px solid #aca899;
+  border-radius: 2px;
+  font-family: "Tahoma", "Segoe UI", sans-serif;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset;
+}
+
+.loading-message,
+.error-message,
+.empty-message {
+  padding: 16px;
+  text-align: center;
+  color: #000000;
+  background: #ece9d8;
+  font-size: 11px;
+  font-family: "Tahoma", "Segoe UI", sans-serif;
+}
+
+.loading-message p {
+  color: #3a75c4;
+}
+
+.error-message {
+  color: #cc0000;
+}
+
+.error-message p {
+  margin-bottom: 8px;
+  color: #cc0000;
+}
+
+.retry-btn {
+  padding: 3px 14px;
+  background: linear-gradient(to bottom, #ece9d8 0%, #d4d0c8 100%);
+  color: #000000;
+  border: 1px solid #aca899;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 11px;
+  font-family: "Tahoma", "Segoe UI", sans-serif;
+  min-height: 23px;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset;
+  transition: background 0.1s ease;
+}
+
+.retry-btn:hover {
+  background: linear-gradient(to bottom, #f5f3ea 0%, #e8e4d8 100%);
+  border-color: #8b8878;
+}
+
+.retry-btn:active {
+  background: linear-gradient(to bottom, #d4d0c8 0%, #ece9d8 100%);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
+}
+
+.empty-message button {
+  margin-top: 8px;
+  padding: 3px 14px;
+  background: linear-gradient(to bottom, #ece9d8 0%, #d4d0c8 100%);
+  color: #000000;
+  border: 1px solid #aca899;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 11px;
+  font-family: "Tahoma", "Segoe UI", sans-serif;
+  min-height: 23px;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset;
+  transition: background 0.1s ease;
+}
+
+.empty-message button:hover {
+  background: linear-gradient(to bottom, #f5f3ea 0%, #e8e4d8 100%);
+  border-color: #8b8878;
+}
+
+.empty-message button:active {
+  background: linear-gradient(to bottom, #d4d0c8 0%, #ece9d8 100%);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
+}
+

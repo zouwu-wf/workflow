@@ -1,0 +1,89 @@
+/* Windows XP 风格的可调整大小分割器 */
+
+.resizable-splitter {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #ece9d8;
+}
+
+.resizable-splitter-vertical {
+    flex-direction: row;
+}
+
+.resizable-splitter-horizontal {
+    flex-direction: column;
+}
+
+.resizable-splitter-left,
+.resizable-splitter-right {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background: #ece9d8;
+}
+
+.resizable-splitter-left {
+    flex-shrink: 0;
+    border-right: 1px solid #aca899;
+}
+
+.resizable-splitter-right {
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+}
+
+.resizable-splitter-handle {
+    flex-shrink: 0;
+    background: #d4d0c8;
+    border: none;
+    cursor: col-resize;
+    position: relative;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 4px;
+    transition: background 0.15s ease;
+}
+
+.resizable-splitter-horizontal .resizable-splitter-handle {
+    cursor: row-resize;
+    height: 4px;
+    width: 100%;
+}
+
+.resizable-splitter-handle:hover {
+    background: #c8c4b8;
+}
+
+.resizable-splitter-handle:active {
+    background: #aca899;
+}
+
+/* Windows XP 风格的分割线 */
+.resizable-splitter-handle::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #d4d0c8;
+    border-left: 1px solid rgba(255, 255, 255, 0.5);
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.resizable-splitter-horizontal .resizable-splitter-handle::before {
+    border-left: none;
+    border-right: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.5);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.resizable-splitter-handle-inner {
+    display: none; /* 使用 ::before 伪元素代替 */
+}
+

@@ -1,0 +1,40 @@
+/* Windows 95 消息组件样式 */
+.win95-loading-message,
+.win95-error-message,
+.win95-empty-message {
+    padding: 16px;
+    text-align: center;
+    color: var(--win95-black, #000000);
+    background: var(--win95-gray, #c0c0c0);
+    font-size: 11px;
+    font-family: 'MS Sans Serif', 'MS UI Gothic', 'Segoe UI', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.win95-loading-message p {
+    color: var(--win95-blue, #000080);
+    margin: 0;
+}
+
+.win95-error-message {
+    color: var(--win95-red, #ff0000);
+}
+
+.win95-error-message p {
+    margin: 0 0 8px 0;
+    color: var(--win95-red, #ff0000);
+}
+
+.win95-empty-message p {
+    margin: 0 0 8px 0;
+    color: var(--win95-black, #000000);
+}
+
+.win95-error-message .retry-btn,
+.win95-empty-message .action-btn {
+    margin-top: 4px;
+}
+

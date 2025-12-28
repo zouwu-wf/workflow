@@ -1,0 +1,84 @@
+/* Windows XP 风格的树节点样式 */
+.tree-node {
+    user-select: none;
+    font-family: "Tahoma", "Segoe UI", sans-serif;
+    font-size: 11px;
+}
+
+.tree-node-content {
+    display: flex;
+    align-items: center;
+    padding: 2px 4px;
+    cursor: pointer;
+    gap: 4px;
+    background: transparent;
+    color: #000000;
+    min-height: 20px;
+    border-radius: 2px;
+    transition: background 0.15s ease;
+}
+
+.tree-node-content:hover {
+    background: #316ac5;
+    color: #ffffff;
+}
+
+.tree-node.selected .tree-node-content {
+    background: #316ac5;
+    color: #ffffff;
+}
+
+.tree-node.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    color: #808080;
+}
+
+.tree-node-toggle {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    margin-right: 2px;
+    width: 16px;
+    height: 16px;
+    font-size: 10px;
+}
+
+.tree-node-icon {
+    font-size: 12px;
+    margin-right: 4px;
+    width: 16px;
+    height: 16px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.tree-node-name {
+    flex: 1;
+    color: #000000;
+    font-size: 11px;
+    font-family: "Tahoma", "Segoe UI", sans-serif;
+}
+
+.tree-node.selected .tree-node-name {
+    color: #ffffff;
+}
+
+.tree-node-badge {
+    font-size: 10px;
+    color: #000000;
+    background: linear-gradient(to bottom, #ece9d8 0%, #d4d0c8 100%);
+    padding: 1px 6px;
+    border: 1px solid #aca899;
+    border-radius: 2px;
+    font-family: "Tahoma", "Segoe UI", sans-serif;
+    margin-left: 4px;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset;
+}
+
+.tree-node-children {
+    margin-left: 0;
+    display: block;
+    width: 100%;
+}
+

@@ -1,0 +1,142 @@
+/* Windows XP 风格的树组件样式 */
+.workflow-tree {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    background: #ece9d8;
+    font-family: "Tahoma", "Segoe UI", sans-serif;
+    font-size: 11px;
+}
+
+.tree-search {
+    padding: 6px;
+    border-bottom: 1px solid #aca899;
+    background: #ece9d8;
+}
+
+.tree-search-input {
+    width: 100%;
+    padding: 3px 5px;
+    background: #ffffff;
+    border: 1px solid #aca899;
+    border-radius: 2px;
+    font-family: "Tahoma", "Segoe UI", sans-serif;
+    font-size: 11px;
+    color: #000000;
+    min-height: 21px;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset;
+}
+
+.tree-search-input:focus {
+    outline: 1px dotted #000000;
+    outline-offset: -2px;
+    border-color: #3a75c4;
+    box-shadow: 0 0 3px rgba(58, 117, 196, 0.3);
+}
+
+.tree-content {
+    flex: 1;
+    overflow: hidden;
+    padding: 4px;
+    background: #ece9d8;
+}
+
+.tree-empty {
+    padding: 16px;
+    text-align: center;
+    color: #000000;
+    background: #ece9d8;
+    font-size: 11px;
+    font-family: "Tahoma", "Segoe UI", sans-serif;
+}
+
+/* react-arborist 样式覆盖 - Windows XP 风格 */
+.tree-content [data-tree] {
+    height: 100%;
+    font-family: "Tahoma", "Segoe UI", sans-serif;
+    background: #ece9d8;
+}
+
+.tree-content [data-tree-node] {
+    cursor: pointer;
+    user-select: none;
+    background: transparent;
+    border-radius: 2px;
+    transition: background 0.15s ease;
+}
+
+.tree-content [data-tree-node]:hover {
+    background-color: #316ac5;
+    color: #ffffff;
+}
+
+.tree-content [data-tree-node][aria-selected="true"] {
+    background-color: #316ac5;
+    color: #ffffff;
+}
+
+.tree-node-content {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 4px;
+    min-height: 20px;
+    font-family: "Tahoma", "Segoe UI", sans-serif;
+    font-size: 11px;
+    color: #000000;
+    border-radius: 2px;
+    transition: background 0.15s ease;
+}
+
+.tree-node-content.selected {
+    background-color: #316ac5;
+    color: #ffffff;
+}
+
+.tree-node-content.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    color: #808080;
+}
+
+.tree-node-toggle {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    margin-right: 2px;
+    width: 16px;
+    height: 16px;
+    font-size: 10px;
+}
+
+.tree-node-icon {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 4px;
+    font-size: 12px;
+    width: 16px;
+    height: 16px;
+}
+
+.tree-node-name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 11px;
+    font-family: "Tahoma", "Segoe UI", sans-serif;
+}
+
+.tree-node-badge {
+    font-size: 10px;
+    padding: 1px 6px;
+    background: linear-gradient(to bottom, #ece9d8 0%, #d4d0c8 100%);
+    border: 1px solid #aca899;
+    border-radius: 2px;
+    margin-left: 4px;
+    font-family: "Tahoma", "Segoe UI", sans-serif;
+    color: #000000;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset;
+}
+

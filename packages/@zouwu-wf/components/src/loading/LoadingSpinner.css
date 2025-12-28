@@ -1,0 +1,21 @@
+/* Windows 95 加载动画样式 */
+.win95-loading-spinner {
+    border: 2px solid var(--win95-dark-gray, #808080);
+    border-top: 2px solid var(--win95-blue, #000080);
+    border-right: 2px solid var(--win95-blue, #000080);
+    border-bottom: 2px solid var(--win95-blue, #000080);
+    animation: win95-spin 1s linear infinite;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+@keyframes win95-spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+

@@ -1,0 +1,248 @@
+/* Windows XP 主题样式 */
+
+/* Windows XP 经典颜色 */
+:root {
+    --winxp-blue: #3a75c4;
+    --winxp-blue-dark: #2a5a94;
+    --winxp-blue-light: #5a9ae4;
+    --winxp-gray: #ece9d8;
+    --winxp-gray-dark: #d4d0c8;
+    --winxp-gray-darker: #aca899;
+    --winxp-white: #ffffff;
+    --winxp-black: #000000;
+    --winxp-text: #000000;
+    --winxp-text-disabled: #808080;
+    --winxp-border: #aca899;
+    --winxp-shadow: rgba(0, 0, 0, 0.1);
+}
+
+/* 全局样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Tahoma", "Segoe UI", "MS Sans Serif", sans-serif;
+    font-size: 11px;
+    background: #ece9d8;
+    color: #000000;
+    overflow: hidden;
+}
+
+#root {
+    width: 100vw;
+    height: 100vh;
+}
+
+/* Windows XP 按钮样式 */
+.winxp-button {
+    background: linear-gradient(to bottom, #ece9d8 0%, #d4d0c8 100%);
+    border: 1px solid #aca899;
+    border-radius: 3px;
+    color: #000000;
+    padding: 3px 14px;
+    font-family: "Tahoma", "Segoe UI", sans-serif;
+    font-size: 11px;
+    cursor: pointer;
+    min-height: 23px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset;
+    transition: background 0.1s ease;
+}
+
+.winxp-button:hover:not(:disabled) {
+    background: linear-gradient(to bottom, #f5f3ea 0%, #e8e4d8 100%);
+    border-color: #8b8878;
+}
+
+.winxp-button:active:not(:disabled),
+.winxp-button:focus:not(:disabled) {
+    background: linear-gradient(to bottom, #d4d0c8 0%, #ece9d8 100%);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
+    outline: 1px dotted #000000;
+    outline-offset: -2px;
+}
+
+.winxp-button:disabled {
+    color: #808080;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.winxp-button-primary {
+    background: linear-gradient(to bottom, #3a75c4 0%, #2a5a94 100%);
+    border: 1px solid #1e3f6b;
+    color: #ffffff;
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.2) inset,
+        0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.winxp-button-primary:hover:not(:disabled) {
+    background: linear-gradient(to bottom, #4a85d4 0%, #3a6aa4 100%);
+    border-color: #2e4f7b;
+}
+
+.winxp-button-primary:active:not(:disabled) {
+    background: linear-gradient(to bottom, #2a5a94 0%, #3a75c4 100%);
+}
+
+/* Windows XP 输入框样式 */
+.winxp-input {
+    background: #ffffff;
+    border: 1px solid #aca899;
+    border-radius: 2px;
+    padding: 3px 5px;
+    font-family: "Tahoma", "Segoe UI", sans-serif;
+    font-size: 11px;
+    color: #000000;
+    min-height: 21px;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset;
+}
+
+.winxp-input:focus {
+    outline: 1px dotted #000000;
+    outline-offset: -2px;
+    border-color: #3a75c4;
+    box-shadow: 0 0 3px rgba(58, 117, 196, 0.3);
+}
+
+.winxp-input:disabled {
+    background: #ece9d8;
+    color: #808080;
+    cursor: not-allowed;
+}
+
+/* Windows XP 滚动条样式 */
+.winxp-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #d4d0c8 #ece9d8;
+}
+
+.winxp-scrollbar::-webkit-scrollbar {
+    width: 17px;
+    height: 17px;
+}
+
+.winxp-scrollbar::-webkit-scrollbar-track {
+    background: #ece9d8;
+    border: 1px solid #d4d0c8;
+    border-radius: 1px;
+}
+
+.winxp-scrollbar::-webkit-scrollbar-thumb {
+    background: linear-gradient(to right, #d4d0c8 0%, #c8c4b8 50%, #d4d0c8 100%);
+    border: 1px solid #aca899;
+    border-radius: 3px;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+}
+
+.winxp-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(to right, #c8c4b8 0%, #bcb8ac 50%, #c8c4b8 100%);
+}
+
+.winxp-scrollbar::-webkit-scrollbar-thumb:active {
+    background: linear-gradient(to right, #aca899 0%, #a09c8d 50%, #aca899 100%);
+}
+
+.winxp-scrollbar::-webkit-scrollbar-button {
+    background: linear-gradient(to bottom, #ece9d8 0%, #d4d0c8 100%);
+    border: 1px solid #aca899;
+    border-radius: 2px;
+    width: 17px;
+    height: 17px;
+}
+
+.winxp-scrollbar::-webkit-scrollbar-button:hover {
+    background: linear-gradient(to bottom, #f5f3ea 0%, #e8e4d8 100%);
+}
+
+.winxp-scrollbar::-webkit-scrollbar-button:active {
+    background: linear-gradient(to bottom, #d4d0c8 0%, #ece9d8 100%);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
+}
+
+/* 应用容器 */
+.app-container {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background: #ece9d8;
+}
+
+/* 左侧面板：工作流树（现在由 ResizableSplitter 管理） */
+.sidebar {
+    width: 100%;
+    height: 100%;
+    background: #ece9d8;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* 右侧面板：React Flow 画布（现在由 ResizableSplitter 管理） */
+.main-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: #ece9d8;
+}
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    color: #000000;
+    background: #ece9d8;
+}
+
+.empty-state h2 {
+    margin-bottom: 0.5rem;
+    color: #000000;
+    font-size: 14px;
+    font-weight: bold;
+    font-family: "Tahoma", "Segoe UI", sans-serif;
+}
+
+.empty-state p {
+    color: #808080;
+    font-size: 11px;
+    font-family: "Tahoma", "Segoe UI", sans-serif;
+}
+
+/* Windows XP 窗口标题栏样式 */
+.winxp-titlebar {
+    background: linear-gradient(to bottom, #3a75c4 0%, #2a5a94 100%);
+    color: #ffffff;
+    padding: 3px 6px;
+    font-size: 11px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    height: 22px;
+    user-select: none;
+    border-bottom: 1px solid #1e3f6b;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+}
+
+/* Windows XP 面板样式 */
+.winxp-panel {
+    background: #ece9d8;
+    border: 1px solid #aca899;
+    border-radius: 3px;
+    padding: 6px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}

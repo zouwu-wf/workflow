@@ -10,7 +10,9 @@
         "format": "prettier --write \"**/*.{ts,tsx,md}\"",
         "prepare": "husky",
         "release": "qingniao",
-        "release:dry-run": "qingniao --dry-run"
+        "release:dry-run": "qingniao --dry-run",
+        "design": "pnpm --filter @zouwu-wf/design dev",
+        "design:debug": "pnpm --filter @zouwu-wf/design dev:debug"
     },
     "devDependencies": {
         "@changesets/cli": "^2.29.8",
