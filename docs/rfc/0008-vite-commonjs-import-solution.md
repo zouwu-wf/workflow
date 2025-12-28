@@ -2,8 +2,8 @@
 
 - **开始日期**: 2025-12-28
 - **更新日期**: 2025-12-28
-- **RFC PR**: 
-- **实现议题**: 
+- **RFC PR**:
+- **实现议题**:
 - **作者**: AI Assistant
 - **状态**: Implemented
 - **相关组件**: `@zouwu-wf/design/vite.config.ts`
@@ -59,12 +59,14 @@ const monacoEditorPlugin = require("vite-plugin-monaco-editor").default;
 ```
 
 **优点：**
+
 - ✅ 最可靠和兼容（Node.js 12.2.0+）
 - ✅ 同步执行，不影响配置加载性能
 - ✅ 代码清晰明确
 - ✅ 不需要异步处理
 
 **缺点：**
+
 - 需要额外的导入语句
 - 代码稍微冗长
 
@@ -79,7 +81,7 @@ import react from "@vitejs/plugin-react";
 // 使用异步配置函数
 export default defineConfig(async () => {
     const { default: monacoEditorPlugin } = await import("vite-plugin-monaco-editor");
-    
+
     return {
         plugins: [
             react(),
@@ -93,11 +95,13 @@ export default defineConfig(async () => {
 ```
 
 **优点：**
+
 - ✅ 更符合 ESM 规范
 - ✅ 代码更简洁
 - ✅ Vite 官方支持异步配置函数（自 Vite 2.9.0+）
 
 **缺点：**
+
 - 需要将配置函数改为异步
 - 如果配置中有多个 CommonJS 模块，需要多个 await
 - 某些工具可能不完全支持异步配置
@@ -165,6 +169,7 @@ const clientConfig = defineConfig({
 ### 为什么不使用动态 `import()`？
 
 虽然动态 `import()` 更符合 ESM 规范，但对于单个 CommonJS 模块：
+
 - `createRequire` 更简单直接
 - 同步执行，性能更好
 - 不需要修改配置函数签名
@@ -172,6 +177,7 @@ const clientConfig = defineConfig({
 ### 何时考虑切换到动态 `import()`？
 
 如果满足以下条件：
+
 - ✅ 项目中有多个 CommonJS 模块需要导入
 - ✅ 希望代码更符合 ESM 规范
 - ✅ 使用现代工具链（Vite 2.9.0+）
@@ -233,4 +239,3 @@ pnpm build
 - ✅ 易于维护
 
 对于单个 CommonJS 模块，这是最佳选择。如果未来需要导入多个 CommonJS 模块，可以考虑切换到异步 `import()` 方案。
-

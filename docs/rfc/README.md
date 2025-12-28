@@ -13,7 +13,7 @@ This directory contains RFCs for the **Zouwu Workflow** engine and DSL.
 | [0005](./0005-universal-publish-tool.md)                 | Universal Publish Tool Design                 | Draft       |
 | [0006](./0006-workflow-visualization-app.md)             | Workflow Visualization App (Bun + React Flow) | Draft       |
 | [0007](./0007-tree-component-data-structure-refactor.md) | Tree 组件数据结构重构 - 去掉 `_original` 包装 | Implemented |
-| [0008](./0008-vite-commonjs-import-solution.md)         | Vite 配置中 CommonJS 模块导入解决方案          | Implemented |
+| [0008](./0008-vite-commonjs-import-solution.md)          | Vite 配置中 CommonJS 模块导入解决方案         | Implemented |
 
 ## RFC Process
 
